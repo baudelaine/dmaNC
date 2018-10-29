@@ -1,0 +1,3 @@
+curl -i --cookie cookies.txt --cookie-jar cookies.txt -X POST -d 'j_username=fram' -d 'j_password=fram' 'http://localhost:9080/dma/j_security_check'
+curl --cookie cookies.txt --cookie-jar cookies.txt -X POST 'http://localhost:9080/dma/GetUserInfos' | jq .
+curl --cookie cookies.txt --cookie-jar cookies.txt -X POST 'http://localhost:9080/dma/GetResources' | jq .

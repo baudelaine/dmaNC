@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Modeling Accelarator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="css/bootstrap-select.min.css" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <!-- dynamic modal -->
+		<div class="modal fade" id="dynamicModal" tabindex="-1" role="dialog" aria-labelledby="dynamicModalLabel" data-keyboard="false" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+		        <h4 class="modal-title" id="dynamicModalLabel"></h4>
+		      </div>
+		      <div class="modal-body">
+            <div class="list-group">
+              <a href="#" id="new" class="list-group-item"><span>New project</span></a>
+              <a href="#" id="open" class="list-group-item"><span>Open project</span></a>
+            </div>
+		      </div>
+		      <div class="modal-footer">
+            <form method="post" action='ibm_security_logout' name="logout_form">
+							<INPUT type="hidden" name="logoutExitPage" VALUE="/login.html">
+							<input type="submit" class="btn btn-default" name="logout" value="Logout">
+	          </form>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- dynamic modal -->
+
+    <!-- newProject modal -->
+		<div class="modal fade" id="newProjectModal" tabindex="-1" role="dialog" aria-labelledby="newProjectModalLabel" data-keyboard="false" data-backdrop="static">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+		        <h4 class="modal-title" id="newProjectModalLabel">Create a new project</h4>
+		      </div>
+		      <div class="modal-body">
+            <div id="Alert"></div>
+            <form>
+              <div class="form-group">
+                <label for="prjName">Name</label>
+                <input type="text" class="form-control" id="prjName" placeholder="Name" autofocus>
+              </div>
+              <div class="form-group">
+                <form role="form">
+                <label for="prjResource">Resource</label>
+        				<select class="selectpicker form-control" data-style="btn-default" id="prjResource" data-live-search="true" title="Choose a resource..."></select>
+                </form>
+              </div>
+              <div class="form-group">
+                <label for="prjDbSchema">dbSchema</label>
+                <input type="text" class="form-control" id="prjDbSchema" placeholder="dbSchema">
+              </div>
+              <div class="form-group">
+                <label for="prjDescription">Description</label>
+                <textarea class="form-control" rows="5" id="prjDescription" placeholder="Description"></textarea>
+              </div>
+            </form>
+		      </div>
+		      <div class="modal-footer">
+            <button type="submit" id="create" class="btn btn-primary">Create</button>
+            <input type="button" onclick="location.reload(true);" class="btn btn-default" value="Back"/>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- newProject modal -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <script src="js/bootstrap-list-filter.min.js"></script>
+  <script src="js/bootstrap-select.min.js"></script>
+
+  <script src="js/project.js"></script>
+
+</body>
+</html>

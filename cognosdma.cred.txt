@@ -1,0 +1,4 @@
+<jndiEntry jndiName="CognosLogin" value="cognosdma"/>
+<jndiEntry jndiName="CognosPassword" value="S5Mev?c45T"/>
+<jndiEntry jndiName="CognosNamespace" value="ODROAAD"/>
+

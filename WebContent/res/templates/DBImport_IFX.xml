@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bmtactionlog project="C:\models\InformixManual\InformixManual.cpf" templatedir="../templates/bmt/Cr1Model" timestamp="20180920142146279" user="Administrator" version="11.0.7.11">
+<transaction saved="false" seq="1" timestamp="20180920142219355" uniqueId="4C4570B74C4570B7">
+<action seq="1" type="DBImport"><inputparams>
+<param seq="1" type="handle"><mappingpath>namespace</mappingpath><value>[INFORMIXSample]</value></param>
+<param seq="2" type="cclnode"><value><![CDATA[
+<item Name="INFORMIXSampl" Type="database" Value="partial" dbType="JDBC" description="" isSystem="false" screenTip="">
+	<item Name="stores_dem" Type="catalog" Value="partial">
+		<item Name="sd" Type="schema" Value="partial">
+			<item Name="Tables" Type="tables" Value="true">
+			</item>
+		</item>
+	</item>
+</item>
+]]></value></param>
+<param seq="3" type="integer"><value>0</value></param>
+<param seq="4" type="integer"><value>1</value></param>
+<param seq="5" type="integer"><value>1</value></param>
+<param seq="6" type="integer"><value>0</value></param>
+<param seq="7" type="integer"><value>0</value></param>
+<param seq="8" type="integer"><value>0</value></param>
+<param seq="9" type="integer"><value>0</value></param>
+<param seq="10" type="integer"><value>1</value></param>
+<param seq="11" type="integer"><value>0</value></param>
+<param seq="12" type="integer"><value>0</value></param></inputparams><domchanges/><result success="t"><outputparams/></result></action>
+<action seq="3" type="DBRelease"><inputparams/><domchanges/><result success="t"><outputparams/></result></action></transaction>
+<transaction saved="false" seq="12" timestamp="20180920142459121" uniqueId="E97CAEB0E97CAEB0"><action seq="1" type="ResetPromptValues"><inputparams>
+<param seq="1" type="integer"><value>1</value></param></inputparams><domchanges/><result success="t"><outputparams/></result></action></transaction>
+<transaction saved="false" seq="13" timestamp="20180920142519760" uniqueId="4E1D175E4E1D175E"><action seq="1" type="ResetPromptValues"><inputparams>
+<param seq="1" type="integer"><value>1</value></param></inputparams><domchanges/><result success="t"><outputparams/></result></action></transaction>
+<transaction saved="false" seq="14" timestamp="20180920142613091" uniqueId="FD8FA53CFD8FA53C"><action seq="1" type="ResetPromptValues"><inputparams>
+<param seq="1" type="integer"><value>1</value></param></inputparams><domchanges/><result success="t"><outputparams/></result></action></transaction>
+</bmtactionlog>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bmtactionlog project="C:\models\ImportMySQL\ImportMySQL.cpf" templatedir="../templates/bmt/Cr1Model" timestamp="20180620161938079" user="Administrator" version="11.0.7.11">
+<transaction saved="false" seq="3" timestamp="20180620161957285" uniqueId="40AC805240AC8052">
+<action seq="1" type="DBImport"><inputparams><param seq="1" type="handle"><mappingpath>namespace</mappingpath><value>[PHYSICAL]</value></param>
+<param seq="2" type="cclnode"><value><![CDATA[
+<item Name="MYSQ" Type="database" Value="partial" dbType="JDBC" description="" isSystem="false" screenTip="">
+	<item Name="employ" Type="catalog" Value="partial">
+		<item Name="Tables" Type="tables" Value="true"/>
+	</item>
+</item>]]></value></param>
+<param seq="3" type="integer"><value>0</value></param>
+<param seq="4" type="integer"><value>1</value></param>
+<param seq="5" type="integer"><value>1</value></param>
+<param seq="6" type="integer"><value>0</value></param>
+<param seq="7" type="integer"><value>0</value></param>
+<param seq="8" type="integer"><value>0</value></param>
+<param seq="9" type="integer"><value>0</value></param>
+<param seq="10" type="integer"><value>1</value></param>
+<param seq="11" type="integer"><value>0</value></param>
+<param seq="12" type="integer"><value>0</value></param></inputparams><domchanges/><result success="t"><outputparams/></result></action>
+<action seq="2" type="DBRelease"><inputparams/><domchanges/><result success="t"><outputparams/></result></action></transaction></bmtactionlog>

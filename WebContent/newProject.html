@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Modeling Accelarator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link href="css/bootstrap-select.min.css" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+
+  <div class="container-fluid"><div class="row">
+
+    <form>
+      <div class="form-group">
+        <label for="prjName">Name</label>
+        <input type="text" class="form-control" id="prjName" placeholder="Name" autofocus>
+      </div>
+      <div class="form-group">
+        <label for="prjDbSchema">dbSchema</label>
+        <input type="text" class="form-control" id="prjDbSchema" placeholder="dbSchema">
+      </div>
+      <div class="form-group">
+        <label for="prjDescription">Description</label>
+        <textarea class="form-control" rows="5" id="prjDescription" placeholder="Description"></textarea>
+      </div>
+      <div class="form-group">
+        <form role="form">
+        <label for="prjResource">Resource</label>
+				<select class="selectpicker form-control" data-style="btn-default" id="prjResource" data-live-search="true" title="Choose a resource..."></select>      </form>
+      </div>
+      <button type="submit" id="create" class="btn btn-default">Create</button>
+      <input type="button" onclick="location.reload(true);" class="btn btn-default" value="Back"/>
+    </form>
+
+  </div></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- <script src="js/bootstrap-list-filter.min.js"></script> -->
+  <script src="js/bootstrap-select.min.js"></script>
+
+  <script>
+
+  $(document).ready(function() {
+    GetUserInfos();
+  });
+
+  function GetUserInfos() {
+
+    $.ajax({
+      type: 'POST',
+      url: "GetUserInfos",
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+        loadList($("#prjResource"), data.RESOURCES);
+
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    });
+  }
+
+  function loadList(obj, list){
+    obj.empty();
+    $.each(list, function(i, item){
+      var option = '<option class="fontsize" value="' + item + '" data-subtext="' + item.dbEngine + ' - ' + item.jndiName + '">' + item.dbName + '</option>';
+      obj.append(option);
+    });
+    obj.selectpicker('refresh');
+
+  }
+
+  </script>
+
+</body>
+</html>

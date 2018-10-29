@@ -1,0 +1,203 @@
+<server description="new server">
+
+    <!-- Enable features -->
+    <featureManager>
+		   <feature>servlet-3.0</feature>
+	    	<feature>jndi-1.0</feature>
+		  <feature>jdbc-4.0</feature>
+                  <feature>appSecurity-2.0</feature>
+                  <feature>ldapRegistry-3.0</feature>
+	  </featureManager>
+
+    <!-- To access this server from a remote client add a host attribute to the following element, e.g. host="*" -->
+    <httpEndpoint host="*" httpPort="80" httpsPort="443" id="defaultHttpEndpoint"/>
+
+	<!-- Automatically expand WAR files and EAR files -->
+	<applicationManager autoExpand="true"/>
+
+	<!--
+	<quickStartSecurity userName="fram" userPassword="fram" />
+	-->
+
+       <ldapRegistry
+                id="sample_ldap" realm="SampleLdapIDSRealm" ignoreCase="true"
+                host="172.16.160.120" port="389"
+                baseDN="dc=iicparis,dc=fr,dc=ibm,dc=com"
+                bindDN="cn=admin,dc=iicparis,dc=fr,dc=ibm,dc=com"
+                bindPassword="admin"
+                ldapType="Custom"
+		recursiveSearch="true"
+                certificateMapMode="EXACT_DN"
+                >
+                <customFilters
+                        userFilter="(&amp;(uid=%v)(objectclass=posixaccount))"
+                        groupFilter="(&amp;(cn=%v)(objectclass=groupofNames))"
+                        userIdMap="*:uid"
+                        groupIdMap="*:cn"
+                        groupMemberIdMap="groupofNames:member"
+                />
+        </ldapRegistry>
+
+
+  <!-- START ORA SETUP-->
+  <!-- If Oracle machine is behind a firewall and is running a ssh server then connect via a local ssh tunnel -->
+	<!-- and change serverName attribute to localhost -->
+	<!-- /usr/bin/ssh -f -X -Y -N -C -L 1521:172.16.186.243:1521 -g administrateur:Adminvm$@172.16.186.243 -->
+
+	<library id="ORALib">
+	  <fileset dir="${shared.resource.dir}/ORA" includes="*.jar"/>
+	</library>
+
+	<dataSource jndiName="jdbc/lvso112.DANONE" transactional="false" cognosCatalog="" cognosDataSource="DEV" cognosSchema="DANONE">
+	  <jdbcDriver libraryRef="ORALib"/>
+	  <properties.oracle databaseName="lvso112" driverType="thin" password="danone" portNumber="1521" serverName="172.16.186.243" user="danone"/>
+	</dataSource>
+
+	<dataSource jndiName="jdbc/XE.HR" transactional="false" cognosCatalog="CCAT" cognosDataSource="CDS" cognosSchema="CSCH">
+	  <jdbcDriver libraryRef="ORALib"/>
+	  <properties.oracle databaseName="XE" driverType="thin" password="spcspc" portNumber="1521" serverName="172.16.186.241" user="HR"/>
+	</dataSource>
+
+	<jndiEntry jndiName="TestORAConnection" value="select sysdate from dual"/>
+
+  <!-- END ORA SETUP-->
+
+  <!-- START DB2 SETUP-->
+
+	<library id="DB2Lib">
+    <fileset dir="${shared.resource.dir}/DB2" includes="*.jar"/>
+  </library>
+
+  <dataSource jndiName="jdbc/FRMARK.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="FRMARK" cognosSchema="DB2INST1">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="FRMARK" password="spcspc" portNumber="50000" serverName="172.16.186.151" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/SAMPLE.DB2INST1" transactional="false" cognosCatalog="" cognosDataSource="DB2Sample" cognosSchema="DB2INST1">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="SAMPLE" password="spcspc" portNumber="50000" serverName="172.16.186.242" user="db2inst1"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/MAXDB76.MAXIMO" transactional="false" cognosCatalog="" cognosDataSource="MAXDB76" cognosSchema="MAXIMO">
+    <jdbcDriver libraryRef="DB2Lib"/>
+    <properties.db2.jcc databaseName="MAXDB76" password="spcspc" portNumber="50000" serverName="172.16.186.241" user="db2admin"/>
+  </dataSource>
+
+  <jndiEntry jndiName="TestDB2Connection" value="select current date from sysibm.sysdummy1"/>
+
+  <!-- END DB2 SETUP-->
+
+  <!-- START DB2400 SETUP-->
+
+  <library id="DB2400Lib">
+    <fileset dir="${shared.resource.dir}/DB2400" includes="*.jar"/>
+  </library>
+
+  <dataSource jndiName="jdbc/DB2400" transactional="false" cognosCatalog="CCAT" cognosDataSource="CDS" cognosSchema="CSCH">
+    <jdbcDriver libraryRef="DB2400Lib"/>
+    <properties.db2.i.toolbox databaseName="" password="" portNumber="" serverName="" user=""/>
+  </dataSource>
+
+	<jndiEntry jndiName="TestDB2400Connection" value="select current date from sysibm.sysdummy1"/>
+
+  <!-- END DB2400 SETUP-->
+
+  <!-- START SQLSRV SETUP-->
+
+  <library id="SQLSRVLib">
+    <fileset dir="${shared.resource.dir}/SQLSRV" includes="*.jar"/>
+  </library>
+
+  <dataSource jndiName="jdbc/IBS_CHRYSALIDE.dbo" transactional="false" cognosCatalog="IBS_CHRYSALIDE" cognosDataSource="IBS_CHRYSALIDE" cognosSchema="dbo">
+    <jdbcDriver libraryRef="SQLSRVLib"/>
+    <properties.microsoft.sqlserver databaseName="IBS_CHRYSALIDE" password="spcspc" portNumber="1433" serverName="172.16.186.241" user="sa"/>
+  </dataSource>
+
+  <dataSource jndiName="jdbc/Northwind.dbo" transactional="false" cognosCatalog="Northwind" cognosDataSource="SQLServerSample" cognosSchema="dbo">
+    <jdbcDriver libraryRef="SQLSRVLib"/>
+    <properties.microsoft.sqlserver databaseName="Northwind" password="spcspc" portNumber="1433" serverName="172.16.186.241" user="sa"/>
+  </dataSource>
+
+	<jndiEntry jndiName="TestSQLSRVConnection" value="SELECT GETDATE()"/>
+
+  <!-- END SQLSRV SETUP-->
+
+  <!-- START MYSQL SETUP-->
+
+  <library id="MYSQLLib">
+    <fileset dir="${shared.resource.dir}/MYSQL" includes="*.jar"/>
+  </library>
+
+  <dataSource jndiName="jdbc/employees" transactional="false" cognosCatalog="employees" cognosDataSource="MYSQL" cognosSchema="">
+    <jdbcDriver libraryRef="MYSQLLib"/>
+    <properties databaseName="employees" password="spcspc" portNumber="3306" serverName="172.16.186.242" user="root"/>
+  </dataSource>
+
+	<jndiEntry jndiName="TestMYSQLConnection" value="select now()"/>
+
+  <!-- END MYSQL SETUP-->
+
+  <!-- START PGSQL SETUP-->
+
+  <library id="PGSQLLib">
+    <fileset dir="${shared.resource.dir}/PGSQL" includes="*.jar"/>
+  </library>
+
+  <dataSource jndiName="jdbc/dvdrental.public" type="javax.sql.XADataSource" cognosCatalog="" cognosDataSource="PGSample" cognosSchema="dvdrental">
+    <jdbcDriver libraryRef="PGSQLLib" javax.sql.XADataSource="org.postgresql.xa.PGXADataSource"/>
+    <properties databaseName="dvdrental" password="spcspc" portNumber="5432" serverName="172.16.186.242" user="postgres"/>
+  </dataSource>
+
+	<jndiEntry jndiName="TestPGSQLConnection" value="select 1"/>
+
+  <!-- END PGSQL SETUP-->
+
+  <!-- START IFX SETUP-->
+
+  <library id="IFXLib">
+    <fileset dir="${shared.resource.dir}/IFX" includes="*.jar"/>
+  </library>
+
+  <dataSource jndiName="jdbc/stores_demo" cognosCatalog="stores_demo" cognosDataSource="INFORMIXSample" cognosSchema="sde">
+    <jdbcDriver libraryRef="IFXLib"/>
+    <properties.informix databaseName="stores_demo" ifxIFXHOST="172.16.186.241" password="spcspc" portNumber="9088" serverName="ol_informix1210" user="informix"/>
+  </dataSource>
+
+	<jndiEntry jndiName="TestIFXConnection" value="SELECT CURRENT FROM systables WHERE tabid=1"/>
+
+  <!-- END IFX SETUP-->
+
+  <!-- START DMA SETUP-->
+
+	<jndiEntry jndiName="WithRecCount" value="true"/>
+
+  <!-- END DMA SETUP-->
+
+	<!-- START COGNOS SETUP -->
+
+	<jndiEntry jndiName="CognosFolder" value="C:/models"/>
+	<jndiEntry jndiName="CognosModelsPath" value="/mnt/models"/>
+	<jndiEntry jndiName="CognosDispatcher" value="http://172.16.186.246:9300/p2pd/servlet/dispatch"/>
+	<jndiEntry jndiName="CognosLogin" value="admin"/>
+	<jndiEntry jndiName="CognosPassword" value="Freestyle05$"/>
+	<jndiEntry jndiName="CognosNamespace" value="CognosEx"/>
+	<jndiEntry jndiName="CognosDefaultLocale" value="en-gb"/>
+	<jndiEntry jndiName="CognosLocales" value="en"/>
+
+  <!-- END COGNOS SETUP -->
+
+  <applicationMonitor updateTrigger="mbean"/>
+
+  <application id="dma" location="dma.war" name="dma">
+        <application-bnd>
+                <security-role name="testing">
+                  <special-subject type="ALL_AUTHENTICATED_USERS" />
+		  <!--
+			<user name="fram" />
+		  -->
+                </security-role>
+        </application-bnd>
+  </application>
+
+
+</server>

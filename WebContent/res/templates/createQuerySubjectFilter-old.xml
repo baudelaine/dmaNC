@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bmtactionlog templatedir="../templates/bmt/Cr1Model" timestamp="20180312153753673" user="Administrator" version="11.0.7.11">
+<transaction saved="false" seq="1" timestamp="20180312154506684" uniqueId="673BEF78673BEF78">
+<action seq="1" type="UpdateObject"><inputparams>
+<param seq="1" type="handle"><mappingpath>querySubject</mappingpath><value>[DATA].[S_SAMPLETYPE]</value></param>
+<param seq="2" type="cclnode"><value>
+<![CDATA[<updateObjectRequest><tasks><task name="addProperty"><parameters>
+<param name="propertyType" value="filter"/>
+<param name="propertyValue"><expression/></param><param name="caption" value="New Filter"/>
+<param name="filterApplyType" value="always"/>
+<param name="filterApplicationType" value="beforeAutoAggregation"/></parameters></task></tasks></updateObjectRequest>]]>
+</value></param>
+</inputparams><domchanges/>
+<result success="t"><outputparams/></result></action>
+<action seq="2" type="ModifyComplex"><inputparams>
+<param seq="1" type="handle"><mappingpath>querySubject/definition/modelQuery/filters/filterDefinition/expression</mappingpath><value>/O/definition[0]/modelQuery[0]/filters[0]/filterDefinition[0]/expression[0]/O/[DATA].[S_SAMPLETYPE]</value></param>
+<param seq="2" type="i18nstring"><value>&lt;refobj&gt;[FINAL].[S_SAMPLETYPE].[S_SAMPLETYPEID]&lt;/refobj&gt;  = &amp;apos;Production Sample&amp;apos;</value></param></inputparams><domchanges/>
+<result success="t"><outputparams/></result></action>
+<action seq="3" type="Modify"><inputparams>
+<param seq="1" type="handle"><mappingpath>querySubject/definition/modelQuery/filters/filterDefinition/@apply</mappingpath><value>/O/definition[0]/modelQuery[0]/filters[0]/filterDefinition[0]/@apply/O/[DATA].[S_SAMPLETYPE]</value></param>
+<param seq="2" type="i18nstring"><value>always</value></param></inputparams><domchanges/>
+<result success="t"><outputparams/></result></action>
+<action seq="4" type="Modify"><inputparams>
+<param seq="1" type="handle"><mappingpath>querySubject/definition/modelQuery/filters/filterDefinition/@application</mappingpath><value>/O/definition[0]/modelQuery[0]/filters[0]/filterDefinition[0]/@application/O/[DATA].[S_SAMPLETYPE]</value></param>
+<param seq="2" type="i18nstring"><value>beforeAutoAggregation</value></param></inputparams><domchanges/>
+<result success="t"><outputparams/></result></action></transaction></bmtactionlog>

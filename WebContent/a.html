@@ -1,0 +1,23 @@
+<script>
+
+  var s = "[FINAL].[PROJECT].[MAJPROJ] = [PROjECT].[PROJNO]";
+
+  var oldValue = "PROJECT";
+  var re = new RegExp("[^\\.]\\[" + oldValue + "\\]", "gi");
+  var newValue = "PROJECTAA";
+
+  console.log(s);
+
+  console.log("On modifie le pk_alias...");
+
+  s = s.replace(re, " [" + newValue + "]");
+  console.log(s);
+
+  re = new RegExp("[^\\.]\\[" + newValue + "\\]", "gi");
+
+  console.log("On coche la case fin...");
+
+  s = s.replace(re, " [FINAL].[" + newValue + "]");
+  console.log(s);
+
+</script>

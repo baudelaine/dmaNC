@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archive>
+    <dir sourceOnDisk="/opt/wks/dma/WebContent" targetInArchive="/"/>
+    <dir sourceOnDisk="/home/dma" targetInArchive="/datas"/>
+</archive>

@@ -1,0 +1,381 @@
+********************************************************************************
+product = WebSphere Application Server 16.0.0.4 (wlp-1.0.15.cl160420161113-0206)
+wlp.install.dir = /opt/wlp/
+java.home = /opt/jdk1.8.0_121/jre
+java.version = 1.8.0_121
+java.runtime = Java(TM) SE Runtime Environment (1.8.0_121-b13)
+os = Linux (4.4.0-130-generic; amd64) (en_US)
+process = 20459@ODRBIMODSVR
+********************************************************************************
+[7/17/18 11:46:38:443 CEST] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           A CWWKE0001I: The server server1 has been launched.
+[7/17/18 11:46:38:455 CEST] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           A CWWKE0100I: This product is licensed for development, and limited production use. The full license terms can be viewed here: https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.4/lafiles/en.html
+[7/17/18 11:46:39:416 CEST] 00000001 com.ibm.ws.kernel.launch.internal.FrameworkManager           I CWWKE0002I: The kernel started after 1.169 seconds
+[7/17/18 11:46:39:429 CEST] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            I CWWKF0007I: Feature update started.
+[7/17/18 11:46:39:862 CEST] 00000010 com.ibm.ws.app.manager.internal.monitor.DropinMonitor        A CWWKZ0058I: Monitoring dropins for applications. 
+[7/17/18 11:46:40:034 CEST] 0000001a com.ibm.ws.tcpchannel.internal.TCPChannel                    I CWWKO0219I: TCP Channel defaultHttpEndpoint has been started and is now listening for requests on host *  (IPv6) port 80.
+[7/17/18 11:46:40:276 CEST] 00000020 com.ibm.ws.app.manager.AppMessageHelper                      I CWWKZ0018I: Starting application dma.
+[7/17/18 11:46:40:372 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path log4j-1.2.13.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:374 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path groovy-all-1.0.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:374 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphiredigester1.8.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:375 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-math-dev.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:375 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jfreechart.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:375 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jcommon.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:378 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphirehibernate.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:378 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path ehcache-1.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:381 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jdt-compiler-3.1.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:381 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jasperreports.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:381 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path iText.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:382 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jxl-2.6.10.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:382 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path poi.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:382 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path poi-ooxml.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:382 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path poi-ooxml-schemas.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:383 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path xmlbeans.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:383 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path geronimo-stax-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:383 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path iReport.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:383 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path barbecue-1.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:384 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path ant.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:384 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path ant-launcher.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:384 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path axis.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:386 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-net-2.0.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:386 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-discovery.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:386 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-logging.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:387 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-collections.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:389 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-codec-1.4.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:390 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path saaj.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:393 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphireboxiwsdl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:393 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphireexternal.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:393 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path tidy.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:393 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path PDFRenderer.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:394 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jasperreports-chart-themes-4.0.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:394 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path castor-1.2.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:394 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path spring-core-2.5.5.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:395 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path spring-beans-2.5.5.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:397 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path smack.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/smackx-3.0.4.jar or its parent.
+[7/17/18 11:46:40:406 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path bcel.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:406 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jibx-run.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:406 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path xpp3.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:406 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path stax-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:407 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path wstx-asl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:417 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path xpp3.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-run-1.2.1.jar or its parent.
+[7/17/18 11:46:40:418 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path stax-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-run-1.2.1.jar or its parent.
+[7/17/18 11:46:40:418 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path wstx-asl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-run-1.2.1.jar or its parent.
+[7/17/18 11:46:40:433 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:434 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb-impl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:434 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jsr173_1.0_api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:434 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path activation.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:478 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:478 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path activation.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:478 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jsr173_1.0_api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:478 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb1-impl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:622 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path log4j-1.2.13.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:622 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path groovy-all-1.0.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:623 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphiredigester1.8.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:623 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-math-dev.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:623 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jfreechart.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:623 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jcommon.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:624 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphirehibernate.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:624 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path ehcache-1.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:626 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jdt-compiler-3.1.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:626 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jasperreports.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:626 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path iText.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:626 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jxl-2.6.10.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:627 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path poi.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:627 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path poi-ooxml.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:627 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path poi-ooxml-schemas.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:627 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path xmlbeans.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:628 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path geronimo-stax-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:628 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path iReport.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:628 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path barbecue-1.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:628 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path ant.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:628 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path ant-launcher.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:629 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path axis.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:630 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-net-2.0.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:630 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-discovery.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:630 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-logging.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:630 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-collections.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:632 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path commons-codec-1.4.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:633 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path saaj.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:635 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphireboxiwsdl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:635 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path sapphireexternal.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:635 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path tidy.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:636 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path PDFRenderer.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:636 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jasperreports-chart-themes-4.0.1.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:636 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path castor-1.2.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:636 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path spring-core-2.5.5.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:636 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path spring-beans-2.5.5.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/sapphire.jar or its parent.
+[7/17/18 11:46:40:638 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path smack.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/smackx-3.0.4.jar or its parent.
+[7/17/18 11:46:40:648 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path bcel.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:648 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jibx-run.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:649 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path xpp3.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:649 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path stax-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:649 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path wstx-asl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-bind-1.2.1.jar or its parent.
+[7/17/18 11:46:40:663 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path xpp3.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-run-1.2.1.jar or its parent.
+[7/17/18 11:46:40:663 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path stax-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-run-1.2.1.jar or its parent.
+[7/17/18 11:46:40:663 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path wstx-asl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jibx-run-1.2.1.jar or its parent.
+[7/17/18 11:46:40:675 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:675 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb-impl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:675 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jsr173_1.0_api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:676 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path activation.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-xjc-2.1.7.jar or its parent.
+[7/17/18 11:46:40:716 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb-api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:717 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path activation.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:717 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jsr173_1.0_api.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:40:717 CEST] 00000020 m.ibm.ws.container.service.app.deploy.ManifestClassPathUtils W SRVE9967W: The manifest class path jaxb1-impl.jar can not be found in jar file file:/opt/wks/dma/WebContent/WEB-INF/lib/jaxb-impl-2.1.7.jar or its parent.
+[7/17/18 11:46:42:831 CEST] 00000020 com.ibm.ws.session.WASSessionCore                            I SESN8501I: The session manager did not find a persistent storage location; HttpSession objects will be stored in the local application server's memory.
+[7/17/18 11:46:42:846 CEST] 00000020 com.ibm.ws.webcontainer.osgi.webapp.WebGroup                 I SRVE0169I: Loading Web Module: ddprj0.
+[7/17/18 11:46:42:848 CEST] 00000020 com.ibm.ws.webcontainer                                      I SRVE0250I: Web Module ddprj0 has been bound to default_host.
+[7/17/18 11:46:42:849 CEST] 00000020 com.ibm.ws.http.internal.VirtualHostImpl                     A CWWKT0016I: Web application available (default_host): http://odrbimodsvr.odr1.odroa.com:80/dma/
+[7/17/18 11:46:42:853 CEST] 00000020 com.ibm.ws.app.manager.AppMessageHelper                      A CWWKZ0001I: Application dma started in 2.577 seconds.
+[7/17/18 11:46:42:861 CEST] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            A CWWKF0012I: The server installed the following features: [servlet-3.0, jndi-1.0, jdbc-4.0].
+[7/17/18 11:46:42:861 CEST] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            I CWWKF0008I: Feature update completed in 3.445 seconds.
+[7/17/18 11:46:42:861 CEST] 00000018 com.ibm.ws.kernel.feature.internal.FeatureManager            A CWWKF0011I: The server server1 is ready to run a smarter planet.
+[7/17/18 11:46:43:029 CEST] 00000022 com.ibm.ws.webcontainer.osgi.mbeans.PluginGenerator          I SRVE9103I: A configuration file for a web server plugin was automatically generated for this server at /opt/wlp/usr/servers/server1/logs/state/plugin-cfg.xml.
+[7/17/18 11:46:59:704 CEST] 00000021 com.ibm.ws.session.WASSessionCore                            I SESN0176I: A new session context will be created for application key default_host/dma
+[7/17/18 11:46:59:718 CEST] 00000021 com.ibm.ws.util                                              I SESN0172I: The session manager is using the Java default SecureRandom implementation for session ID generation.
+[7/17/18 11:46:59:753 CEST] 00000021 SystemOut                                                    O Context has been initialized...
+[7/17/18 11:47:00:004 CEST] 00000025 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [dma] [/dma] [com.dma.web.GetDatabaseMetaDatasFromCache]: Initialization successful.
+[7/17/18 11:47:00:006 CEST] 00000025 SystemOut                                                    O realPath=/opt/wks/dma/WebContent
+[7/17/18 11:47:00:006 CEST] 00000025 SystemOut                                                    O fileName=/opt/wks/dma/WebContent/res/dbmd.json
+[7/17/18 11:47:00:116 CEST] 00000026 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [dma] [/dma] [com.dma.web.GetDataTypeServlet]: Initialization successful.
+[7/17/18 11:47:00:126 CEST] 00000026 SystemOut                                                    O Session fBCju3F-l57bp42Q-bctuWv has been created...
+[7/17/18 11:47:00:211 CEST] 00000026 com.ibm.ws.jca.cm.ConnectorService                           I J2CA8050I: An authentication alias should be used instead of defining a user name and password on dataSource[default-3].
+[7/17/18 11:47:00:439 CEST] 00000026 com.ibm.ws.recoverylog.spi.RecoveryDirectorImpl              I CWRLS0010I: Performing recovery processing for local WebSphere server (server1).
+[7/17/18 11:47:00:517 CEST] 00000021 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [dma] [/dma] [com.dma.web.GetTablesServlet]: Initialization successful.
+[7/17/18 11:47:00:518 CEST] 00000021 SystemOut                                                    O Session Yv7JFvbCG3o-D37y-JKAcZ7 has been created...
+[7/17/18 11:47:00:529 CEST] 00000026 com.ibm.ws.recoverylog.spi.RecoveryDirectorImpl              I CWRLS0012I: All persistent services have been directed to perform recovery processing for this WebSphere server (server1).
+[7/17/18 11:47:00:529 CEST] 00000028 com.ibm.tx.jta.impl.RecoveryManager                          I WTRN0135I: Transaction service recovering no transactions.
+[7/17/18 11:47:00:913 CEST] 00000021 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8203I: Database product name : Microsoft SQL Server
+[7/17/18 11:47:00:913 CEST] 00000026 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8203I: Database product name : Microsoft SQL Server
+[7/17/18 11:47:00:917 CEST] 00000021 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8204I: Database product version : 13.00.5149
+[7/17/18 11:47:00:917 CEST] 00000026 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8204I: Database product version : 13.00.5149
+[7/17/18 11:47:00:917 CEST] 00000021 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8205I: JDBC driver name  : Microsoft JDBC Driver 4.1 for SQL Server
+[7/17/18 11:47:00:917 CEST] 00000026 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8205I: JDBC driver name  : Microsoft JDBC Driver 4.1 for SQL Server
+[7/17/18 11:47:00:917 CEST] 00000021 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8206I: JDBC driver version  : 4.1.8112.200
+[7/17/18 11:47:00:918 CEST] 00000026 com.ibm.ws.rsadapter.spi.DatabaseHelper                      I DSRA8206I: JDBC driver version  : 4.1.8112.200
+[7/17/18 11:47:01:032 CEST] 00000021 SystemOut                                                    O tableAliases={}
+[7/17/18 11:47:01:033 CEST] 00000026 SystemOut                                                    O tableAliases={}
+[7/17/18 11:47:01:033 CEST] 00000021 SystemOut                                                    O SessionId Yv7JFvbCG3o-D37y-JKAcZ7 is now connected to jdbc/SQLSRV using shema dbo
+[7/17/18 11:47:01:033 CEST] 00000026 SystemOut                                                    O SessionId fBCju3F-l57bp42Q-bctuWv is now connected to jdbc/SQLSRV using shema dbo
+[7/17/18 11:47:03:094 CEST] 00000022 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [dma] [/dma] [com.dma.web.TestDBConnectionServlet]: Initialization successful.
+[7/17/18 11:47:09:140 CEST] 00000020 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [dma] [/dma] [com.dma.web.GetQuerySubjectsServlet]: Initialization successful.
+[7/17/18 11:47:09:147 CEST] 00000020 SystemOut                                                    O table=SPECIALITE
+[7/17/18 11:47:09:147 CEST] 00000020 SystemOut                                                    O alias=SPECIALITE
+[7/17/18 11:47:09:148 CEST] 00000020 SystemOut                                                    O type=Final
+[7/17/18 11:47:09:149 CEST] 00000020 SystemOut                                                    O withRecCount=true
+[7/17/18 11:47:09:159 CEST] 00000020 SystemOut                                                    O resultcom.dma.web.QuerySubject@12aee648
+[7/17/18 11:47:39:550 CEST] 00000021 com.ibm.ws.webcontainer.servlet                              I SRVE0242I: [dma] [/dma] [SendQuerySubjects]: Initialization successful.
+[7/17/18 11:47:39:620 CEST] 00000021 SystemOut                                                    O query_subjects.size=1
+[7/17/18 11:47:39:625 CEST] 00000021 SystemOut                                                    O Extracting: archive-log.xml
+[7/17/18 11:47:39:626 CEST] 00000021 SystemOut                                                    O Extracting: customdata.xml
+[7/17/18 11:47:39:626 CEST] 00000021 SystemOut                                                    O Extracting: IDLog.xml
+[7/17/18 11:47:39:627 CEST] 00000021 SystemOut                                                    O Extracting: log.xml
+[7/17/18 11:47:39:629 CEST] 00000021 SystemOut                                                    O Extracting: model.cpf
+[7/17/18 11:47:39:631 CEST] 00000021 SystemOut                                                    O Extracting: model.xml
+[7/17/18 11:47:39:632 CEST] 00000021 SystemOut                                                    O Extracting: Preferences.xml
+[7/17/18 11:47:39:636 CEST] 00000021 SystemOut                                                    O Extracting: session-log-backup.xml
+[7/17/18 11:47:39:636 CEST] 00000021 SystemOut                                                    O Extracting: session-log.xml
+[7/17/18 11:47:39:644 CEST] 00000021 SystemOut                                                    O cognosLocales=fr
+[7/17/18 11:47:42:181 CEST] 00000021 SystemOut                                                    O Logon successful as cognosdma
+[7/17/18 11:47:42:331 CEST] 00000021 SystemOut                                                    O setLocale ActiveLocale=en-gb DefaultLocale=en-gb
+[7/17/18 11:47:42:335 CEST] 00000021 SystemOut                                                    O createNamespace(PHYSICAL, Model)
+[7/17/18 11:47:42:337 CEST] 00000021 SystemOut                                                    O createNamespace(PHYSICALUSED, Model)
+[7/17/18 11:47:42:339 CEST] 00000021 SystemOut                                                    O createNamespace(AUTOGENERATION, Model)
+[7/17/18 11:47:42:342 CEST] 00000021 SystemOut                                                    O createNamespace(FINAL, AUTOGENERATION)
+[7/17/18 11:47:42:345 CEST] 00000021 SystemOut                                                    O createNamespace(REF, AUTOGENERATION)
+[7/17/18 11:47:42:347 CEST] 00000021 SystemOut                                                    O createNamespace(SEC, AUTOGENERATION)
+[7/17/18 11:47:42:349 CEST] 00000021 SystemOut                                                    O createNamespace(FILTER_FINAL, AUTOGENERATION)
+[7/17/18 11:47:42:351 CEST] 00000021 SystemOut                                                    O createNamespace(FILTER_REF, AUTOGENERATION)
+[7/17/18 11:47:42:353 CEST] 00000021 SystemOut                                                    O createNamespace(DATA, Model)
+[7/17/18 11:47:42:355 CEST] 00000021 SystemOut                                                    O createNamespace(DIMENSIONAL, Model)
+[7/17/18 11:47:42:362 CEST] 00000021 SystemOut                                                    O DBImport(PHYSICAL, DWHTEST, cognos_ro, dbo)
+[7/17/18 11:47:42:365 CEST] 00000021 SystemOut                                                    O copyQuerySubject([PHYSICALUSED], [PHYSICAL].[SPECIALITE])
+[7/17/18 11:47:42:367 CEST] 00000021 SystemOut                                                    O renameQuerySubject([PHYSICALUSED].[SPECIALITE], FINAL_SPECIALITE)
+[7/17/18 11:47:42:370 CEST] 00000021 SystemOut                                                    O createQuerySubject(PHYSICALUSED, FINAL, FINAL_SPECIALITE, FINAL_SPECIALITE)
+[7/17/18 11:47:42:374 CEST] 00000021 SystemOut                                                    O createQuerySubject(FINAL, DATA, SPECIALITE, SPECIALITE)
+[7/17/18 11:47:42:387 CEST] 00000021 SystemOut                                                    O SPECIALITEFinal ids : Root
+[7/17/18 11:47:42:388 CEST] 00000021 SystemOut                                                    O {}
+[7/17/18 11:47:42:388 CEST] 00000021 SystemOut                                                    O {}
+[7/17/18 11:47:42:390 CEST] 00000021 SystemOut                                                    O addLocale(fr)
+[7/17/18 11:47:42:429 CEST] 00000021 SystemErr                                                    R AxisFault
+ faultCode: Client
+ faultSubcode: 
+ faultString: Metadata Provider Error
+ faultActor: 
+ faultNode: 
+ faultDetail: 
+	{http://developer.cognos.com/schemas/bibus/3/}exception:<ns1:severity>Error</ns1:severity><ns1:errorCode>caf</ns1:errorCode><ns1:message><ns1:messageString>BME-AS-0022 Model was not opened.
+</ns1:messageString><ns1:nestingLevel>1</ns1:nestingLevel></ns1:message>
+[7/17/18 11:47:42:429 CEST] 00000021 SystemErr                                                    R Metadata Provider Error
+[7/17/18 11:47:42:430 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.message.SOAPFaultBuilder.createFault(SOAPFaultBuilder.java:223)
+[7/17/18 11:47:42:451 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.message.SOAPFaultBuilder.endElement(SOAPFaultBuilder.java:130)
+[7/17/18 11:47:42:451 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.encoding.DeserializationContext.endElement(DeserializationContext.java:1088)
+[7/17/18 11:47:42:451 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(AbstractSAXParser.java:609)
+[7/17/18 11:47:42:452 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(XMLDocumentFragmentScannerImpl.java:1782)
+[7/17/18 11:47:42:452 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:2967)
+[7/17/18 11:47:42:452 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:602)
+[7/17/18 11:47:42:452 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:112)
+[7/17/18 11:47:42:453 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:505)
+[7/17/18 11:47:42:453 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:841)
+[7/17/18 11:47:42:453 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:770)
+[7/17/18 11:47:42:453 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
+[7/17/18 11:47:42:454 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1213)
+[7/17/18 11:47:42:454 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:643)
+[7/17/18 11:47:42:454 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(SAXParserImpl.java:327)
+[7/17/18 11:47:42:454 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.encoding.DeserializationContext.parse(DeserializationContext.java:228)
+[7/17/18 11:47:42:455 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.SOAPPart.getAsSOAPEnvelope(SOAPPart.java:699)
+[7/17/18 11:47:42:455 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.Message.getSOAPEnvelope(Message.java:436)
+[7/17/18 11:47:42:455 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.handlers.soap.MustUnderstandChecker.invoke(MustUnderstandChecker.java:63)
+[7/17/18 11:47:42:455 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.AxisClient.invoke(AxisClient.java:207)
+[7/17/18 11:47:42:456 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invokeEngine(Call.java:2785)
+[7/17/18 11:47:42:456 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:2768)
+[7/17/18 11:47:42:456 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:2444)
+[7/17/18 11:47:42:456 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:2367)
+[7/17/18 11:47:42:457 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:1813)
+[7/17/18 11:47:42:459 CEST] 00000021 SystemErr                                                    R 	at com.cognos.developer.schemas.bibus._3.MetadataServiceStub.updateMetadata(MetadataServiceStub.java:6371)
+[7/17/18 11:47:42:459 CEST] 00000021 SystemErr                                                    R 	at com.dma.svc.CognosSVC.executeAllActions(CognosSVC.java:215)
+[7/17/18 11:47:42:460 CEST] 00000021 SystemErr                                                    R 	at com.dma.web.SendQuerySubjectsServlet.doGet(SendQuerySubjectsServlet.java:425)
+[7/17/18 11:47:42:460 CEST] 00000021 SystemErr                                                    R 	at com.dma.web.SendQuerySubjectsServlet.doPost(SendQuerySubjectsServlet.java:544)
+[7/17/18 11:47:42:460 CEST] 00000021 SystemErr                                                    R 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:595)
+[7/17/18 11:47:42:461 CEST] 00000021 SystemErr                                                    R 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:668)
+[7/17/18 11:47:42:461 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.service(ServletWrapper.java:1290)
+[7/17/18 11:47:42:461 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.handleRequest(ServletWrapper.java:778)
+[7/17/18 11:47:42:461 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.handleRequest(ServletWrapper.java:475)
+[7/17/18 11:47:42:462 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.filter.WebAppFilterManager.invokeFilters(WebAppFilterManager.java:1161)
+[7/17/18 11:47:42:462 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.webapp.WebApp.handleRequest(WebApp.java:4956)
+[7/17/18 11:47:42:462 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.osgi.DynamicVirtualHost$2.handleRequest(DynamicVirtualHost.java:315)
+[7/17/18 11:47:42:462 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.WebContainer.handleRequest(WebContainer.java:1014)
+[7/17/18 11:47:42:462 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.osgi.DynamicVirtualHost$2.run(DynamicVirtualHost.java:280)
+[7/17/18 11:47:42:463 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink$TaskWrapper.run(HttpDispatcherLink.java:967)
+[7/17/18 11:47:42:463 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink.wrapHandlerAndExecute(HttpDispatcherLink.java:359)
+[7/17/18 11:47:42:463 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink.ready(HttpDispatcherLink.java:318)
+[7/17/18 11:47:42:463 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.handleDiscrimination(HttpInboundLink.java:471)
+[7/17/18 11:47:42:464 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.handleNewRequest(HttpInboundLink.java:405)
+[7/17/18 11:47:42:464 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.processRequest(HttpInboundLink.java:285)
+[7/17/18 11:47:42:464 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.ready(HttpInboundLink.java:256)
+[7/17/18 11:47:42:465 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.NewConnectionInitialReadCallback.sendToDiscriminators(NewConnectionInitialReadCallback.java:174)
+[7/17/18 11:47:42:465 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.NewConnectionInitialReadCallback.complete(NewConnectionInitialReadCallback.java:83)
+[7/17/18 11:47:42:465 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.requestComplete(WorkQueueManager.java:504)
+[7/17/18 11:47:42:465 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.attemptIO(WorkQueueManager.java:574)
+[7/17/18 11:47:42:466 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.workerRun(WorkQueueManager.java:929)
+[7/17/18 11:47:42:466 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager$Worker.run(WorkQueueManager.java:1018)
+[7/17/18 11:47:42:466 CEST] 00000021 SystemErr                                                    R 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+[7/17/18 11:47:42:466 CEST] 00000021 SystemErr                                                    R 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+[7/17/18 11:47:42:467 CEST] 00000021 SystemErr                                                    R 	at java.lang.Thread.run(Thread.java:745)
+[7/17/18 11:47:42:561 CEST] 00000021 SystemOut                                                    O logoff
+[7/17/18 11:47:42:618 CEST] 00000021 SystemErr                                                    R AxisFault
+ faultCode: Client
+ faultSubcode: 
+ faultString: CM-REQ-4342 Une erreur s'est produite avec le client.
+ faultActor: 
+ faultNode: 
+ faultDetail: 
+	{http://developer.cognos.com/schemas/bibus/3/}exception:
+					<severity>error</severity>
+					<errorCode>caf</errorCode>
+					<ns1:message>
+						<messageString>CM-CAM-4005 Authentification impossible. Vérifiez la connexion au serveur d'annuaire de sécurité et confirmez les données d'identification entrées à la connexion.</messageString>
+					<detail>
+					<exception xmlns:cm="http://developer.cognos.com/schemas/bibus/3/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="bus:CAMException">
+						<severity xsi:type="bus:severityEnum">error</severity>
+						<errorCode>-38</errorCode>
+						<errorCodeString xml:space="preserve" xsi:type="xsd:string">camAuthUnrecoverable</errorCodeString>
+						<messages soapenc:arrayType="bus:message[1]" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="SOAP-ENC:Array">
+							<item xsi:type="bus:message">
+								<messageString xml:space="preserve" xsi:type="xsd:string">AAA-AUT-0010 Authentification de l'utilisateur requise. Veuillez vous connecter.</messageString>
+							</item>
+						</messages>
+						<promptInfo xsi:type="bus:promptInfo">
+							<captions soapenc:arrayType="xsd:string[1]" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="SOAP-ENC:Array">
+								<item xml:space="preserve" xsi:type="xsd:string">AAA-AUT-0010 Authentification de l'utilisateur requise. Veuillez vous connecter.</item>
+							</captions>
+						</promptInfo>
+					</exception>
+					</detail>
+					</ns1:message>
+				
+[7/17/18 11:47:42:619 CEST] 00000021 SystemErr                                                    R CM-REQ-4342 Une erreur s'est produite avec le client.
+[7/17/18 11:47:42:619 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.message.SOAPFaultBuilder.createFault(SOAPFaultBuilder.java:223)
+[7/17/18 11:47:42:620 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.message.SOAPFaultBuilder.endElement(SOAPFaultBuilder.java:130)
+[7/17/18 11:47:42:620 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.encoding.DeserializationContext.endElement(DeserializationContext.java:1088)
+[7/17/18 11:47:42:620 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.endElement(AbstractSAXParser.java:609)
+[7/17/18 11:47:42:620 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanEndElement(XMLDocumentFragmentScannerImpl.java:1782)
+[7/17/18 11:47:42:621 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl$FragmentContentDriver.next(XMLDocumentFragmentScannerImpl.java:2967)
+[7/17/18 11:47:42:623 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:602)
+[7/17/18 11:47:42:623 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:112)
+[7/17/18 11:47:42:624 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:505)
+[7/17/18 11:47:42:624 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:841)
+[7/17/18 11:47:42:624 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:770)
+[7/17/18 11:47:42:624 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
+[7/17/18 11:47:42:625 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1213)
+[7/17/18 11:47:42:625 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:643)
+[7/17/18 11:47:42:626 CEST] 00000021 SystemErr                                                    R 	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl.parse(SAXParserImpl.java:327)
+[7/17/18 11:47:42:628 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.encoding.DeserializationContext.parse(DeserializationContext.java:228)
+[7/17/18 11:47:42:629 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.SOAPPart.getAsSOAPEnvelope(SOAPPart.java:699)
+[7/17/18 11:47:42:629 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.Message.getSOAPEnvelope(Message.java:436)
+[7/17/18 11:47:42:629 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.handlers.soap.MustUnderstandChecker.invoke(MustUnderstandChecker.java:63)
+[7/17/18 11:47:42:629 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.AxisClient.invoke(AxisClient.java:207)
+[7/17/18 11:47:42:630 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invokeEngine(Call.java:2785)
+[7/17/18 11:47:42:630 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:2768)
+[7/17/18 11:47:42:640 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:2444)
+[7/17/18 11:47:42:641 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:2367)
+[7/17/18 11:47:42:641 CEST] 00000021 SystemErr                                                    R 	at com.cognos.org.apache.axis.client.Call.invoke(Call.java:1813)
+[7/17/18 11:47:42:641 CEST] 00000021 SystemErr                                                    R 	at com.cognos.developer.schemas.bibus._3.ContentManagerServiceStub.logoff(ContentManagerServiceStub.java:6816)
+[7/17/18 11:47:42:641 CEST] 00000021 SystemErr                                                    R 	at com.dma.svc.CognosSVC.logoff(CognosSVC.java:100)
+[7/17/18 11:47:42:641 CEST] 00000021 SystemErr                                                    R 	at com.dma.web.SendQuerySubjectsServlet.doGet(SendQuerySubjectsServlet.java:431)
+[7/17/18 11:47:42:642 CEST] 00000021 SystemErr                                                    R 	at com.dma.web.SendQuerySubjectsServlet.doPost(SendQuerySubjectsServlet.java:544)
+[7/17/18 11:47:42:642 CEST] 00000021 SystemErr                                                    R 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:595)
+[7/17/18 11:47:42:642 CEST] 00000021 SystemErr                                                    R 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:668)
+[7/17/18 11:47:42:642 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.service(ServletWrapper.java:1290)
+[7/17/18 11:47:42:642 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.handleRequest(ServletWrapper.java:778)
+[7/17/18 11:47:42:643 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.handleRequest(ServletWrapper.java:475)
+[7/17/18 11:47:42:643 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.filter.WebAppFilterManager.invokeFilters(WebAppFilterManager.java:1161)
+[7/17/18 11:47:42:643 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.webapp.WebApp.handleRequest(WebApp.java:4956)
+[7/17/18 11:47:42:643 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.osgi.DynamicVirtualHost$2.handleRequest(DynamicVirtualHost.java:315)
+[7/17/18 11:47:42:643 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.WebContainer.handleRequest(WebContainer.java:1014)
+[7/17/18 11:47:42:644 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.osgi.DynamicVirtualHost$2.run(DynamicVirtualHost.java:280)
+[7/17/18 11:47:42:644 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink$TaskWrapper.run(HttpDispatcherLink.java:967)
+[7/17/18 11:47:42:644 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink.wrapHandlerAndExecute(HttpDispatcherLink.java:359)
+[7/17/18 11:47:42:644 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink.ready(HttpDispatcherLink.java:318)
+[7/17/18 11:47:42:644 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.handleDiscrimination(HttpInboundLink.java:471)
+[7/17/18 11:47:42:645 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.handleNewRequest(HttpInboundLink.java:405)
+[7/17/18 11:47:42:645 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.processRequest(HttpInboundLink.java:285)
+[7/17/18 11:47:42:645 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.ready(HttpInboundLink.java:256)
+[7/17/18 11:47:42:645 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.NewConnectionInitialReadCallback.sendToDiscriminators(NewConnectionInitialReadCallback.java:174)
+[7/17/18 11:47:42:646 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.NewConnectionInitialReadCallback.complete(NewConnectionInitialReadCallback.java:83)
+[7/17/18 11:47:42:646 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.requestComplete(WorkQueueManager.java:504)
+[7/17/18 11:47:42:646 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.attemptIO(WorkQueueManager.java:574)
+[7/17/18 11:47:42:646 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.workerRun(WorkQueueManager.java:929)
+[7/17/18 11:47:42:646 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager$Worker.run(WorkQueueManager.java:1018)
+[7/17/18 11:47:42:646 CEST] 00000021 SystemErr                                                    R 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+[7/17/18 11:47:42:647 CEST] 00000021 SystemErr                                                    R 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+[7/17/18 11:47:42:647 CEST] 00000021 SystemErr                                                    R 	at java.lang.Thread.run(Thread.java:745)
+[7/17/18 11:47:42:647 CEST] 00000021 SystemOut                                                    O END COGNOS API
+[7/17/18 11:47:42:647 CEST] 00000021 SystemOut                                                    O START XML MODIFICATION
+[7/17/18 11:47:42:657 CEST] 00000021 SystemErr                                                    R java.lang.NullPointerException
+[7/17/18 11:47:42:658 CEST] 00000021 SystemErr                                                    R 	at com.dma.web.SendQuerySubjectsServlet.doGet(SendQuerySubjectsServlet.java:466)
+[7/17/18 11:47:42:658 CEST] 00000021 SystemErr                                                    R 	at com.dma.web.SendQuerySubjectsServlet.doPost(SendQuerySubjectsServlet.java:544)
+[7/17/18 11:47:42:658 CEST] 00000021 SystemErr                                                    R 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:595)
+[7/17/18 11:47:42:659 CEST] 00000021 SystemErr                                                    R 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:668)
+[7/17/18 11:47:42:659 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.service(ServletWrapper.java:1290)
+[7/17/18 11:47:42:659 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.handleRequest(ServletWrapper.java:778)
+[7/17/18 11:47:42:659 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.servlet.ServletWrapper.handleRequest(ServletWrapper.java:475)
+[7/17/18 11:47:42:660 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.filter.WebAppFilterManager.invokeFilters(WebAppFilterManager.java:1161)
+[7/17/18 11:47:42:660 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.webapp.WebApp.handleRequest(WebApp.java:4956)
+[7/17/18 11:47:42:660 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.osgi.DynamicVirtualHost$2.handleRequest(DynamicVirtualHost.java:315)
+[7/17/18 11:47:42:660 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.WebContainer.handleRequest(WebContainer.java:1014)
+[7/17/18 11:47:42:660 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.webcontainer.osgi.DynamicVirtualHost$2.run(DynamicVirtualHost.java:280)
+[7/17/18 11:47:42:661 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink$TaskWrapper.run(HttpDispatcherLink.java:967)
+[7/17/18 11:47:42:661 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink.wrapHandlerAndExecute(HttpDispatcherLink.java:359)
+[7/17/18 11:47:42:661 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.dispatcher.internal.channel.HttpDispatcherLink.ready(HttpDispatcherLink.java:318)
+[7/17/18 11:47:42:661 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.handleDiscrimination(HttpInboundLink.java:471)
+[7/17/18 11:47:42:662 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.handleNewRequest(HttpInboundLink.java:405)
+[7/17/18 11:47:42:662 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.processRequest(HttpInboundLink.java:285)
+[7/17/18 11:47:42:662 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.http.channel.internal.inbound.HttpInboundLink.ready(HttpInboundLink.java:256)
+[7/17/18 11:47:42:662 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.NewConnectionInitialReadCallback.sendToDiscriminators(NewConnectionInitialReadCallback.java:174)
+[7/17/18 11:47:42:662 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.NewConnectionInitialReadCallback.complete(NewConnectionInitialReadCallback.java:83)
+[7/17/18 11:47:42:663 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.requestComplete(WorkQueueManager.java:504)
+[7/17/18 11:47:42:663 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.attemptIO(WorkQueueManager.java:574)
+[7/17/18 11:47:42:663 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager.workerRun(WorkQueueManager.java:929)
+[7/17/18 11:47:42:663 CEST] 00000021 SystemErr                                                    R 	at com.ibm.ws.tcpchannel.internal.WorkQueueManager$Worker.run(WorkQueueManager.java:1018)
+[7/17/18 11:47:42:663 CEST] 00000021 SystemErr                                                    R 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+[7/17/18 11:47:42:663 CEST] 00000021 SystemErr                                                    R 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+[7/17/18 11:47:42:664 CEST] 00000021 SystemErr                                                    R 	at java.lang.Thread.run(Thread.java:745)

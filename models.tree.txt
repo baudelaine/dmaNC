@@ -1,0 +1,16 @@
+root@ODRBIMODSVR:/mnt/models# l
+total 8.0K
+drwxrwxrwx 2 root root 4.0K Jul 17 11:47 AAAA
+drwxrwxrwx 2 root root 4.0K Jul 17 11:56 ZZZZ
+root@ODRBIMODSVR:/mnt/models# l ZZZZ/
+total 32K
+-rwxrwxrwx 1 root root  566 Jul 17 11:56 IDLog.xml
+-rwxrwxrwx 1 root root   59 Jul 17 11:56 customdata.xml
+-rwxrwxrwx 1 root root  322 Jul 17 11:56 archive-log.xml
+-rwxrwxrwx 1 root root 1.3K Jul 17 11:56 ZZZZ.cpf
+-rwxrwxrwx 1 root root    0 Jul 17 11:56 session-log-backup.xml
+-rwxrwxrwx 1 root root  424 Jul 17 11:56 Preferences.xml
+-rwxrwxrwx 1 root root 1.2K Jul 17 11:56 model.xml
+-rwxrwxrwx 1 root root 2.8K Jul 17 11:56 log.xml
+-rwxrwxrwx 1 root root 2.8K Jul 17 11:56 session-log.xml
+

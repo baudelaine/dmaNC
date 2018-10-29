@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bmtactionlog project="C:\models\IBS lien\IBS lien.cpf" templatedir="../templates/bmt/Cr1Model" timestamp="20180719144301955" user="Administrator" version="11.0.7.11">
+<transaction saved="false" seq="1" timestamp="20180719144314513" uniqueId="C1810A4AC1810A4A">
+<action seq="1" type="UpdateObject"><inputparams>
+<param seq="1" type="handle"><mappingpath>querySubject</mappingpath><value>[DATA].[HISTORIQUE_]</value></param>
+<param seq="2" type="cclnode"><value><![CDATA[<updateObjectRequest><tasks><task name="addObject"><parameters>
+<param locale="en-g" name="objectName" value="MONTANT_H"/>
+<param name="objectType" value="queryItem"/>
+<param name="makeNameUnique" value="false"/>
+<param name="basedOn"><expression></expression></param></parameters></task></tasks></updateObjectRequest>]]></value></param></inputparams><domchanges/>
+<result success="t"><outputparams/></result></action></transaction></bmtactionlog>

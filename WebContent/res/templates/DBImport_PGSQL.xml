@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bmtactionlog project="C:\models\PGImport\PGImport.cpf" templatedir="../templates/bmt/Cr1Model" timestamp="20180713120234790" user="Administrator" version="11.0.7.11">
+<transaction saved="false" seq="1" timestamp="20180713120259329" uniqueId="8274096382740963">
+<action seq="1" type="DBImport"><inputparams>
+<param seq="1" type="handle"><mappingpath>namespace</mappingpath><value>[PGSample]</value></param>
+<param seq="2" type="cclnode"><value><![CDATA[
+<item Name="PGSampl" Type="database" Value="partial" dbType="JDBC" description="" isSystem="false" screenTip="">
+	<item Name="publi" Type="schema" Value="partial">
+		<item Name="Tables" Type="tables" Value="true"/>
+	</item>
+</item>]]></value></param>
+<param seq="3" type="integer"><value>0</value></param>
+<param seq="4" type="integer"><value>1</value></param>
+<param seq="5" type="integer"><value>1</value></param>
+<param seq="6" type="integer"><value>0</value></param>
+<param seq="7" type="integer"><value>0</value></param>
+<param seq="8" type="integer"><value>0</value></param>
+<param seq="9" type="integer"><value>0</value></param>
+<param seq="10" type="integer"><value>1</value></param>
+<param seq="11" type="integer"><value>0</value></param>
+<param seq="12" type="integer"><value>0</value></param></inputparams><domchanges/><result success="t"><outputparams/></result></action>
+<action seq="3" type="DBRelease"><inputparams/><domchanges/><result success="t"><outputparams/></result></action></transaction></bmtactionlog>
