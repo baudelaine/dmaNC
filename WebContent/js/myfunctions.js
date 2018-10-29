@@ -1846,7 +1846,6 @@ function ChooseTable(table, sort) {
         table.selectpicker('refresh');
         // $('#modPKTables').selectpicker('refresh');
         // localStorage.setItem('tables', JSON.stringify(tables));
-        loadDBMD(dbmd);
       }
       else {
         console.log("GetTables");
