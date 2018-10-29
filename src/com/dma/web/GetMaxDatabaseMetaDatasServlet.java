@@ -99,7 +99,7 @@ public class GetMaxDatabaseMetaDatasServlet extends HttpServlet {
 			    	if(schema.equalsIgnoreCase("MAXIMO")) {
 						path = Paths.get(request.getServletContext().getRealPath("res/maximo.json"));
 						String relationsQuery = (String) Tools.fromJSON(path.toFile()).get("relationsQuery");
-//			    		stmt = con.createStatement();
+			    		stmt = con.createStatement();
 //			    		stmt.execute("SET SCHEMA " + schema);
 			    		rst = stmt.executeQuery(relationsQuery.replace(";", "") + " WHERE TARGETOBJ = '" + table_name + "'");
 			    	}
@@ -119,7 +119,7 @@ public class GetMaxDatabaseMetaDatasServlet extends HttpServlet {
 			    	if(schema.equalsIgnoreCase("MAXIMO")) {
 						path = Paths.get(request.getServletContext().getRealPath("res/maximo.json"));
 						String relationsQuery = (String) Tools.fromJSON(path.toFile()).get("relationsQuery");
-//			    		stmt = con.createStatement();
+			    		stmt = con.createStatement();
 //			    		stmt.execute("SET SCHEMA " + schema);
 			    		rst = stmt.executeQuery(relationsQuery.replace(";", "") + " WHERE OBJECTNAME = '" + table_name + "'");
 			    	}
