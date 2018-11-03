@@ -575,6 +575,8 @@ function aboveFormatter(value, row, index){
   }
 
   else{
+
+    row.above = row.seqs[0].column_name;
     var options_str = "";
     var above = row.above;
 
