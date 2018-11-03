@@ -48,7 +48,7 @@ relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", edit
 // relationCols.push({field:"rightJoin", title: "Right Join", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"duplicate", title: '<i class="glyphicon glyphicon-duplicate"></i>', formatter: "duplicateFormatter", align: "center"});
 relationCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
-relationCols.push({field:"operate", title: "operate", formatter: "operateRelationFormatter", align: "center", events: "operateRelationEvents"});
+// relationCols.push({field:"operate", title: "operate", formatter: "operateRelationFormatter", align: "center", events: "operateRelationEvents"});
 
 // relationCols.push({field:"linker", formatter: "boolFormatter", align: "center", title: "linker"});
 // relationCols.push({field:"linker_ids", title: "linker_ids"});
@@ -1195,9 +1195,9 @@ function buildSubTable($el, cols, data, parentData){
 
           default:
 
-            console.log(row);
-            console.log(value);
-            console.log(newValue);
+            // console.log(row);
+            // console.log(value);
+            // console.log(newValue);
 
         }
 
