@@ -21,6 +21,7 @@ public class Relation {
 	boolean sec = false;
 	boolean tra = false;
 	boolean nommageRep = false;
+	String above = "";
 	boolean leftJoin = false;
 	String usedForDimensions = "";
 	boolean rightJoin = false;
@@ -55,6 +56,12 @@ public class Relation {
 	}
 	public void setNommageRep(boolean nommageRep) {
 		this.nommageRep = nommageRep;
+	}
+	public String getAbove() {
+		return above;
+	}
+	public void setAbove(String above) {
+		this.above = above;
 	}
 	public String getKey_name() {
 		return key_name;

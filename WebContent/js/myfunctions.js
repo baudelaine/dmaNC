@@ -39,6 +39,7 @@ relationCols.push({field:"ref", title: "ref", formatter: "boolFormatter", align:
 relationCols.push({field:"sec", title: "sec", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"tra", title: "tra", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"nommageRep", title: "RepTableName", formatter: "boolFormatter", align: "center"});
+relationCols.push({field:"above", title: "Above", formatter: "aboveFormatter", align: "center", events: "aboveEvents"});
 relationCols.push({field:"leftJoin", title: "Left Join", formatter: "boolFormatter", align: "center"});
 // relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", editable: {type: "text", mode: "inline"}, align: "center"});
@@ -47,7 +48,7 @@ relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", edit
 // relationCols.push({field:"rightJoin", title: "Right Join", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"duplicate", title: '<i class="glyphicon glyphicon-duplicate"></i>', formatter: "duplicateFormatter", align: "center"});
 relationCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
-// relationCols.push({field:"operate", title: "operate", formatter: "operateRelationFormatter", align: "center", events: "operateRelationEvents"});
+relationCols.push({field:"operate", title: "operate", formatter: "operateRelationFormatter", align: "center", events: "operateRelationEvents"});
 
 // relationCols.push({field:"linker", formatter: "boolFormatter", align: "center", title: "linker"});
 // relationCols.push({field:"linker_ids", title: "linker_ids"});
@@ -62,9 +63,9 @@ window.pktable_aliasEvents = {
 //   return '<a href="#" id="pktable_alias">' + value + 'superuser</a>'
 // }
 //
-// $('pktable_alias .editable').on('update', function(e, editable) {
-//     alert('new value: ' + editable.value);
-// });
+$('pktable_alias .editable').on('update', function(e, editable) {
+    alert('new value: ' + editable.value);
+});
 
 var newRelationCols = [];
 
@@ -558,6 +559,39 @@ window.operateQSEvents = {
     }
 };
 
+window.aboveEvents = {
+  'change .Select1': function (e, value, row, index){
+    var selectedText = $("#Select1").find("option:selected").val();
+    row.above = selectedText;
+  }
+
+};
+
+function aboveFormatter(value, row, index){
+
+  if(row.seqs.length < 2){
+    row.above = row.seqs[0].column_name;
+    return row.seqs[0].column_name;
+  }
+
+  else{
+    var options_str = "";
+    var above = row.above;
+
+    $.each(row.seqs, function(index, seq){
+      options_str += '<option value="' + seq.column_name + '">' + seq.column_name + '</option>';
+    });
+
+    return [
+      '<select class="Select1" name="drop1" id="Select1">',
+      options_str,
+      '</select>'
+    ].join('');
+  }
+}
+
+
+
 function operateRelationFormatter(value, row, index) {
     return [
         '<a class="duplicate" href="javascript:void(0)" title="Duplicate">',
@@ -854,9 +888,6 @@ function expandTable($detail, cols, data, parentData) {
 }
 
 function buildSubTable($el, cols, data, parentData){
-
-  console.log("buildSubTable: activeTab=" + activeTab);
-  console.log("buildSubTable: previousTab=" + previousTab);
 
   $el.bootstrapTable({
       columns: cols,
