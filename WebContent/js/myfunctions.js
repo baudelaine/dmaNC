@@ -39,7 +39,8 @@ relationCols.push({field:"ref", title: "ref", formatter: "boolFormatter", align:
 relationCols.push({field:"sec", title: "sec", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"tra", title: "tra", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"nommageRep", title: "RepTableName", formatter: "boolFormatter", align: "center"});
-relationCols.push({field:"above", title: "Above", formatter: "aboveFormatter", align: "center", events: "aboveEvents"});
+// relationCols.push({field:"above", title: "Above", formatter: "aboveFormatter", align: "center", events: "aboveEvents"});
+relationCols.push({field:"above", title: "Above", align: "center", editable: {type: "text", mode: "inline"}});
 relationCols.push({field:"leftJoin", title: "Left Join", formatter: "boolFormatter", align: "center"});
 // relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", editable: {type: "text", mode: "inline"}, align: "center"});
@@ -563,6 +564,13 @@ window.aboveEvents = {
   'change .Select1': function (e, value, row, index){
     var selectedText = $("#Select1").find("option:selected").val();
     row.above = selectedText;
+    console.log(e);
+    console.log(value);
+    console.log(row);
+    console.log(index);
+    console.log($activeSubDatasTable);
+    // updateCell($activeSubDatasTable, index, 'above', selectedText);
+    // updateRow($activeSubDatasTable, index, row);
   }
 
 };
@@ -570,25 +578,26 @@ window.aboveEvents = {
 function aboveFormatter(value, row, index){
 
   if(row.seqs.length < 2){
-    row.above = row.seqs[0].column_name;
+    // row.above = row.seqs[0].column_name;
     return row.seqs[0].column_name;
   }
 
   else{
+    return row.seqs[1].column_name;
 
-    row.above = row.seqs[0].column_name;
-    var options_str = "";
-    var above = row.above;
-
-    $.each(row.seqs, function(index, seq){
-      options_str += '<option value="' + seq.column_name + '">' + seq.column_name + '</option>';
-    });
-
-    return [
-      '<select class="Select1" name="drop1" id="Select1">',
-      options_str,
-      '</select>'
-    ].join('');
+    // row.above = row.seqs[0].column_name;
+    // var options_str = "";
+    // var above = row.above;
+    //
+    // $.each(row.seqs, function(index, seq){
+    //   options_str += '<option value="' + seq.column_name + '">' + seq.column_name + '</option>';
+    // });
+    //
+    // return [
+    //   '<select class="Select1" name="drop1" id="Select1">',
+    //   options_str,
+    //   '</select>'
+    // ].join('');
   }
 }
 
