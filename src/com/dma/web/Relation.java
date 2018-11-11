@@ -57,12 +57,6 @@ public class Relation {
 	public void setNommageRep(boolean nommageRep) {
 		this.nommageRep = nommageRep;
 	}
-	public String getAbove() {
-		return above;
-	}
-	public void setAbove(String above) {
-		this.above = above;
-	}
 	public String getKey_name() {
 		return key_name;
 	}
@@ -179,6 +173,12 @@ public class Relation {
 	}
 	public void setRecCountPercent(int recCountPercent) {
 		this.recCountPercent = recCountPercent;
+	}
+	public String getAbove() {
+		return above;
+	}
+	public void setAbove(String above) {
+		this.above = above;
 	}
 	public boolean isLeftJoin() {
 		return leftJoin;

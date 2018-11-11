@@ -313,7 +313,7 @@
 
 			var data = [
 			  {
-			    "_id": "PROJECT_ALIASFinal",
+			    "_id": "PROJECT_ALIASFinalqqq",
 			    "_ref": null,
 			    "table_name": "PROJECT",
 			    "table_alias": "PROJECT_ALIAS",
@@ -426,6 +426,8 @@
 			        "ref": false,
 			        "relashionship": "[FINAL].[PROJECT_ALIAS].[MAJPROJ] = [PROJ].[PROJNO] AND [FINAL].[PROJECT_ALIAS].[MAJPROJ] = [PROJECT].[PROJNO]",
 			        "key_type": "F",
+							"above": "MAJPROJ",
+							// "above": "ggggggggggggg",
 			        "seqs": [
 			          {
 			            "column_name": "MAJPROJ",
@@ -433,9 +435,9 @@
 			            "key_seq": 1
 			          },
 			          {
-			            "column_name": "MAJPROJ",
+			            "column_name": "MAJPROJAA",
 			            "pkcolumn_name": "PROJNO",
-			            "key_seq": 1
+			            "key_seq": 2
 			          }
 			        ]
 			      },
@@ -452,6 +454,8 @@
 			        "ref": false,
 			        "relashionship": "[FINAL].[PROJECT_ALIAS].[RESPEMP] = [EMP].[EMPNO] AND [FINAL].[PROJECT_ALIAS].[RESPEMP] = [EMPLOYEE].[EMPNO]",
 			        "key_type": "F",
+							"above": "RESPEMP",
+							// "above": "qscvqcqcqc",
 			        "seqs": [
 			          {
 			            "column_name": "RESPEMP",
@@ -459,9 +463,9 @@
 			            "key_seq": 1
 			          },
 			          {
-			            "column_name": "RESPEMP",
+			            "column_name": "RESPEMPAA",
 			            "pkcolumn_name": "EMPNO",
-			            "key_seq": 1
+			            "key_seq": 2
 			          }
 			        ]
 			      },
@@ -478,6 +482,8 @@
 			        "ref": false,
 			        "relashionship": "[FINAL].[PROJECT_ALIAS].[DEPTNO] = [DEPARTMENT].[DEPTNO] AND [FINAL].[PROJECT_ALIAS].[DEPTNO] = [DEPT].[DEPTNO]",
 			        "key_type": "F",
+							"above": "DEPTNO",
+							// "above": ",h,yu,yu,ytu,ty,",
 			        "seqs": [
 			          {
 			            "column_name": "DEPTNO",
@@ -485,9 +491,9 @@
 			            "key_seq": 1
 			          },
 			          {
-			            "column_name": "DEPTNO",
+			            "column_name": "DEPTNOAA",
 			            "pkcolumn_name": "DEPTNO",
-			            "key_seq": 1
+			            "key_seq": 2
 			          }
 			        ]
 			      }
@@ -508,17 +514,18 @@
 			cols.push({field:"table_alias", title: "table_alias", editable: false, sortable: false});
 			cols.push({field:"type", title: "type", sortable: false});
 			cols.push({field:"visible", title: "visible", formatter: "boolFormatter", sortable: false});
-			cols.push({field:"filter", title: "filter", editable: {type: "textarea"}, sortable: false});
-			cols.push({field:"label", title: "label", editable: {type: "textarea"}});
+			cols.push({field:"filter", title: "filter", editable: {type: "textarea", mode: "inline"}, sortable: false});
+			cols.push({field:"label", title: "label", editable: {type: "textarea", mode: "inline"}});
 
 			var subcols = [];
 			subcols.push({field:"subindex", title: "subindex", formatter: "indexFormatter", sortable: false});
 			subcols.push({field:"field_name", title: "field_name", sortable: false });
-			subcols.push({field:"label", title: "label", editable: {type: "text"}, sortable: false});
+			subcols.push({field:"label", title: "label", editable: {type: "text", mode: "inline"}, sortable: false});
 			subcols.push({field:"traduction", title: "traduction", formatter: "boolFormatter", sortable: false});
 			subcols.push({field:"visibleField", title: "visible", formatter: "boolFormatter", sortable: false});
 			subcols.push({field:"field_type", title: "field_type", editable: false, sortable: false});
 			subcols.push({field:"timezone", title: "timezone", formatter: "boolFormatter", sortable: false});
+			subcols.push({field:"above", title: "Above", editable: {type: "text", mode: "inline"}, sortable: false});
 
 			$(function () {
 					buildTable($table, cols, data, true);
@@ -530,12 +537,141 @@
 					buildSubTable($subtable, cols, data, false);
 			}
 
-			function buildSubTable($el, cols, data, detailView){
+			function buildSubTable($el, cols, datas, detailView){
+
+				console.log(datas);
+				console.log(cols);
+				$.each(cols, function(i, col){
+					if(col.field == "above"){
+						console.log(col.editable);
+						$.each(datas, function(j, data){
+							var source = [];
+							var option = {};
+							$.each(data.seqs, function(k, seq){
+								console.log(seq.column_name);
+								option.text = seq.column_name;
+								option.value = seq.column_name;
+								source.push(option);
+							})
+							col.editable.source = source;
+							console.log(col.editable);
+						})
+					}
+				})
+
 
 				$el.bootstrapTable({
 						columns: cols,
 						// url: url,
-						data: data,
+						uniqueId: "index",
+						data: datas,
+
+						onAll: function(name, args){
+			        //Fires when all events trigger, the parameters contain: name: the event name, args: the event data.
+			        console.log("---------- buildSubTable: onAll -------------");
+			        console.log("name=" + name);
+			        console.log("args=");
+			        console.log(args);
+			        console.log("---------- buildSubTable: onAll -------------");
+			      },
+
+						onPreBody: function(datas){
+
+
+						},
+
+			      onEditableInit: function(){
+			        //Fired when all columns was initialized by $().editable() method.
+							// console.log("---------- buildSubTable: onEditableInit -------------");
+							// console.log("e=");
+			        // console.log(e);
+			        // console.log("editable=");
+			        // console.log(editable);
+			        // console.log("field=");
+			        // console.log(field);
+			        // console.log("row=");
+			        // console.log(row);
+			        // console.log("oldValue=");
+			        // console.log(oldValue);
+			        // console.log("---------- buildSubTable: onEditableInit -------------");
+			      },
+			      onEditableShown: function(editable, field, row, $el){
+			        //Fired when an editable cell is opened for edits.
+			        // console.log("---------- buildSubTable: onEditableShown -------------");
+			        // console.log("editable=");
+			        // console.log(editable);
+			        // console.log("field=");
+			        // console.log(field);
+			        // console.log("row=");
+			        // console.log(row);
+			        // console.log("$el=");
+			        // console.log($el);
+			        // console.log("---------- buildSubTable: onEditableShown -------------");
+			      },
+			      onEditableHidden: function(field, row, $el, reason){
+			        //Fired when an editable cell is hidden / closed.
+							// console.log("---------- buildSubTable: onEditableHidden -------------");
+			        // console.log("editable=");
+			        // console.log(editable);
+			        // console.log("field=");
+			        // console.log(field);
+			        // console.log("row=");
+			        // console.log(row);
+			        // console.log("oldValue=");
+			        // console.log(oldValue);
+			        // console.log("---------- buildSubTable: onEditableHidden -------------");
+			      },
+			      onEditableSave: function (field, row, oldValue, editable) {
+			        //Fired when an editable cell is saved.
+			        // console.log("---------- buildSubTable: onEditableSave -------------");
+			        // console.log("editable=");
+			        // console.log(editable);
+			        // console.log("field=");
+			        // console.log(field);
+			        // console.log("row=");
+			        // console.log(row);
+			        // console.log("oldValue=");
+			        // console.log(oldValue);
+			        // console.log("---------- buildSubTable: onEditableSave -------------");
+			      },
+
+						onResetView: function(){
+							var $tableRows = $el.find('tbody tr');
+
+							$.each(datas, function(i, obj){
+
+								console.log(obj);
+
+								if(obj.seqs.length > 1){
+									$tableRows.eq(i).find('a').eq(1).editable('destroy');
+									// $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
+
+									var customFieldType = {
+										type: "select",
+										mode: "inline"
+									};
+
+									var source = [];
+									$.each(obj.seqs, function(k, seq){
+										console.log(seq.column_name);
+										var option = {};
+										option.text = seq.column_name;
+										option.value = seq.column_name;
+										source.push(option);
+									})
+
+									customFieldType.source = source;
+
+
+									// customFieldType.source = dbDataType;
+									$tableRows.eq(i).find('a').eq(1).editable(customFieldType);
+									$tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
+								}
+
+							})
+
+						},
+
 						onClickCell: function (field, value, row, $element){
 							if(field.match("traduction|visibleField|timezone")){
 								var newValue = value == false ? true : false;
@@ -549,6 +685,47 @@
 								updateCell($el, row.index, field, newValue);
 
 							}
+
+							if(field.match("above")){
+
+								// console.log(field);
+								// console.log(value);
+								// console.log(row);
+								// console.log($element);
+								//
+								// var $tableRows = $el.find('tbody tr');
+								// console.log($tableRows.eq(row.index).find('a').eq(0).editable);
+								// console.log($el.bootstrapTable('getRowByUniqueId', row.index));
+								// console.log($el.bootstrapTable('getOptions'));
+								// var cols = $el.bootstrapTable('getOptions').columns[0];
+								// console.log(cols);
+								// var editable = cols[7].editable;
+								// console.log(editable);
+								//
+								// var customFieldType = {
+								//   type: "select",
+								//   mode: "inline"
+								// };
+								//
+								// var source = [];
+								// $.each(row.seqs, function(k, seq){
+								// 	console.log(seq.column_name);
+								// 	var option = {};
+								// 	option.text = seq.column_name;
+								// 	option.value = seq.column_name;
+								// 	source.push(option);
+								// })
+								//
+								// customFieldType.source = source;
+								// console.log(customFieldType);
+								// $tableRows.eq(row.index).find('a').eq(0).editable('destroy');
+								//
+								// $tableRows.eq(row.index).find('a').eq(0).editable(customFieldType);
+			          // $tableRows.eq(row.index).find('a').eq(0).editable('option', 'defaultValue', '');
+
+
+							}
+
 						}
 				});
 
@@ -578,11 +755,18 @@
 							},
 							onExpandRow: function (index, row, $detail) {
 									console.log("++++++++++++ row.fields");
-									console.log(row.fields);
-									expandTable($detail, subcols, row.fields);
+									console.log(row.relations);
+									expandTable($detail, subcols, row.relations);
 							}
 					});
 			}
+
+			function aboveFormatter(value, row, index) {
+				console.log(value);
+				console.log(row);
+				console.log(index);
+			}
+
 
 			function boolFormatter(value, row, index) {
 				var icon = value == true ? 'glyphicon-check' : 'glyphicon-unchecked'

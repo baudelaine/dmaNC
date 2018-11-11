@@ -29,17 +29,18 @@ relationCols.push({field:"index", title: "index", formatter: "indexFormatter", s
 relationCols.push({field:"key_name", title: "key_name", sortable: true});
 relationCols.push({field:"key_type", title: "key_type", sortable: true});
 relationCols.push({field:"pktable_name", title: "pktable_name", sortable: true});
-relationCols.push({field:"pktable_alias", title: "pktable_alias", class: "pktable_alias", editable: {type: "text"}, sortable: true, events: "pktable_aliasEvents"});
-relationCols.push({field:"label", title: "Label", sortable: true, editable: {type: "textarea", rows: 4}});
+relationCols.push({field:"pktable_alias", title: "pktable_alias", class: "pktable_alias", editable: {type: "text", mode: "inline"}, sortable: true, events: "pktable_aliasEvents"});
+relationCols.push({field:"label", title: "Label", sortable: true, editable: {type: "textarea", mode: "inline", rows: 4}});
 relationCols.push({field:"description", title: "Description", sortable: false});
 relationCols.push({field:"recCountPercent", title: "count(*) %", sortable: true});
-relationCols.push({field:"relationship", title: "relationship", editable: {type: "textarea", rows: 4}});
+relationCols.push({field:"relationship", title: "relationship", editable: {type: "textarea", mode: "inline", rows: 4}});
 relationCols.push({field:"fin", title: "fin", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"ref", title: "ref", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"sec", title: "sec", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"tra", title: "tra", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"nommageRep", title: "RepTableName", formatter: "boolFormatter", align: "center"});
-relationCols.push({field:"above", title: "Above", formatter: "aboveFormatter", align: "center", events: "aboveEvents"});
+relationCols.push({field:"above", title: "Above", editable: {type: "text", mode: "inline"}, align: "center"});
+// relationCols.push({field:"above", title: "Above", formatter: "aboveFormatter", align: "center", events: "aboveEvents"});
 relationCols.push({field:"leftJoin", title: "Left Join", formatter: "boolFormatter", align: "center"});
 // relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", editable: {type: "text", mode: "inline"}, align: "center"});
@@ -79,12 +80,13 @@ qsCols.push({field:"table_name", title: "table_name", sortable: true});
 qsCols.push({field:"table_alias", title: "table_alias", editable: false, sortable: true});
 qsCols.push({field:"type", title: "type", sortable: true});
 // qsCols.push({field:"visible", title: "visible", formatter: "boolFormatter", align: "center", sortable: false});
-qsCols.push({field:"filter", title: "filter", editable: {type: "textarea"}, sortable: true});
-qsCols.push({field:"label", title: "label", editable: {type: "textarea"}, sortable: true});
-qsCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", rows: 4}});
+qsCols.push({field:"filter", title: "filter", editable: {type: "textarea", mode: "inline"}, sortable: true});
+qsCols.push({field:"label", title: "label", editable: {type: "textarea", mode: "inline"}, sortable: true});
+qsCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
 qsCols.push({field:"recCount", title: "count(*)", sortable: true});
 qsCols.push({field:"recurseCount", title: '<i class="glyphicon glyphicon-repeat" title="Set recurse count"></i>', editable: {
     type: "select",
+    mode: "inline",
     value: 1,
   //   source: [
   //     {value: 1, text: 1},
@@ -195,7 +197,7 @@ var dimensions = {
 }
 
 fieldCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
-fieldCols.push({field:"order", title: "Order", editable: {type: "text"}, sortable: true});
+fieldCols.push({field:"order", title: "Order", editable: {type: "text", mode: "inline"}, sortable: true});
 fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 
 $(document)
@@ -258,6 +260,7 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'addField');
   $datasTable.bootstrapTable('hideColumn', 'recurseCount');
   $datasTable.bootstrapTable('hideColumn', '_id');
+  $datasTable.bootstrapTable('hideColumn', 'above');
   // console.log('dbDataType=');
   // console.log(dbDataType);
 
@@ -279,6 +282,7 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'linker');
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
+  $datasTable.bootstrapTable('hideColumn', 'above');
 
 });
 
@@ -293,6 +297,7 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'label');
   $datasTable.bootstrapTable('showColumn', 'addPKRelation');
   $datasTable.bootstrapTable('showColumn', 'addRelation');
+  $datasTable.bootstrapTable('showColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'addField');
   $datasTable.bootstrapTable('showColumn', 'recurseCount');
   $datasTable.bootstrapTable('showColumn', 'nommageRep');
@@ -314,6 +319,7 @@ $secTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'addField');
   $datasTable.bootstrapTable('showColumn', 'recurseCount');
   $datasTable.bootstrapTable('showColumn', 'nommageRep');
+  $datasTable.bootstrapTable('hideColumn', 'above');
 
 });
 
@@ -345,7 +351,7 @@ $traTab.on('shown.bs.tab', function(e) {
 //   }
 // });
 
-$datasTable.on('reset-view.bs.table', function(){
+$datasTable.on('resetrr-view.bs.table', function(){
   // console.log("++++++++++++++on passe dans reset-view");
   // console.log("activeTab=" + activeTab);
   // console.log("previousTab=" + previousTab);
@@ -955,6 +961,94 @@ function buildSubTable($el, cols, data, parentData){
         }
 
       },
+
+      onResetView: function(){
+
+        var $tableRows = $el.find('tbody tr');
+
+        $.each(data, function(i, row){
+
+          console.log(row);
+          console.log($tableRows.eq(i).find('a'));
+
+          if(activeTab.match("Reference") && row.seqs.length > 1){
+            $tableRows.eq(i).find('a').eq(5).editable('destroy');
+            // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
+
+            var source = [];
+            $.each(row.seqs, function(k, seq){
+              console.log(seq.column_name);
+              var option = {};
+              option.text = seq.column_name;
+              option.value = seq.column_name;
+              source.push(option);
+            })
+
+            customFieldType.source = source;
+
+
+            // customFieldType.source = dbDataType;
+            $tableRows.eq(i).find('a').eq(5).editable(customFieldType);
+            $tableRows.eq(i).find('a').eq(5).editable('option', 'defaultValue', '');
+          }
+
+          // Disable RepTableName if !ref
+          if(activeTab == "Reference" && !row.ref){
+            $tableRows.eq(i).find('a').eq(4).editable('disable');
+            // $tableRows.eq(i).find('a').editable('disable');
+          }
+          if(activeTab == "Security" && !row.sec){
+            $tableRows.eq(i).find('a').eq(4).editable('disable');
+            // $tableRows.eq(i).find('a').editable('disable');
+          }
+          if(row.fin || row.ref || row.sec){
+            $tableRows.eq(i).find('a').eq(0).editable('disable');
+            // $tableRows.eq(i).find('a').editable('disable');
+          }
+          if(row.fin && activeTab.match("Reference|Security")){
+            $tableRows.eq(i).find('a').eq(3).editable('disable');
+            $tableRows.eq(i).find('a').eq(2).editable('disable');
+          }
+          if(row.ref && activeTab.match("Final|Security")){
+            $tableRows.eq(i).find('a').eq(3).editable('disable');
+            $tableRows.eq(i).find('a').eq(2).editable('disable');
+          }
+          if(row.sec && activeTab.match("Final|Reference")){
+            $tableRows.eq(i).find('a').eq(3).editable('disable');
+            $tableRows.eq(i).find('a').eq(2).editable('disable');
+          }
+          // if(activeTab.match("Query Subject") && row.field_type != undefined){
+          //   if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+          //     $tableRows.eq(i).find('a').eq(8).editable('destroy');
+          //     $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
+          //   // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
+          //   }
+          //   else{
+          //     // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
+          //   }
+          // }
+          if(activeTab.match("Query Subject")){
+            if(row.custom != true){
+              $tableRows.eq(i).find('a').eq(0).editable('disable');
+              // console.log($tableRows.eq(i).find('a.remove').val('hidden'));
+              // console.log(row);
+              // $tableRows.eq(i).find('a.remove').prop("disabled",true);
+              $tableRows.eq(i).find('a.remove').remove();
+            }
+            else{
+              $tableRows.eq(i).find('a').eq(0).editable('destroy');
+              // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
+              customFieldType.source = dbDataType;
+              $tableRows.eq(i).find('a').eq(0).editable(customFieldType);
+              $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
+            }
+          }
+
+
+        })
+
+      },
+
       onClickCell: function (field, value, row, $element){
 
         $activeSubDatasTable = $el;
@@ -1217,6 +1311,7 @@ function buildSubTable($el, cols, data, parentData){
     $el.bootstrapTable('showColumn', 'nommageRep');
     $el.bootstrapTable('showColumn', 'usedForDimensions');
     $el.bootstrapTable('showColumn', 'rightJoin');
+    $el.bootstrapTable('showColumn', 'above');
   }
 
   if(activeTab == "Security"){
@@ -1227,6 +1322,7 @@ function buildSubTable($el, cols, data, parentData){
     $el.bootstrapTable('showColumn', 'nommageRep');
     $el.bootstrapTable('hideColumn', 'usedForDimensions');
     $el.bootstrapTable('showColumn', 'rightJoin');
+    $el.bootstrapTable('hideColumn', 'above');
   }
 
   if(activeTab == "Translation"){
@@ -1237,6 +1333,7 @@ function buildSubTable($el, cols, data, parentData){
     $el.bootstrapTable('showColumn', 'nommageRep');
     $el.bootstrapTable('hideColumn', 'usedForDimensions');
     $el.bootstrapTable('hideColumn', 'rightJoin');
+    $el.bootstrapTable('hideColumn', 'above');
   }
 
   if(activeTab == "Final"){
@@ -1246,6 +1343,7 @@ function buildSubTable($el, cols, data, parentData){
     $el.bootstrapTable('hideColumn', 'tra');
     $el.bootstrapTable('showColumn', 'fin');
     $el.bootstrapTable('hideColumn', 'nommageRep');
+    $el.bootstrapTable('hideColumn', 'above');
     $el.bootstrapTable('hideColumn', 'usedForDimensions');
     $el.bootstrapTable('showColumn', 'rightJoin');
   }

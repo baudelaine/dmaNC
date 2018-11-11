@@ -310,6 +310,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	        	relation.setKey_type("F");
 	        	relation.setType(type.toUpperCase());
 	        	relation.set_id("FK_" + relation.getPktable_alias() + "_" + alias + "_" + type.toUpperCase());
+	        	relation.setAbove(fkcolumn_name);
 	        	
 	        	String[] types = {"TABLE"};
 	    		ResultSet rst0 = metaData.getTables(con.getCatalog(), schema, pktable_name, types);
