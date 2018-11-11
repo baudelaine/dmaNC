@@ -981,16 +981,12 @@ function buildSubTable($el, cols, data, parentData){
 
         $.each(data, function(i, row){
 
-          console.log(row);
-          console.log($tableRows.eq(i).find('a'));
-
           if(activeTab.match("Reference") && row.seqs.length > 1){
             $tableRows.eq(i).find('a').eq(5).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
 
             var source = [];
             $.each(row.seqs, function(k, seq){
-              console.log(seq.column_name);
               var option = {};
               option.text = seq.column_name;
               option.value = seq.column_name;
@@ -1056,7 +1052,6 @@ function buildSubTable($el, cols, data, parentData){
               $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
             }
           }
-
 
         })
 
