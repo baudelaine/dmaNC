@@ -10,6 +10,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+import org.apache.commons.lang3.StringUtils;
 
 import com.cognos.developer.schemas.bibus._3.AddOptions;
 import com.cognos.developer.schemas.bibus._3.BaseClass;
@@ -21,6 +22,7 @@ import com.cognos.developer.schemas.bibus._3.SearchPathSingleObject;
 import com.cognos.developer.schemas.bibus._3.Sort;
 import com.cognos.developer.schemas.bibus._3.TokenProp;
 import com.cognos.developer.schemas.bibus._3.UpdateActionEnum;
+
 import com.dma.cognos.CRNConnect;
 import com.dma.web.Field;
 import com.dma.web.QuerySubject;
@@ -850,7 +852,7 @@ public class FactorySVC {
 		    cdata.setText("");
 			cdata.addCDATA(root_cdata.asXML());
 
-			// System.out.println(document.asXML());
+			//System.out.println(document.asXML());
 			System.out.println("createMeasure: dimensionPath " + dimensionPath + ", measureName " + measureName + ", exp " + exp);
 			csvc.executeModel(document);
 		} catch (DocumentException ex) {
@@ -1120,7 +1122,9 @@ public class FactorySVC {
 			handleLP.setText(levelPath);
 			elem0or1.setText(int0or1);
 			
+			System.out.println("adjustScopeRelationship( dimensionMeasurePath " + dimensionMeasurePath + ", measurePath " + measurePath + ", dimensionPath " + dimensionPath + ", levelPath " + levelPath  + ",int0or1 " + int0or1);
 		// System.out.println(document.asXML());
+			
 		csvc.executeModel(document);
 	} catch (DocumentException ex) {
 		lg(ex.getMessage());
@@ -1613,6 +1617,146 @@ public class FactorySVC {
 			i++;
 			qsname = (Element) document.selectSingleNode(spath + "/querySubject[" + i + "]/name");
 			qsNameLocale = (Element) document.selectSingleNode(spath + "/querySubject[" + i + "]/name[@locale=\"" + locale + "\"]");
+		}
+	}
+
+	public void recursiveParserDimension(Document document, String spath, String locale, Map<String, String> map) {
+		
+		System.out.println("recursiveParserDimension : OK");
+//		spath = "/project/namespace/namespace[1]/namespace[1]";
+		int i = 1;
+		Element dName = (Element) document.selectSingleNode(spath + "/dimension[" + i + "]/name");
+		Element dNameLocale = (Element) document.selectSingleNode(spath + "/dimension[" + i + "]/name[@locale=\"" + locale + "\"]");
+		
+		int j = 1;
+		Element dfName = (Element) document.selectSingleNode(spath + "/folder[" + j + "]/name");
+		Element dfNameLocale = (Element) document.selectSingleNode(spath + "/folder[" + j + "]/name[@locale=\"" + locale + "\"]");
+				
+		while (dfName != null)
+		{
+//			System.out.println(qsfname.getStringValue());  // clef de map
+//			qsfNameLocale.setText("qsfNameLocale" + j);               // valeur du map
+			String nextFPath = spath + "/folder[" + j + "]";
+			recursiveParserDimension(document, nextFPath, locale, map);
+			j++;
+			dfName = (Element) document.selectSingleNode(spath + "/folder[" + j + "]/name");
+//			qsfNameLocale = (Element) document.selectSingleNode(spath + "/folder[" + j + "]/name[@locale=\"" + locale + "\"]");
+		}
+		
+		while (dName != null)
+		{
+			System.out.println("dimension : " + dName.getStringValue() + " *    *     *     *     *    * " + map.get(dName.getStringValue()));  // clef de map
+			String label = map.get(dName.getStringValue());
+			if (label != null) {
+			dNameLocale.setText(label); // valeur de map
+			}
+			String nextQIPath = spath + "/dimension[" + i + "]";
+			if (!dName.getStringValue().startsWith("Time Dimension")){
+				parserDimensionItem(document, nextQIPath, locale, map, dName.getStringValue());
+			}
+			i++;
+			dName = (Element) document.selectSingleNode(spath + "/dimension[" + i + "]/name");
+			dNameLocale = (Element) document.selectSingleNode(spath + "/dimension[" + i + "]/name[@locale=\"" + locale + "\"]");
+		}
+	}
+
+	public void parserDimensionItem(Document document, String spath, String locale, Map <String, String> map, String qsFinal) {
+		
+//		s = "/project/namespace/namespace[1]/namespace[1]/querySubject[1]";
+		int i = 1;
+		Element mName = (Element) document.selectSingleNode(spath + "/measure[" + i + "]/name");
+		Element mNameLocale = (Element) document.selectSingleNode(spath + "/measure[" + i + "]/name[@locale=\"" + locale + "\"]");
+		
+		int j = 1;
+		Element hName = (Element) document.selectSingleNode(spath + "/hierarchy[" + j + "]/name");
+		Element hNameLocale = (Element) document.selectSingleNode(spath + "/hierarchy[" + j + "]/name[@locale=\"" + locale + "\"]");
+		
+		while (hName != null)
+		{
+			System.out.println("hierarchy : " + hName.getStringValue() + " * * * * * * * " + map.get(hName.getStringValue()));  // clef de map
+			String prefixTab[] = StringUtils.split(hName.getStringValue(), ".");
+			String prefix = prefixTab[0];
+			for (int k=1; k < prefixTab.length - 1; k++) {
+				prefix = prefix + "." + prefixTab[k];
+			}
+			System.out.println("hierarchy prefix : " + prefix + " * * * * * * * " + map.get(prefix));
+			String label = "(" + map.get(prefix) + ") " + map.get(hName.getStringValue());  // valeur de map
+			if (label != null) {
+				hNameLocale.setText(label);        // valeur de map
+				}
+			String nextsPath = spath + "/hierarchy[" + j + "]";
+			parserHierarchyLevel(document, nextsPath, locale, map, qsFinal);
+			j++;
+			hName = (Element) document.selectSingleNode(spath + "/hierarchy[" + j + "]/name");
+			hNameLocale = (Element) document.selectSingleNode(spath + "/hierarchy[" + j + "]/name[@locale=\"" + locale + "\"]");
+		}
+		
+		while (mName != null)
+		{
+			System.out.println("measure : " + mName.getStringValue() + "****" + map.get(mName.getStringValue()));    // clef de map
+			String label = map.get(mName.getStringValue());
+			if (label != null) {
+				mNameLocale.setText(label);       // valeur de map
+				}
+			i++;
+			mName = (Element) document.selectSingleNode(spath + "/measure[" + i + "]/name");
+			mNameLocale = (Element) document.selectSingleNode(spath + "/measure[" + i + "]/name[@locale=\"" + locale + "\"]");
+		}
+	}
+	
+	public void parserHierarchyLevel(Document document, String spath, String locale, Map <String, String> map, String qsFinal) {
+		
+//		s = "/project/namespace/namespace[1]/namespace[1]/querySubject[1]";
+		
+		int j = 1;
+		Element levelName = (Element) document.selectSingleNode(spath + "/level[" + j + "]/name");
+		Element levelNameLocale = (Element) document.selectSingleNode(spath + "/level[" + j + "]/name[@locale=\"" + locale + "\"]");
+		
+		while (levelName != null)
+		{
+			System.out.println("level : " + levelName.getStringValue() + " * * * * * * * " + map.get(levelName.getStringValue()));  // clef de map
+			String prefixTab[] = StringUtils.split(levelName.getStringValue(), ".");
+			String prefix = prefixTab[0];
+			for (int k=1; k < prefixTab.length - 1; k++) {
+				prefix = prefix + "." + prefixTab[k];
+			}
+			System.out.println("level prefix : " + prefix + " * * * * * * * " + map.get(prefix));
+			String label = "(" + map.get(prefix) + ") " +  map.get(levelName.getStringValue());  // valeur de map
+			if (label != null) {
+				levelNameLocale.setText(label);        // valeur de maps
+				}
+			String nextsPath = spath + "/level[" + j + "]";
+			parserLevelQs(document, nextsPath, locale, map, qsFinal);
+			j++;
+			levelName = (Element) document.selectSingleNode(spath + "/level[" + j + "]/name");
+			levelNameLocale = (Element) document.selectSingleNode(spath + "/level[" + j + "]/name[@locale=\"" + locale + "\"]");
+		}
+	}
+	
+	public void parserLevelQs(Document document, String spath, String locale, Map <String, String> map, String qsFinal) {
+		
+//		s = "/project/namespace/namespace[1]/namespace[1]/querySubject[1]";
+		
+		int j = 1;
+		Element qiName = (Element) document.selectSingleNode(spath + "/queryItem[" + j + "]/name");
+		Element qiNameLocale = (Element) document.selectSingleNode(spath + "/queryItem[" + j + "]/name[@locale=\"" + locale + "\"]");
+		
+		while (qiName != null)
+		{
+			System.out.println("queryItem : " + qiName.getStringValue() + " * * * * * * * " + map.get(qiName.getStringValue()));  // clef de map
+			String prefixTab[] = StringUtils.split(qiName.getStringValue(), ".");
+			String prefix = prefixTab[0];
+			for (int k=1; k < prefixTab.length - 1; k++) {
+				prefix = prefix + "." + prefixTab[k];
+			}
+			System.out.println("queryItem prefix : " + prefix + " * * * * * * * " + map.get(prefix));
+			String label = map.get("(" + map.get(prefix) + ") " + qiName.getStringValue());  // valeur de map
+			if (label != null) {
+				qiNameLocale.setText(label);        // valeur de map
+				}
+			j++;
+			qiName = (Element) document.selectSingleNode(spath + "/queryItem[" + j + "]/name");
+			qiNameLocale = (Element) document.selectSingleNode(spath + "/queryItem[" + j + "]/name[@locale=\"" + locale + "\"]");
 		}
 	}
 	
