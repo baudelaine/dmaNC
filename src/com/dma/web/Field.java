@@ -27,7 +27,14 @@ public class Field {
 	String measure = "";
 	String order = "";
 	boolean custom = false;
+	String BK = "";
 	
+	public String getBK() {
+		return BK;
+	}
+	public void setBK(String bK) {
+		BK = bK;
+	}
 	public String get_id() {
 		return _id;
 	}
