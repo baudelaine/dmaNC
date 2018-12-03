@@ -113,7 +113,7 @@ qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sig
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
 // qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 // qsCols.push({field:"linker_ids", title: "linker_ids"});
-qsCols.push({field:"directory", title: "Directory", editable: {type: "text", mode: "inline"}, sortable: true});
+qsCols.push({field:"folder", title: "Folder", editable: {type: "text", mode: "inline"}, sortable: true});
 
 var fieldCols = [];
 fieldCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
@@ -264,7 +264,7 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'recurseCount');
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'above');
-  $datasTable.bootstrapTable('showColumn', 'directory');
+  $datasTable.bootstrapTable('showColumn', 'folder');
   // console.log('dbDataType=');
   // console.log(dbDataType);
 
@@ -287,7 +287,7 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'linker');
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'above');
-  $datasTable.bootstrapTable('hideColumn', 'directory');
+  $datasTable.bootstrapTable('hideColumn', 'folder');
 
 });
 
@@ -309,7 +309,7 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'linker');
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
-  $datasTable.bootstrapTable('hideColumn', 'directory');
+  $datasTable.bootstrapTable('hideColumn', 'folder');
 });
 
 $secTab.on('shown.bs.tab', function(e) {
@@ -326,7 +326,7 @@ $secTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'recurseCount');
   $datasTable.bootstrapTable('showColumn', 'nommageRep');
   $datasTable.bootstrapTable('hideColumn', 'above');
-  $datasTable.bootstrapTable('hideColumn', 'directory');
+  $datasTable.bootstrapTable('hideColumn', 'folder');
 
 });
 

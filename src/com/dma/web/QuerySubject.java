@@ -25,13 +25,13 @@ public class QuerySubject {
 	Map<String, Integer> relationCount = new HashMap<String, Integer>(); 
 	int recurseCount = 1;
 	long recCount= 0L;
-	String directory = "";
+	String folder = "";
 	
-	public String getDirectory() {
-		return directory;
+	public String getFolder() {
+		return folder;
 	}
-	public void setDirectory(String directory) {
-		this.directory = directory;
+	public void setFolder(String folder) {
+		this.folder = folder;
 	}
 	public int getRecurseCount() {
 		return recurseCount;
