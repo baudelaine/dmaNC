@@ -81,6 +81,7 @@ qsCols.push({field:"table_name", title: "table_name", sortable: true});
 qsCols.push({field:"table_alias", title: "table_alias", editable: false, sortable: true});
 qsCols.push({field:"type", title: "type", sortable: true});
 // qsCols.push({field:"visible", title: "visible", formatter: "boolFormatter", align: "center", sortable: false});
+qsCols.push({field:"folder", title: "Folder", editable: {type: "text", mode: "inline"}, sortable: true});
 qsCols.push({field:"filter", title: "filter", editable: {type: "textarea", mode: "inline"}, sortable: true});
 qsCols.push({field:"label", title: "label", editable: {type: "textarea", mode: "inline"}, sortable: true});
 qsCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
@@ -113,7 +114,6 @@ qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sig
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
 // qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 // qsCols.push({field:"linker_ids", title: "linker_ids"});
-qsCols.push({field:"folder", title: "Folder", editable: {type: "text", mode: "inline"}, sortable: true});
 
 var fieldCols = [];
 fieldCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
