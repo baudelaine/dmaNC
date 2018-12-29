@@ -112,8 +112,9 @@ qsCols.push({field:"recurseCount", title: '<i class="glyphicon glyphicon-repeat"
 qsCols.push({field:"addPKRelation", title: '<i class="glyphicon glyphicon-magnet" title="Add PK relation(s)"></i>', formatter: "addPKRelationFormatter", align: "center"});
 qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new relation"></i>', formatter: "addRelationFormatter", align: "center"});
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
-// qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
-// qsCols.push({field:"linker_ids", title: "linker_ids"});
+qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
+qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
+qsCols.push({field:"linker_ids", title: "linker_ids"});
 
 var fieldCols = [];
 fieldCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
@@ -265,9 +266,9 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'above');
   $datasTable.bootstrapTable('showColumn', 'folder');
-  // console.log('dbDataType=');
-  // console.log(dbDataType);
-
+  $datasTable.bootstrapTable('hideColumn', 'linker');
+  $datasTable.bootstrapTable('hideColumn', 'linker_ids');
+  $datasTable.bootstrapTable('hideColumn', 'remove');
 });
 
 $finTab.on('shown.bs.tab', function(e) {
@@ -288,7 +289,7 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'folder');
-
+  $datasTable.bootstrapTable('showColumn', 'remove');
 });
 
 $refTab.on('shown.bs.tab', function(e) {
@@ -310,6 +311,7 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'linker');
   $datasTable.bootstrapTable('hideColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'folder');
+  $datasTable.bootstrapTable('hideColumn', 'remove');
 });
 
 $secTab.on('shown.bs.tab', function(e) {
@@ -327,6 +329,8 @@ $secTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'nommageRep');
   $datasTable.bootstrapTable('hideColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'folder');
+  $datasTable.bootstrapTable('hideColumn', 'linker');
+  $datasTable.bootstrapTable('hideColumn', 'linker_ids');
 
 });
 
@@ -1550,9 +1554,48 @@ function buildTable($el, cols, data) {
         idField: "index",
 				// toolbar: "#DatasToolbar",
         detailView: true,
+
+        onResetView: function(){
+
+          var $tableRows = $el.find('tbody tr');
+
+          $.each($el.bootstrapTable("getData"), function(i, row){
+
+            if(!activeTab.match("Final")){
+              $tableRows.eq(i).find('a.remove').remove();
+            }
+            else{
+              if(row.linker_ids){
+                if(row.linker_ids[0].match("Root") && !row.linker){
+                }
+                else{
+                  $tableRows.eq(i).find('a.remove').remove();
+                }
+              }
+            }
+
+          })
+
+        },
+
         onClickCell: function (field, value, row, $element){
 
           // RemoveFilter();
+
+          if(activeTab.match("Final")){
+            if(field.match("remove")){
+
+              if(row.linker_ids){
+                if(row.linker_ids[0].match("Root") && !row.linker){
+                  $el.bootstrapTable('remove', {
+                    field: 'index',
+                    values: [row.index]
+                  });
+
+                }
+              }              
+            }
+          }
 
           if(field == "visible"){
             var newValue = value == false ? true : false;
@@ -1616,6 +1659,9 @@ function buildTable($el, cols, data) {
     $el.bootstrapTable('showColumn', '_id');
     $el.bootstrapTable('showColumn', 'linker');
     $el.bootstrapTable('showColumn', 'linker_ids');
+    $el.bootstrapTable('hideColumn', 'linker');
+    $el.bootstrapTable('hideColumn', 'linker_ids');
+  
 
     console.log("in buildTable: activeTab="+activeTab);
     console.log("in buildTable: previousTab="+previousTab);
