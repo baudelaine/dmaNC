@@ -119,7 +119,7 @@ qsCols.push({field:"linker_ids", title: "linker_ids"});
 var fieldCols = [];
 fieldCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
 fieldCols.push({field:"field_name", title: "Name", sortable: true });
-fieldCols.push({field:"field_type", title: "Type", editable: {type: "text", mode: "inline"}, sortable: true});
+fieldCols.push({class:"field_type", field:"field_type", title: "Type", editable: {type: "text", mode: "inline"}, sortable: true});
 
 var customFieldType = {
   type: "select",
@@ -1187,17 +1187,27 @@ function buildSubTable($el, cols, data, parentData){
             $tableRows.eq(i).find('a').eq(3).editable('disable');
             $tableRows.eq(i).find('a').eq(2).editable('disable');
           }
-          // if(activeTab.match("Query Subject") && row.field_type != undefined){
-          //   if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-          //     $tableRows.eq(i).find('a').eq(8).editable('destroy');
-          //     $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
-          //   // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
-          //   }
-          //   else{
-          //     // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
-          //   }
-          // }
+          if(activeTab.match("Query Subject") && row.field_type != undefined){
+            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+              $tableRows.eq(i).find('a').eq(8).editable('destroy');
+              $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
+              console.log($tableRows.eq(i).find('a.buildDrillPath'));
+              $tableRows.eq(i).find('a.buildDrillPath').remove();
+            // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
+            }
+            else{
+              // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
+            }
+          }
           if(activeTab.match("Query Subject")){
+            console.log($tableRows.eq(i).find('a'));
+            console.log($tableRows.eq(i).find('a').length);
+
+            for(href = 0; href < $tableRows.eq(i).find('a').length; href++){
+              console.log($tableRows.eq(i).find('a').eq(href).val('hidden'));
+              console.log($tableRows.eq(i).find('a').eq(href));
+            }
+
             if(row.custom != true){
               $tableRows.eq(i).find('a').eq(0).editable('disable');
               // console.log($tableRows.eq(i).find('a.remove').val('hidden'));
@@ -1225,31 +1235,36 @@ function buildSubTable($el, cols, data, parentData){
         switch(field){
 
           case "dimension":
-          console.log("---------- buildSubTable: case dimension -------------");
-          console.log("field=");
-          console.log(field);
-          console.log("value=");
-          console.log(value);
-          console.log("row=");
-          console.log(row);
-          console.log("$element=");
-          console.log($element);
-          console.log("---------- buildSubTable: case dimension -------------");
+            console.log("---------- buildSubTable: case dimension -------------");
+            console.log("field=");
+            console.log(field);
+            console.log("value=");
+            console.log(value);
+            console.log("row=");
+            console.log(row);
+            console.log("$element=");
+            console.log($element);
+            console.log("---------- buildSubTable: case dimension -------------");
 
-            if(row.field_type == "DATE"){
-              // $element.options.source = dateDimensions;
-              // console.log("!!!!!!!!!!!!!!!!!!!!!!!");
-              // console.log($(this).bootstrapTable('getOptions'));
-              // var col = $(this).bootstrapTable('getOptions')[0].columns[0];
-              // var src = col[8].editable.source
-              // console.log(src);
-              // $(this).bootstrapTable('getOptions')[0].columns[0][8].editable.source = dateDimensions;
-              // // $(this).bootstrapTable('refreshOptions', $(this).bootstrapTable('getOptions'));
-            }
+            // if(row.field_type == "DATE"){
+            //   $element.options.source = dateDimensions;
+            //   console.log("!!!!!!!!!!!!!!!!!!!!!!!");
+            //   console.log($(this).bootstrapTable('getOptions'));
+            //   var col = $(this).bootstrapTable('getOptions')[0].columns[0];
+            //   var src = col[8].editable.source
+            //   console.log(src);
+            //   $(this).bootstrapTable('getOptions')[0].columns[0][8].editable.source = dateDimensions;
+            //   // $(this).bootstrapTable('refreshOptions', $(this).bootstrapTable('getOptions'));
+            // }
 
             break;
 
           case "buildDrillPath":
+
+            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+              return;
+            }
+
             console.log(row);
             console.log(parentData);
             var fieldName = parentData.table_alias + '.' + row.field_name;
