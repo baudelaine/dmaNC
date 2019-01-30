@@ -181,6 +181,50 @@
 
 		<!-- modal -->
 
+		<!-- modal -->
+
+		<div class="modal fade" tabindex="-1" role="dialog" id="DrillModal">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title">Build Drill Path for <label id="drillFieldName">Field Name</label></h4>
+		      </div><!-- /.modal-header -->
+		      <div class="modal-body">
+
+						<div class="container-fluid">
+							<div id="modDivLoading"></div>
+
+							<div class="row">
+					        <h4>Dimension</h4>
+					        <select class="selectpicker form-control" id="selectDimension">
+					        </select>
+					    </div>
+					    <div class="row">
+					        <h4>Order</h4>
+					        <select class="selectpicker form-control" id="selectOrder">
+					        </select>
+					    </div>
+					    <div class="row">
+					        <h4>BK</h4>
+					        <select class="selectpicker form-control" id="selectBK">
+					        </select>
+					    </div>
+
+						</div>
+
+					</div> <!-- /.modal-body -->
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" onclick="BuildDrillPath()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></button>
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></button>
+		      </div><!-- /.modal-footer -->
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<!-- modal -->
+
+
 		<!-- modelList modal -->
 		<div class="modal fade" id="modModelList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		  <div class="modal-dialog" role="document">

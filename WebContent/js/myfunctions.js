@@ -202,6 +202,7 @@ var dimensions = {
 fieldCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
 fieldCols.push({field:"order", title: "Order", editable: {type: "text", mode: "inline"}, sortable: true});
 fieldCols.push({field:"bk", title: "BK", editable: {type: "text", mode: "inline"}, sortable: true});
+fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
 fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 
 $(document)
@@ -591,6 +592,152 @@ window.aboveEvents = {
 
 };
 
+$(function() {
+
+  var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
+  // var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
+
+  var divider = $('<option/>')
+          .addClass('divider')
+          .data('divider', true);
+
+
+  var addoption = $('<option/>', {class: 'addItem'})
+          .data('content', content)
+
+  $('#selectDimension')
+          .append(divider)
+          .append(addoption)
+          .selectpicker();
+
+});
+
+function addSelectItem(t,ev){
+   ev.stopPropagation();
+
+   var bs = $(t).closest('.bootstrap-select')
+   var txt=bs.find('.bss-input').val().replace(/[|]/g,"");
+   var txt=$(t).prev().val().replace(/[|]/g,"");
+   if ($.trim(txt)=='') return;
+
+   // Changed from previous version to cater to new
+   // layout used by bootstrap-select.
+   var p=bs.find('select');
+   var o=$('option', p).eq(-2);
+   o.before( $("<option>", { "selected": true, "text": txt}) );
+   p.selectpicker('refresh');
+}
+
+function addSelectInpKeyPress(t,ev){
+   ev.stopPropagation();
+
+   // do not allow pipe character
+   if (ev.which==124) ev.preventDefault();
+
+   // enter character adds the option
+   if (ev.which==13)
+   {
+      ev.preventDefault();
+      addSelectItem($(t).next(),ev);
+   }
+}
+
+$('#selectDimension').change(function () {
+    var selectedText = $(this).find("option:selected").val();
+
+    // var option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="' + obj.table_remarks +  ' ' + obj.table_stats + '">'
+    //  + obj.table_name + '</option>';
+    // table.append(option);
+
+    $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+
+      console.log(obj);
+
+    });
+
+
+});
+
+$('#selectDimension').on('show.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("show.bs.select");
+});
+
+$('#selectDimension').on('shown.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("shown");
+});
+
+$('#selectDimension').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("hide");
+});
+
+$('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("hidden");
+  $('#selectOrder').empty();
+  var dimension = $(this).find("option:selected").val();
+  console.log(dimension);
+
+  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+
+    console.log(obj);
+    $.each(obj.fields, function(j, field){
+      if(field.dimension == dimension){
+        var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
+        $('#selectOrder').append(option);
+      }
+    });
+    $('#selectOrder').selectpicker('refresh');
+  });
+
+
+
+});
+
+$('#selectDimension').on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("loaded");
+});
+
+$('#selectDimension').on('rendered.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("rendered");
+});
+
+$('#selectDimension').on('refreshed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("refreshed");
+});
+
+$('#selectDimension').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("changed");
+});
+
+function BuildDrillPath(){
+
+  var dimension = $('#selectDimension').find("option:selected").val();
+  var order = $('#selectOrder').find("option:selected").val();
+  var bk = $('#selectBK').find("option:selected").val();
+
+  console.log("drillFieldName");
+  console.log($('#drillFieldName').text());
+  // var alias = $('#drillFieldName').text().split('.')[0];
+  var field = $('#drillFieldName').text().split('.')[1];
+  console.log(field);
+
+
+  if($activeSubDatasTable != undefined){
+    $.each($activeSubDatasTable.bootstrapTable("getData"), function(i, obj){
+      if(obj.field_name == field){
+        console.log(obj);
+        obj.dimension = dimension;
+        if(!order){order = ""} else{obj.order = '[DATA].[' + dimension + '].[' + order + ']';}
+        obj.bk = '[DATA].[' + dimension + '].[' + bk + ']';
+        updateRow($activeSubDatasTable, obj.index, obj);
+      }
+
+    });
+
+  }
+  $('#DrillModal').modal('toggle');
+
+}
+
 function aboveFormatter(value, row, index){
 
   if(row.seqs.length < 2){
@@ -700,6 +847,14 @@ function removeFormatter(value, row, index) {
   return [
       '<a class="remove" href="javascript:void(0)" title="Remove">',
       '<i class="glyphicon glyphicon-trash"></i>',
+      '</a>'
+  ].join('');
+}
+
+function buildDrillPathFormatter(value, row, index) {
+  return [
+      '<a class="buildDrillPath" href="javascript:void(0)" title="Build Drill Path">',
+      '<i class="glyphicon glyphicon-zoom-in"></i>',
       '</a>'
   ].join('');
 }
@@ -1091,6 +1246,20 @@ function buildSubTable($el, cols, data, parentData){
               // $(this).bootstrapTable('getOptions')[0].columns[0][8].editable.source = dateDimensions;
               // // $(this).bootstrapTable('refreshOptions', $(this).bootstrapTable('getOptions'));
             }
+
+            break;
+
+          case "buildDrillPath":
+            console.log(row);
+            console.log(parentData);
+            var fieldName = parentData.table_alias + '.' + row.field_name;
+            $('#drillFieldName').text(fieldName);
+            $('#selectOrder').empty();
+            $('#selectBK').empty();
+            ChooseField($('#selectBK'), parentData.table_name);
+
+
+            $('#DrillModal').modal('toggle');
 
             break;
 
@@ -1593,7 +1762,7 @@ function buildTable($el, cols, data) {
                   });
 
                 }
-              }              
+              }
             }
           }
 
@@ -1661,7 +1830,7 @@ function buildTable($el, cols, data) {
     $el.bootstrapTable('showColumn', 'linker_ids');
     $el.bootstrapTable('hideColumn', 'linker');
     $el.bootstrapTable('hideColumn', 'linker_ids');
-  
+
 
     console.log("in buildTable: activeTab="+activeTab);
     console.log("in buildTable: previousTab="+previousTab);

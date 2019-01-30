@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Add options dynamically to bootstrap-select</title>
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<!-- <link href="css/custom.css" rel="stylesheet" /> -->
+<link href="css/bootstrap-select.min.css" rel="stylesheet" />
+<style type="text/css">
+.dropdown-menu {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.dropdown-menu a {
+   overflow: hidden;
+   outline: none;
+}
+
+.bss-input
+{
+   border:0;
+   margin:-3px;
+   padding:3px;
+   outline: none;
+   color: #000;
+   width: 99%;
+}
+
+.bss-input:hover
+{
+   background-color: #f5f5f5;
+}
+
+.additem .check-mark
+{
+   opacity: 0;
+   z-index: -1000;
+}
+
+.addnewicon {
+   position: relative;
+   padding: 4px;
+   margin: -8px;
+   padding-right: 50px;
+   margin-right: -50px;
+   color: #aaa;
+}
+
+.addnewicon:hover {
+   color: #222;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="container">
+    <div class="row">
+        <h2>Dimension</h2>
+        <select class="selectpicker form-control" id="selectDimension">
+        </select>
+    </div>
+    <div class="row">
+        <h2>Order</h2>
+        <select class="selectpicker form-control" id="selectOrder">
+        </select>
+    </div>
+    <div class="row">
+        <h2>BK</h2>
+        <select class="selectpicker form-control" id="selectBK">
+        </select>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/jquery.min.js" ></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap-select.min.js"></script>
+<!-- <script src="http://www.marcorpsa.com/ee/plugins/Bootstrap-select%20v12/js/bootstrap-select.js"></script> -->
+<script>
+$(function() {
+
+  var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
+  // var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
+
+  var divider = $('<option/>')
+          .addClass('divider')
+          .data('divider', true);
+
+
+  var addoption = $('<option/>', {class: 'addItem'})
+          .data('content', content)
+
+  $('#selectDimension')
+          .append(divider)
+          .append(addoption)
+          .selectpicker();
+
+});
+
+$('#select1').on('changed.bs.select', function (e) {
+  // do something...
+  // console.log("$tableList.on('show.bs.select'");
+  // ChooseTable($tableList);
+  console.log($(this));
+
+});
+
+function addSelectItem(t,ev)
+{
+   ev.stopPropagation();
+
+   var bs = $(t).closest('.bootstrap-select')
+   var txt=bs.find('.bss-input').val().replace(/[|]/g,"");
+   var txt=$(t).prev().val().replace(/[|]/g,"");
+   if ($.trim(txt)=='') return;
+
+   // Changed from previous version to cater to new
+   // layout used by bootstrap-select.
+   var p=bs.find('select');
+   var o=$('option', p).eq(-2);
+   o.before( $("<option>", { "selected": true, "text": txt}) );
+   p.selectpicker('refresh');
+}
+
+function addSelectInpKeyPress(t,ev)
+{
+   ev.stopPropagation();
+
+   // do not allow pipe character
+   if (ev.which==124) ev.preventDefault();
+
+   // enter character adds the option
+   if (ev.which==13)
+   {
+      ev.preventDefault();
+      addSelectItem($(t).next(),ev);
+   }
+}
+
+</script>
+</body>
+</html>
