@@ -1142,6 +1142,7 @@ function buildSubTable($el, cols, data, parentData){
 
         $.each(data, function(i, row){
 
+
           if(activeTab.match("Reference") && row.seqs.length > 1){
             $tableRows.eq(i).find('a').eq(5).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
@@ -1200,13 +1201,14 @@ function buildSubTable($el, cols, data, parentData){
             }
           }
           if(activeTab.match("Query Subject")){
-            console.log($tableRows.eq(i).find('a'));
-            console.log($tableRows.eq(i).find('a').length);
 
-            for(href = 0; href < $tableRows.eq(i).find('a').length; href++){
-              console.log($tableRows.eq(i).find('a').eq(href).val('hidden'));
-              console.log($tableRows.eq(i).find('a').eq(href));
-            }
+            console.log($tableRows.eq(i).find('a'));
+
+            // console.log($tableRows.eq(i).find('a').length);
+
+            // for(href = 0; href < $tableRows.eq(i).find('a').length; href++){
+              // console.log($tableRows.eq(i).find('a').eq(href));
+            // }
 
             if(row.custom != true){
               $tableRows.eq(i).find('a').eq(0).editable('disable');
