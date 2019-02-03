@@ -213,6 +213,8 @@ $(document)
   buildTable($datasTable, qsCols, datas, true);
   GetCognosLocales
   GetDBDataType();
+  buildComboList($('#selectDimension'));
+
 })
 .ajaxStart(function(){
     $("div#divLoading").addClass('show');
@@ -607,7 +609,7 @@ function buildComboList($el) {
 
   $el.append(divider)
   $el.append(addoption)
-  $el.selectpicker('refresh');
+  $el.selectpicker();
 
 };
 
@@ -674,18 +676,19 @@ $('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelect
   $('#selectOrder').empty();
   var dimension = $(this).find("option:selected").val();
   console.log(dimension);
+  if(dimension != ''){
+    $.each($datasTable.bootstrapTable("getData"), function(i, obj){
 
-  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
-
-    console.log(obj);
-    $.each(obj.fields, function(j, field){
-      if(field.dimension == dimension){
-        var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
-        $('#selectOrder').append(option);
-      }
+      console.log(obj);
+      $.each(obj.fields, function(j, field){
+        if(field.dimension == dimension){
+          var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
+          $('#selectOrder').append(option);
+        }
+      });
+      $('#selectOrder').selectpicker('refresh');
     });
-    $('#selectOrder').selectpicker('refresh');
-  });
+  }
 
 
 
@@ -1273,8 +1276,6 @@ function buildSubTable($el, cols, data, parentData){
             $('#selectOrder').empty();
             $('#selectBK').empty();
             ChooseField($('#selectBK'), parentData.table_name);
-            buildComboList($('#selectDimension'), '["un", "deux"]');
-
 
             $('#DrillModal').modal('toggle');
 
