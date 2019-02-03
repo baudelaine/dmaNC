@@ -46,6 +46,11 @@ relationCols.push({field:"leftJoin", title: "Left Join", formatter: "boolFormatt
 // relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"usedForDimensions", title: "Used For Dimensions", editable: {type: "text", mode: "inline"}, align: "center"});
 
+var usedForDimensionsSelect = {
+  type: "select",
+  mode: "inline"
+};
+
 
 // relationCols.push({field:"rightJoin", title: "Right Join", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"duplicate", title: '<i class="glyphicon glyphicon-duplicate"></i>', formatter: "duplicateFormatter", align: "center"});
@@ -202,6 +207,8 @@ var dimensions = {
 fieldCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
 fieldCols.push({field:"order", title: "Order", editable: {type: "text", mode: "inline"}, sortable: true});
 fieldCols.push({field:"bk", title: "BK", editable: {type: "text", mode: "inline"}, sortable: true});
+fieldCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
+
 fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
 fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 
@@ -213,7 +220,7 @@ $(document)
   buildTable($datasTable, qsCols, datas, true);
   GetCognosLocales
   GetDBDataType();
-  buildComboList($('#selectDimension'));
+  // buildComboList($('#selectDimension'));
 
 })
 .ajaxStart(function(){
@@ -650,17 +657,20 @@ $('#selectDimension').change(function () {
     //  + obj.table_name + '</option>';
     // table.append(option);
 
-    $.each($datasTable.bootstrapTable("getData"), function(i, obj){
 
-      console.log(obj);
-
-    });
 
 
 });
 
 $('#selectDimension').on('show.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-  console.log("show.bs.select");
+  console.log("show");
+
+  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+
+    console.log(obj);
+
+  });
+
 });
 
 $('#selectDimension').on('shown.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -674,6 +684,7 @@ $('#selectDimension').on('hide.bs.select', function (e, clickedIndex, isSelected
 $('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("hidden");
   $('#selectOrder').empty();
+  $('#selectOrder').append('<option></option>');
   var dimension = $(this).find("option:selected").val();
   console.log(dimension);
   if(dimension != ''){
@@ -715,6 +726,7 @@ function BuildDrillPath(){
   var dimension = $('#selectDimension').find("option:selected").val();
   var order = $('#selectOrder').find("option:selected").val();
   var bk = $('#selectBK').find("option:selected").val();
+  var hierarchyName = $('#hierarchyName').val();
 
   console.log("drillFieldName");
   console.log($('#drillFieldName').text());
@@ -728,8 +740,9 @@ function BuildDrillPath(){
       if(obj.field_name == field){
         console.log(obj);
         obj.dimension = dimension;
-        if(!order){order = ""} else{obj.order = '[DATA].[' + dimension + '].[' + order + ']';}
+        if(!order){obj.order = ""} else{obj.order = '[DATA].[' + dimension + '].[' + order + ']';}
         obj.bk = '[DATA].[' + dimension + '].[' + bk + ']';
+        obj.hierarchyName = hierarchyName;
         updateRow($activeSubDatasTable, obj.index, obj);
       }
 
@@ -1060,6 +1073,23 @@ function Search(){
 //   return description;
 // }
 
+function getDimensionSet(){
+  var dimensionSet = new Set();
+  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+    $.each(obj.fields, function(j, field){
+      var dimension = field.dimension
+      if(dimension != ''){
+        if(!field.field_type.toUpperCase().match("DATE|TIMESTAMP|DATETIME")){
+          console.log(dimension);
+          console.log(field.field_type.toUpperCase());
+          dimensionSet.add(dimension);
+        }
+      }
+    })
+  })
+  return dimensionSet;
+}
+
 function expandTable($detail, cols, data, parentData) {
     $subtable = $detail.html('<table></table>').find('table');
     // console.log("expandTable.data=");
@@ -1136,11 +1166,21 @@ function buildSubTable($el, cols, data, parentData){
           }
         }
 
+        if(field == "dimension"){
+          console.log(row.dimension);
+          var dimension = row.dimension;
+          if(Array.isArray(dimension)){
+            row.dimension = dimension.toString();
+          };
+          console.log(row.dimension);
+        }
+
       },
 
       onResetView: function(){
 
         var $tableRows = $el.find('tbody tr');
+
 
         $.each(data, function(i, row){
 
@@ -1163,6 +1203,50 @@ function buildSubTable($el, cols, data, parentData){
             // customFieldType.source = dbDataType;
             $tableRows.eq(i).find('a').eq(5).editable(customFieldType);
             $tableRows.eq(i).find('a').eq(5).editable('option', 'defaultValue', '');
+          }
+
+          if(activeTab == "Reference" && parentData.type == 'Final'){
+            console.log(parentData);
+            console.log($tableRows.eq(i).find('a'));
+
+            var dimensionSet = getDimensionSet();
+
+            var source = [];
+            source.push({"text": "", "value": ""});
+            dimensionSet.forEach(function(value){
+              var option = {};
+              option.text = value;
+              option.value = value;
+              source.push(option);
+            })
+
+            usedForDimensionsSelect.source = source;
+
+            // 7 = usedForDimensions
+            $tableRows.eq(i).find('a').eq(7).editable('destroy');
+            $tableRows.eq(i).find('a').eq(7).editable(usedForDimensionsSelect);
+            $tableRows.eq(i).find('a').eq(7).editable('option', 'defaultValue', '');
+
+
+          }
+
+          if(activeTab == "Reference" && parentData.type == 'Ref'){
+            console.log(parentData);
+            console.log($tableRows.eq(i).find('a'));
+
+            var source = [];
+            source.push({"text": "", "value": ""});
+            source.push({"text": "true", "value": "true"});
+            source.push({"text": "false", "value": "false"});
+
+            usedForDimensionsSelect.source = source;
+
+            // 7 = usedForDimensions
+            $tableRows.eq(i).find('a').eq(7).editable('destroy');
+            $tableRows.eq(i).find('a').eq(7).editable(usedForDimensionsSelect);
+            $tableRows.eq(i).find('a').eq(7).editable('option', 'defaultValue', '');
+
+
           }
 
           // Disable RepTableName if !ref
@@ -1190,21 +1274,21 @@ function buildSubTable($el, cols, data, parentData){
             $tableRows.eq(i).find('a').eq(3).editable('disable');
             $tableRows.eq(i).find('a').eq(2).editable('disable');
           }
-          // if(activeTab.match("Query Subject") && row.field_type != undefined){
-          //   if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-          //     $tableRows.eq(i).find('a').eq(8).editable('destroy');
-          //     $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
-          //     console.log($tableRows.eq(i).find('a.buildDrillPath'));
-          //     $tableRows.eq(i).find('a.buildDrillPath').remove();
-          //   // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
-          //   }
-          //   else{
-          //     // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
-          //   }
-          // }
+          if(activeTab.match("Query Subject") && row.field_type != undefined){
+            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+              $tableRows.eq(i).find('a').eq(8).editable('destroy');
+              $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
+              console.log($tableRows.eq(i).find('a.buildDrillPath'));
+              $tableRows.eq(i).find('a.buildDrillPath').remove();
+            // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
+            }
+            else{
+              // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
+            }
+          }
           if(activeTab.match("Query Subject")){
 
-            console.log($tableRows.eq(i).find('a'));
+            // console.log($tableRows.eq(i).find('a'));
 
             // console.log($tableRows.eq(i).find('a').length);
 
@@ -1265,17 +1349,26 @@ function buildSubTable($el, cols, data, parentData){
 
           case "buildDrillPath":
 
-            // if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-            //   return;
-            // }
+            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+              return;
+            }
 
             console.log(row);
             console.log(parentData);
             var fieldName = parentData.table_alias + '.' + row.field_name;
             $('#drillFieldName').text(fieldName);
+            $('#selectDimension').empty();
             $('#selectOrder').empty();
             $('#selectBK').empty();
             ChooseField($('#selectBK'), parentData.table_name);
+
+            var dimensionSet = getDimensionSet();
+
+            dimensionSet.forEach(function(value){
+              $('#selectDimension').append('<option>' + value + '</option>');
+            })
+            $('#selectDimension').selectpicker('refresh');
+            $('#selectOrder').selectpicker('refresh');
 
             $('#DrillModal').modal('toggle');
 

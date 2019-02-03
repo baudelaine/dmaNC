@@ -28,12 +28,19 @@ public class Field {
 	String order = "";
 	boolean custom = false;
 	String BK = "";
+	String hierarchyName = "";
 	
 	public String getBK() {
 		return BK;
 	}
 	public void setBK(String bK) {
 		BK = bK;
+	}
+	public String getHierarchyName() {
+		return hierarchyName;
+	}
+	public void setHierarchyName(String hierarchyName) {
+		this.hierarchyName = hierarchyName;
 	}
 	public String get_id() {
 		return _id;
