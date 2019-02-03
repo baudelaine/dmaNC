@@ -592,7 +592,7 @@ window.aboveEvents = {
 
 };
 
-$(function() {
+function buildComboList($el, init) {
 
   var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
   // var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
@@ -605,12 +605,12 @@ $(function() {
   var addoption = $('<option/>', {class: 'addItem'})
           .data('content', content)
 
-  $('#selectDimension')
+  $el
           .append(divider)
           .append(addoption)
           .selectpicker();
 
-});
+};
 
 function addSelectItem(t,ev){
    ev.stopPropagation();
@@ -1188,18 +1188,18 @@ function buildSubTable($el, cols, data, parentData){
             $tableRows.eq(i).find('a').eq(3).editable('disable');
             $tableRows.eq(i).find('a').eq(2).editable('disable');
           }
-          if(activeTab.match("Query Subject") && row.field_type != undefined){
-            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-              $tableRows.eq(i).find('a').eq(8).editable('destroy');
-              $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
-              console.log($tableRows.eq(i).find('a.buildDrillPath'));
-              $tableRows.eq(i).find('a.buildDrillPath').remove();
-            // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
-            }
-            else{
-              // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
-            }
-          }
+          // if(activeTab.match("Query Subject") && row.field_type != undefined){
+          //   if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+          //     $tableRows.eq(i).find('a').eq(8).editable('destroy');
+          //     $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
+          //     console.log($tableRows.eq(i).find('a.buildDrillPath'));
+          //     $tableRows.eq(i).find('a.buildDrillPath').remove();
+          //   // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
+          //   }
+          //   else{
+          //     // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
+          //   }
+          // }
           if(activeTab.match("Query Subject")){
 
             console.log($tableRows.eq(i).find('a'));
@@ -1263,9 +1263,9 @@ function buildSubTable($el, cols, data, parentData){
 
           case "buildDrillPath":
 
-            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-              return;
-            }
+            // if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+            //   return;
+            // }
 
             console.log(row);
             console.log(parentData);
@@ -1274,6 +1274,7 @@ function buildSubTable($el, cols, data, parentData){
             $('#selectOrder').empty();
             $('#selectBK').empty();
             ChooseField($('#selectBK'), parentData.table_name);
+            buildComboList($('#selectDimension'));
 
 
             $('#DrillModal').modal('toggle');
