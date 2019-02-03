@@ -592,7 +592,7 @@ window.aboveEvents = {
 
 };
 
-function buildComboList($el, init) {
+function buildComboList($el) {
 
   var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
   // var content = "<input type='text' class='bss-input' onKeyDown='event.stopPropagation();' onKeyPress='addSelectInpKeyPress(this,event)' onClick='event.stopPropagation()' placeholder='Add item'> <span class='glyphicon glyphicon-plus addnewicon' onClick='addSelectItem(this,event,1);'></span>";
@@ -605,10 +605,9 @@ function buildComboList($el, init) {
   var addoption = $('<option/>', {class: 'addItem'})
           .data('content', content)
 
-  $el
-          .append(divider)
-          .append(addoption)
-          .selectpicker();
+  $el.append(divider)
+  $el.append(addoption)
+  $el.selectpicker('refresh');
 
 };
 
@@ -1274,7 +1273,7 @@ function buildSubTable($el, cols, data, parentData){
             $('#selectOrder').empty();
             $('#selectBK').empty();
             ChooseField($('#selectBK'), parentData.table_name);
-            buildComboList($('#selectDimension'));
+            buildComboList($('#selectDimension'), '["un", "deux"]');
 
 
             $('#DrillModal').modal('toggle');
