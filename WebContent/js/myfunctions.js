@@ -1188,13 +1188,14 @@ function buildSubTable($el, cols, data, parentData){
           if(activeTab.match("Reference") && row.seqs.length > 0){
             $tableRows.eq(i).find('a').eq(5).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
-
+            var defaultValue = '';
             var source = [];
             $.each(row.seqs, function(k, seq){
               var option = {};
               option.text = seq.column_name;
               option.value = seq.column_name;
               source.push(option);
+              defaultValue = seq.column_name;
             })
 
             customFieldType.source = source;
@@ -1202,7 +1203,7 @@ function buildSubTable($el, cols, data, parentData){
 
             // customFieldType.source = dbDataType;
             $tableRows.eq(i).find('a').eq(5).editable(customFieldType);
-            $tableRows.eq(i).find('a').eq(5).editable('option', 'defaultValue', '');
+            $tableRows.eq(i).find('a').eq(5).editable('option', 'defaultValue', defaultValue);
           }
 
           if(activeTab == "Reference" && parentData.type == 'Final'){
