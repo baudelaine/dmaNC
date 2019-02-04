@@ -1868,11 +1868,12 @@ function buildTable($el, cols, data) {
 
               if(row.linker_ids){
                 if(row.linker_ids[0].match("Root") && !row.linker){
+                  $el.bootstrapTable("filterBy", {});
                   $el.bootstrapTable('remove', {
                     field: 'index',
                     values: [row.index]
                   });
-
+                  $el.bootstrapTable("filterBy", {type: 'Final'});
                 }
               }
             }
