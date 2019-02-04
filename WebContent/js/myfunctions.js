@@ -693,7 +693,7 @@ $('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelect
       console.log(obj);
       $.each(obj.fields, function(j, field){
         if(field.dimension == dimension){
-          var option = '<option class="fontsize" value="' + obj.table_alias + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
+          var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
           $('#selectOrder').append(option);
         }
       });
@@ -730,7 +730,7 @@ function BuildDrillPath(){
 
   console.log("drillFieldName");
   console.log($('#drillFieldName').text());
-  // var alias = $('#drillFieldName').text().split('.')[0];
+  var alias = $('#drillFieldName').text().split('.')[0];
   var field = $('#drillFieldName').text().split('.')[1];
   console.log(field);
 
@@ -740,8 +740,8 @@ function BuildDrillPath(){
       if(obj.field_name == field){
         console.log(obj);
         obj.dimension = dimension;
-        if(!order){obj.order = ""} else{obj.order = '[DATA].[' + dimension + '].[' + order + ']';}
-        obj.bk = '[DATA].[' + dimension + '].[' + bk + ']';
+        if(!order){obj.order = ""} else{obj.order = '[DATA].[' + alias + '].[' + order + ']';}
+        obj.bk = '[DATA].[' + alias + '].[' + bk + ']';
         obj.hierarchyName = hierarchyName;
         updateRow($activeSubDatasTable, obj.index, obj);
       }
