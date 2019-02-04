@@ -1940,8 +1940,8 @@ function buildTable($el, cols, data) {
     $el.bootstrapTable('showColumn', '_id');
     $el.bootstrapTable('showColumn', 'linker');
     $el.bootstrapTable('showColumn', 'linker_ids');
-    $el.bootstrapTable('hideColumn', 'linker');
-    $el.bootstrapTable('hideColumn', 'linker_ids');
+    // $el.bootstrapTable('hideColumn', 'linker');
+    // $el.bootstrapTable('hideColumn', 'linker_ids');
 
 
     console.log("in buildTable: activeTab="+activeTab);
