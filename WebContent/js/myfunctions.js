@@ -57,8 +57,8 @@ relationCols.push({field:"duplicate", title: '<i class="glyphicon glyphicon-dupl
 relationCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 // relationCols.push({field:"operate", title: "operate", formatter: "operateRelationFormatter", align: "center", events: "operateRelationEvents"});
 
-// relationCols.push({field:"linker", formatter: "boolFormatter", align: "center", title: "linker"});
-// relationCols.push({field:"linker_ids", title: "linker_ids"});
+relationCols.push({field:"linker", formatter: "boolFormatter", align: "center", title: "linker"});
+relationCols.push({field:"linker_ids", title: "linker_ids"});
 
 window.pktable_aliasEvents = {
       'change .pktable_alias': function (e, value, row, index) {
@@ -276,8 +276,8 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'above');
   $datasTable.bootstrapTable('showColumn', 'folder');
-  $datasTable.bootstrapTable('hideColumn', 'linker');
-  $datasTable.bootstrapTable('hideColumn', 'linker_ids');
+  $datasTable.bootstrapTable('showColumn', 'linker');
+  $datasTable.bootstrapTable('showColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'remove');
 });
 
@@ -295,8 +295,8 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'addPKRelation');
   $datasTable.bootstrapTable('hideColumn', 'nommageRep');
   $datasTable.bootstrapTable('hideColumn', '_id');
-  $datasTable.bootstrapTable('hideColumn', 'linker');
-  $datasTable.bootstrapTable('hideColumn', 'linker_ids');
+  $datasTable.bootstrapTable('showColumn', 'linker');
+  $datasTable.bootstrapTable('showColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'folder');
   $datasTable.bootstrapTable('showColumn', 'remove');
@@ -318,8 +318,8 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'recurseCount');
   $datasTable.bootstrapTable('showColumn', 'nommageRep');
   $datasTable.bootstrapTable('hideColumn', '_id');
-  $datasTable.bootstrapTable('hideColumn', 'linker');
-  $datasTable.bootstrapTable('hideColumn', 'linker_ids');
+  $datasTable.bootstrapTable('showColumn', 'linker');
+  $datasTable.bootstrapTable('showColumn', 'linker_ids');
   $datasTable.bootstrapTable('hideColumn', 'folder');
   $datasTable.bootstrapTable('hideColumn', 'remove');
 });
@@ -1185,7 +1185,7 @@ function buildSubTable($el, cols, data, parentData){
         $.each(data, function(i, row){
 
 
-          if(activeTab.match("Reference") && row.seqs.length > 1){
+          if(activeTab.match("Reference") && row.seqs.length > 0){
             $tableRows.eq(i).find('a').eq(5).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
 
