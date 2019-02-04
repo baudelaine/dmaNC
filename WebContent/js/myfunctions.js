@@ -693,7 +693,7 @@ $('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelect
       console.log(obj);
       $.each(obj.fields, function(j, field){
         if(field.dimension == dimension){
-          var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
+          var option = '<option class="fontsize" value="' + obj.table_alias + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
           $('#selectOrder').append(option);
         }
       });
