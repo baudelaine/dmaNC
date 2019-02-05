@@ -21,6 +21,7 @@ var qs2rm = {qs: "", row: "", qsList: [], ids2rm: {}};
 var newRelation;
 var cognosLocales;
 var dbDataType = [];
+var qsType = {isFinal: false, isRefChecked: false, isRef: false};
 
 var relationCols = [];
 // relationCols.push({field:"checkbox", checkbox: "true"});
@@ -652,25 +653,10 @@ function addSelectInpKeyPress(t,ev){
 
 $('#selectDimension').change(function () {
     var selectedText = $(this).find("option:selected").val();
-
-    // var option = '<option class="fontsize" value="' + obj.table_name + '" data-subtext="' + obj.table_remarks +  ' ' + obj.table_stats + '">'
-    //  + obj.table_name + '</option>';
-    // table.append(option);
-
-
-
-
 });
 
 $('#selectDimension').on('show.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("show");
-
-  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
-
-    console.log(obj);
-
-  });
-
 });
 
 $('#selectDimension').on('shown.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -688,20 +674,23 @@ $('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelect
   var dimension = $(this).find("option:selected").val();
   console.log(dimension);
   if(dimension != ''){
-    $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+    console.log(qsType);
+    if(qsType.isFinal && !qsType.isRefChecked){
+      var alias = $('#drillFieldName').text().split('.')[0];
 
-      console.log(obj);
-      $.each(obj.fields, function(j, field){
-        if(field.dimension == dimension){
-          var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
-          $('#selectOrder').append(option);
-        }
+      $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+        console.log(obj);
+        $.each(obj.fields, function(j, field){
+          if(field.dimension == dimension){
+            var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
+            $('#selectOrder').append(option);
+          }
+        });
       });
-      $('#selectOrder').selectpicker('refresh');
-    });
+    }
   }
 
-
+  $('#selectOrder').selectpicker('refresh');
 
 });
 
@@ -1090,6 +1079,16 @@ function getDimensionSet(){
   return dimensionSet;
 }
 
+function clearDrillModal(){
+  $('#selectDimension').empty();
+  $('#selectDimension').selectpicker('refresh');
+  $('#selectOrder').empty();
+  $('#selectOrder').selectpicker('refresh');
+  $('#selectBK').empty();
+  $('#selectBK').selectpicker('refresh');
+  $('#drillFieldName').text('');
+}
+
 function expandTable($detail, cols, data, parentData) {
     $subtable = $detail.html('<table></table>').find('table');
     // console.log("expandTable.data=");
@@ -1354,14 +1353,30 @@ function buildSubTable($el, cols, data, parentData){
               return;
             }
 
-            console.log(row);
-            console.log(parentData);
+            //Check if QS is either Final, RefChecked or Ref
+            qsType = {isFinal: false, isRefChecked: false, isRef: false};
+
+            $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+              if(obj.table_alias == parentData.table_alias){
+                if(obj.type == 'Final'){
+                  qsType.isFinal = true;
+                  $.each(obj.relations, function(j, relation){
+                    if(relation.ref){
+                      qsType.isRefChecked = true;
+                    }
+                  });
+                }
+                if(obj.type != 'Final'){
+                      qsType.isRef = true;
+                }
+              }
+            });
+            console.log(qsType);
+
+            clearDrillModal();
+
             var fieldName = parentData.table_alias + '.' + row.field_name;
             $('#drillFieldName').text(fieldName);
-            $('#selectDimension').empty();
-            $('#selectOrder').empty();
-            $('#selectBK').empty();
-            ChooseField($('#selectBK'), parentData.table_name);
 
             var dimensionSet = getDimensionSet();
 
@@ -1371,7 +1386,12 @@ function buildSubTable($el, cols, data, parentData){
             $('#selectDimension').selectpicker('refresh');
             $('#selectOrder').selectpicker('refresh');
 
+            if(qsType.isFinal && !qsType.isRefChecked){
+              ChooseField($('#selectBK'), parentData.table_name);
+            }
+
             $('#DrillModal').modal('toggle');
+
 
             break;
 
