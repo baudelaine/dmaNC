@@ -1169,7 +1169,7 @@ function buildSubTable($el, cols, data, parentData){
           console.log(row.dimension);
           var dimension = row.dimension;
           if(Array.isArray(dimension)){
-            row.dimension = dimension.toString();
+            row.dimension = '[' + dimension.toString() + ']';
           };
           console.log(row.dimension);
         }
