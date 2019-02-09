@@ -3,11 +3,9 @@ package com.dma.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
@@ -73,6 +71,16 @@ public class GetDimensionsServlet extends HttpServlet {
 							String qSleftType = "Final";
 							
 							dimension.getDimensionDetails().setQsFinalName(qsFinalName);
+					    	List<String> orders = dimension.getDimensionDetails().getOrders();
+					    	List<String> BKs = dimension.getDimensionDetails().getBKs();							
+							
+							for(Field field: query_subjects.get(qsFinalName + qSleftType).getFields()){
+							    if (field.getDimension().equals(dimension.getName())) {
+							    	orders.add(field.getField_name());
+							    }
+							    BKs.add(field.getField_name());
+							}
+							
 							
 							Tools.recurse0(qsAlias, gDirName, qsFinalName, qSleftType, dimension, query_subjects);
 																	

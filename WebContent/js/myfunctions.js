@@ -702,7 +702,11 @@ function updateDimension(dimension){
   $('#selectOrder').selectpicker('refresh');
   $('#selectBK').empty();
   $('#selectBK').selectpicker('refresh');
-  
+
+  console.log(Gdimensions);
+
+  console.log(dimension);
+
   console.log(Gdimensions[dimension].dimensionDetails);
 
   var orders = Gdimensions[dimension].dimensionDetails.orders;
@@ -1275,8 +1279,8 @@ function buildSubTable($el, cols, data, parentData){
           }
 
           if(activeTab == "Reference" && parentData.type == 'Ref'){
-            console.log(parentData);
-            console.log($tableRows.eq(i).find('a'));
+            // console.log(parentData);
+            // console.log($tableRows.eq(i).find('a'));
 
             var source = [];
             source.push({"text": "", "value": ""});

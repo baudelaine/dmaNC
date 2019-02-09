@@ -24,7 +24,7 @@ public class Test3 {
 		// TODO Auto-generated method stub
 
 //		Path path = Paths.get("/opt/wks/dmaNC/foodmart_multi_BK-2019-02-3-12-22-49.json");
-		Path path = Paths.get("/home/dma/seb/sample0/models/m0-2019-02-9-10-8-18.json");
+		Path path = Paths.get("/home/dma/seb/sample0/models/m0-2019-02-9-15-45-25.json");
 		
 		
 		try {
