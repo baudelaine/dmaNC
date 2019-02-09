@@ -207,8 +207,8 @@ var dimensions = {
 }
 
 fieldCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
-fieldCols.push({field:"order", title: "Order", editable: {type: "text", mode: "inline"}, sortable: true});
-fieldCols.push({field:"bk", title: "BK", editable: {type: "text", mode: "inline"}, sortable: true});
+fieldCols.push({field:"order", title: "Order", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
+fieldCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
 fieldCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
 
 fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
@@ -774,10 +774,6 @@ function BuildDrillPath(){
   var bkQsFinalName = bk.split('.').slice(0,1).toString();
   var orderOrder = order.split('.').slice(1).toString();
   var bkBk = bk.split('.').slice(1).toString();
-  console.log(orderQsFinalName);
-  console.log(bkQsFinalName);
-  console.log(orderOrder);
-  console.log(bkBk);
   var hierarchyName = $('#hierarchyName').val();
 
   var alias = $('#drillFieldName').text().split('.')[0];
