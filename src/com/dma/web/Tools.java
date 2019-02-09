@@ -214,43 +214,43 @@ public class Tools {
 	    return "";
 	}	
 	
-	static Dimension recurse0(String qsAlias, String gDirName, String qsFinalName, String qSleftType, Dimension dimension, Map<String, QuerySubject> query_subjects) {
-		
-		
-		String gDirNameCurrent = "";
-		QuerySubject query_subject;
-		query_subject = query_subjects.get(qsAlias + qSleftType);
-    	List<String> orders = dimension.getDimensionDetails().getOrders();
-    	List<String> BKs = dimension.getDimensionDetails().getBKs();
-			
-		for(Relation rel: query_subject.getRelations()){
-			if(rel.isRef()) { 
-				if((rel.getUsedForDimensions().equals(dimension.getName()) && qSleftType.equalsIgnoreCase("Final")) 
-						|| (rel.getUsedForDimensions().equalsIgnoreCase("true") && qSleftType.equalsIgnoreCase("Ref"))) {
-				
-								
-					String pkAlias = rel.getPktable_alias();
-	
-					if(rel.getKey_type().equalsIgnoreCase("P") || rel.isNommageRep()){
-							gDirNameCurrent = gDirName + "." + pkAlias;
-					}
-					else{
-							gDirNameCurrent = gDirName + "." + rel.getAbove();
-					}					
-					
-					for(Field field: query_subjects.get(pkAlias + "Ref").getFields()){
-					    if (field.getDimension().equals(dimension.getName())) {
-					    	orders.add(gDirNameCurrent.substring(1) + "." + field.getField_name());
-					    }
-					    BKs.add(gDirNameCurrent.substring(1) + "." + field.getField_name());
-					}
-					
-					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension, query_subjects);	
-				}
-			}
-		}
-		return dimension;
-	}	
+//	static Dimension recurse0(String qsAlias, String gDirName, String qsFinalName, String qSleftType, Dimension dimension, Map<String, QuerySubject> query_subjects) {
+//		
+//		
+//		String gDirNameCurrent = "";
+//		QuerySubject query_subject;
+//		query_subject = query_subjects.get(qsAlias + qSleftType);
+//    	List<String> orders = dimension.getDimensionDetails().getOrders();
+//    	List<String> BKs = dimension.getDimensionDetails().getBKs();
+//			
+//		for(Relation rel: query_subject.getRelations()){
+//			if(rel.isRef()) { 
+//				if((rel.getUsedForDimensions().equals(dimension.getName()) && qSleftType.equalsIgnoreCase("Final")) 
+//						|| (rel.getUsedForDimensions().equalsIgnoreCase("true") && qSleftType.equalsIgnoreCase("Ref"))) {
+//				
+//								
+//					String pkAlias = rel.getPktable_alias();
+//	
+//					if(rel.getKey_type().equalsIgnoreCase("P") || rel.isNommageRep()){
+//							gDirNameCurrent = gDirName + "." + pkAlias;
+//					}
+//					else{
+//							gDirNameCurrent = gDirName + "." + rel.getAbove();
+//					}					
+//					
+//					for(Field field: query_subjects.get(pkAlias + "Ref").getFields()){
+//					    if (field.getDimension().equals(dimension.getName())) {
+//					    	orders.add(gDirNameCurrent.substring(1) + "." + field.getField_name());
+//					    }
+//					    BKs.add(gDirNameCurrent.substring(1) + "." + field.getField_name());
+//					}
+//					
+//					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension, query_subjects);	
+//				}
+//			}
+//		}
+//		return dimension;
+//	}	
 	
 	
 }

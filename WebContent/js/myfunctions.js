@@ -707,20 +707,20 @@ function updateDimension(dimension){
 
   console.log(dimension);
 
-  console.log(Gdimensions[dimension].dimensionDetails);
+  console.log(Gdimensions[dimension]);
 
-  var orders = Gdimensions[dimension].dimensionDetails.orders;
-  var bks = Gdimensions[dimension].dimensionDetails.bks;
-  var qsFinalName = Gdimensions[dimension].dimensionDetails.qsFinalName;
+  var orders = Gdimensions[dimension].orders;
+  var bks = Gdimensions[dimension].bks;
+  var alias = $('#drillFieldName').text().split('.')[0];
   $.each(orders, function(i, order){
-    var option = '<option class="fontsize" value="' + order + '" data-subtext="' + qsFinalName + '">' + order + '</option>';
+    var option = '<option class="fontsize" value="' + order + '" data-subtext="' + alias + '">' + order + '</option>';
     $('#selectOrder').append(option);
 
   })
   $('#selectOrder').selectpicker('refresh');
 
   $.each(bks, function(i, bk){
-    var option = '<option class="fontsize" value="' + bk + '" data-subtext="' + qsFinalName + '">' + bk + '</option>';
+    var option = '<option class="fontsize" value="' + bk + '" data-subtext="' + alias + '">' + bk + '</option>';
     $('#selectBK').append(option);
 
   })
@@ -749,6 +749,7 @@ function getDimensions(dimensionSet){
     dataType: 'json',
     data: JSON.stringify(parms),
     success: function(data) {
+      console.log(data);
       Gdimensions = data.DATA;
       $.each(Object.values(data.DATA), function(i, dimension){
         var option = '<option class="fontsize" value="' + dimension.name + '" data-subtext="' + '' + '">' + dimension.name + '</option>';
