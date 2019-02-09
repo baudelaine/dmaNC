@@ -713,14 +713,14 @@ function updateDimension(dimension){
   var bks = Gdimensions[dimension].bks;
   var alias = $('#drillFieldName').text().split('.')[0];
   $.each(orders, function(i, order){
-    var option = '<option class="fontsize" value="' + order + '" data-subtext="' + alias + '">' + order + '</option>';
+    var option = '<option class="fontsize" value="' + order.qsFinalName + '.' + order.order + '" data-subtext="' + order.qsFinalName + '">' + order.order + '</option>';
     $('#selectOrder').append(option);
 
   })
   $('#selectOrder').selectpicker('refresh');
 
   $.each(bks, function(i, bk){
-    var option = '<option class="fontsize" value="' + bk + '" data-subtext="' + alias + '">' + bk + '</option>';
+    var option = '<option class="fontsize" value="' + bk.qsFinalName + '.' + bk.bk + '" data-subtext="' + bk.qsFinalName + '">' + bk.bk + '</option>';
     $('#selectBK').append(option);
 
   })
@@ -770,6 +770,14 @@ function BuildDrillPath(){
   var dimension = $('#selectDimension').find("option:selected").val();
   var order = $('#selectOrder').find("option:selected").val();
   var bk = $('#selectBK').find("option:selected").val();
+  var orderQsFinalName = order.split('.').slice(0,1).toString();
+  var bkQsFinalName = bk.split('.').slice(0,1).toString();
+  var orderOrder = order.split('.').slice(1).toString();
+  var bkBk = bk.split('.').slice(1).toString();
+  console.log(orderQsFinalName);
+  console.log(bkQsFinalName);
+  console.log(orderOrder);
+  console.log(bkBk);
   var hierarchyName = $('#hierarchyName').val();
 
   var alias = $('#drillFieldName').text().split('.')[0];
@@ -780,8 +788,8 @@ function BuildDrillPath(){
     $.each($activeSubDatasTable.bootstrapTable("getData"), function(i, obj){
       if(obj.field_name == field){
         obj.dimension = dimension;
-        if(!order){obj.order = ""} else{obj.order = '[DATA].[' + alias + '].[' + order + ']';}
-        obj.bk = '[DATA].[' + alias + '].[' + bk + ']';
+        if(!order){obj.order = ""} else{obj.order = '[DATA].[' + orderQsFinalName + '].[' + orderOrder + ']';}
+        obj.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']';
         obj.hierarchyName = hierarchyName;
         updateRow($activeSubDatasTable, obj.index, obj);
       }
