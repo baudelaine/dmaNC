@@ -154,97 +154,26 @@ public class MainTravail_SEB_REF {
 			
 			if (query_subject.getValue().getType().equalsIgnoreCase("Final")){
 				
-				fsvc.copyQuerySubject("[PHYSICALUSED]", "[PHYSICAL].[" + query_subject.getValue().getTable_name() + "]");
-				fsvc.renameQuerySubject("[PHYSICALUSED].[" + query_subject.getValue().getTable_name() + "]", "FINAL_" + query_subject.getValue().getTable_alias());
-				
-				fsvc.createQuerySubject("PHYSICALUSED", "FINAL", "FINAL_" + query_subject.getValue().getTable_alias(), query_subject.getValue().getTable_alias());
-				//ajout filter
-				if (!query_subject.getValue().getFilter().equals(""))
-				{
-					fsvc.createQuerySubject("FINAL", "FILTER_FINAL", query_subject.getValue().getTable_alias() , query_subject.getValue().getTable_alias());
-					fsvc.createQuerySubjectFilter("[FILTER_FINAL].[" + query_subject.getValue().getTable_alias() + "]" , query_subject.getValue().getFilter());
-					fsvc.createQuerySubject("FILTER_FINAL", "DATA", query_subject.getValue().getTable_alias() , query_subject.getValue().getTable_alias());
-				} else {
-					fsvc.createQuerySubject("FINAL", "DATA", query_subject.getValue().getTable_alias() , query_subject.getValue().getTable_alias());
-				}
-				//end filter
-				//tooltip
-				String desc = "";
-				if(query_subject.getValue().getDescription() != null) {desc = ": " + query_subject.getValue().getDescription();}
-				fsvc.createScreenTip("querySubject", "[DATA].[" + query_subject.getValue().getTable_alias() + "]" , query_subject.getValue().getTable_name() + desc );
-				//end tooltip
-				
 				//lancement f1 ref
 				for(QuerySubject qs: qsList){
 		        	recurseCount.put(qs.getTable_alias(), 0);
 		        }
 				
-				f1(query_subject.getValue().getTable_alias(), query_subject.getValue().getTable_alias(), "", "[DATA].[" + query_subject.getValue().getTable_alias() + "]", query_subject.getValue().getTable_alias(), recurseCount, "Final");
+				String qsAlias = query_subject.getValue().getTable_alias();  // table de gauche, celle ou tu es actuellement
+				String gDirName = ""; // prefix qu'on cherche, il vaut cher
+				String qsFinalName = query_subject.getValue().getTable_alias();   //CONSTANTE, nom du QS final auquel l'arbre ref est accroché, le tronc, on peut le connaitre à tout moment de f1
+				String qSleftType = "Final";
+				String selectedDimension = "Product";  // la dimension que tu scan pour trouver les les champs qui la compose
+				
+				f1(qsAlias, gDirName, qsFinalName, qSleftType, selectedDimension);
 				//end f1
-										
-				for(Relation rel: query_subject.getValue().getRelations()){
-					if(rel.isFin()){
-						
-						RelationShip RS = new RelationShip("[FINAL].[" + query_subject.getValue().getTable_alias() + "]" , "[FINAL].[" + rel.getPktable_alias() + "]");
-						// changer en qs + refobj
-						RS.setExpression(rel.getRelationship());
-						if (rel.isRightJoin())
-						{
-							RS.setCard_left_min("zero");
-						} else {
-							RS.setCard_left_min("one");
-						}
-						RS.setCard_left_max("many");
-	
-						if (rel.isLeftJoin())
-						{
-							RS.setCard_right_min("zero");
-						} else {
-							RS.setCard_right_min("one");
-						}
-						RS.setCard_right_max("one");
-						RS.setParentNamespace("FINAL");
-						rsList.add(RS);					
-				
-					}
-				}				
-				//add label map qs
-				if(query_subject.getValue().getLabel() == null || query_subject.getValue().getLabel().equals("")) {
-				labelMap.put(query_subject.getValue().getTable_alias(), query_subject.getValue().getTable_name());
-				} else {
-					labelMap.put(query_subject.getValue().getTable_alias(), query_subject.getValue().getLabel());
-				}
-				
+														
 				//add label map fields
 				for(Field field: query_subject.getValue().getFields()) {
 					
-					if (field.isCustom()) {
-						
-						fsvc.createQueryItem("[DATA].[" + query_subject.getValue().getTable_alias() + "]", field.getField_name(), field.getExpression(), cognosDefaultLocale);
+					if (field.getDimension().equals("Product")) {
+						// je recupere fieldName pour le mettre dans la liste order
 					}
-					
-					if (field.getLabel() == null || field.getLabel().equals("")) {
-					labelMap.put(query_subject.getValue().getTable_alias() + "." + field.getField_name(), field.getField_name());
-					} else {
-						labelMap.put(query_subject.getValue().getTable_alias() + "." + field.getField_name(), field.getLabel());
-					}
-					//add tooltip
-					desc = "";
-					if(field.getDescription() != null) {desc = ": " + field.getDescription();}	
-					fsvc.createScreenTip("queryItem", "[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", query_subject.getValue().getTable_name() + "." + field.getField_name() + desc);
-					//end tooltip
-					//change property query item
-					fsvc.changeQueryItemProperty("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", "usage", field.getIcon().toLowerCase());
-					if (!field.getDisplayType().toLowerCase().equals("value"))
-					{
-						fsvc.changeQueryItemProperty("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", "displayType", field.getDisplayType().toLowerCase());
-					}
-					if (field.isHidden())
-					{
-						fsvc.changeQueryItemProperty("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", "hidden", "true");
-						
-					}
-				//end change
 				}
 				// end label
 			}
@@ -400,42 +329,35 @@ public class MainTravail_SEB_REF {
 			System.out.println("Model Generation Finished");
 	}
 	
-	protected static void f1(String qsAlias, String qsAliasInc, String gDirName, String qsFinalName, String qSleftType, String selectedDimension) {
+	protected static void f1(String qsAlias, String gDirName, String qsFinalName, String qSleftType, String selectedDimension) {
 		
 	
 		QuerySubject query_subject;
+		query_subject = query_subjects.get(qsAlias + qSleftType);
 			
 		for(Relation rel: query_subject.getRelations()){
-			if(rel.isRef() && (rel.getUsedForDimensions().equals(selectedDimension) && qSleftType.equals("Final") || rel.getUsedForDimensions().equals("true") && !qSleftType.equals("Final"))){
+			if(rel.isRef() && ((rel.getUsedForDimensions().equals(selectedDimension) && qSleftType.equals("Final")) || (rel.getUsedForDimensions().equals("true") && qSleftType.equals("Ref")))){
 				
 								
 				String pkAlias = rel.getPktable_alias();
 
 				//seq
-				String gFieldName = "";
 				String gDirNameCurrent = "";
-				String label = "";
 				if(rel.getKey_type().equalsIgnoreCase("P") || rel.isNommageRep()){
-					if (qSleftType.equals("Final")) {
-						gFieldName = pkAlias;
-						gDirNameCurrent = "." + pkAlias;
-					} else {
-						gFieldName = gDirName.substring(1) + "." + pkAlias;
 						gDirNameCurrent = gDirName + "." + pkAlias;
-					}
-					
 				}
 				else{
-					if (qSleftType.equals("Final")) {
-						gFieldName = rel.getAbove();
-						gDirNameCurrent = "." + rel.getAbove();
-					} else {
-						gFieldName = gDirName.substring(1) + "." + rel.getAbove();
 						gDirNameCurrent = gDirName + "." + rel.getAbove();
-					}
 				}					
-					
-				f1(pkAlias, qsFinalName + gDirNameCurrent, gDirNameCurrent, qsFinalName);	
+				
+				for(Field field: query_subjects.get(pkAlias + "Ref").getFields()){
+				    if (field.getDimension().equals(selectedDimension)) {
+				    	// afficher dans la colonne order [DATA].[qsFinalName].[gDirNameCurrent + "." + field.getName()]
+				    	// afficher dans la liste order gDirNameCurrent + "." + field.getName() -- qsFinalName //grisé
+				    }
+				}
+				
+				f1(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,selectedDimension);	
 			}
 		}
 	}

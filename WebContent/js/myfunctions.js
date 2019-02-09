@@ -22,6 +22,7 @@ var newRelation;
 var cognosLocales;
 var dbDataType = [];
 var qsType = {isFinal: false, isRefChecked: false, isRef: false};
+var Gdimensions = {};
 
 var relationCols = [];
 // relationCols.push({field:"checkbox", checkbox: "true"});
@@ -652,11 +653,16 @@ function addSelectInpKeyPress(t,ev){
 }
 
 $('#selectDimension').change(function () {
-    var selectedText = $(this).find("option:selected").val();
+  console.log("change");
+  var selectedText = $(this).find("option:selected").val();
+  updateDimension(selectedText);
+
 });
 
 $('#selectDimension').on('show.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("show");
+  var selectedText = $(this).find("option:selected").val();
+  updateDimension(selectedText);
 });
 
 $('#selectDimension').on('shown.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -669,29 +675,6 @@ $('#selectDimension').on('hide.bs.select', function (e, clickedIndex, isSelected
 
 $('#selectDimension').on('hidden.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("hidden");
-  $('#selectOrder').empty();
-  $('#selectOrder').append('<option></option>');
-  var dimension = $(this).find("option:selected").val();
-  console.log(dimension);
-  if(dimension != ''){
-    console.log(qsType);
-    if(qsType.isFinal && !qsType.isRefChecked){
-      var alias = $('#drillFieldName').text().split('.')[0];
-
-      $.each($datasTable.bootstrapTable("getData"), function(i, obj){
-        console.log(obj);
-        $.each(obj.fields, function(j, field){
-          if(field.dimension == dimension){
-            var option = '<option class="fontsize" value="' + field.field_name + '" data-subtext="' + obj.table_alias + '">' + field.field_name + '</option>';
-            $('#selectOrder').append(option);
-          }
-        });
-      });
-    }
-  }
-
-  $('#selectOrder').selectpicker('refresh');
-
 });
 
 $('#selectDimension').on('loaded.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -710,6 +693,64 @@ $('#selectDimension').on('changed.bs.select', function (e, clickedIndex, isSelec
   console.log("changed");
 });
 
+function updateDimension(dimension){
+  console.log(Gdimensions[dimension].dimensionDetails);
+
+  var orders = Gdimensions[dimension].dimensionDetails.orders;
+  var bks = Gdimensions[dimension].dimensionDetails.bks;
+  var qsFinalName = Gdimensions[dimension].dimensionDetails.qsFinalName;
+  $.each(orders, function(i, order){
+    var option = '<option class="fontsize" value="' + order + '" data-subtext="' + qsFinalName + '">' + order + '</option>';
+    $('#selectOrder').append(option);
+
+  })
+  $('#selectOrder').selectpicker('refresh');
+
+  $.each(bks, function(i, bk){
+    var option = '<option class="fontsize" value="' + bk + '" data-subtext="' + qsFinalName + '">' + bk + '</option>';
+    $('#selectBK').append(option);
+
+  })
+  $('#selectBK').selectpicker('refresh');
+}
+
+function getDimensions(dimensionSet){
+
+  var dimensions = [];
+  var qss = {};
+  dimensionSet.forEach(function(value){
+    dimensions.push(value);
+  })
+
+  // $datasTable.bootstrapTable("filterBy", {});
+
+  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+    qss[obj._id] = obj;
+  });
+
+  var parms = {dimensions: JSON.stringify(dimensions), qss: JSON.stringify(qss)};
+
+  $.ajax({
+    type: 'POST',
+    url: "GetDimensions",
+    dataType: 'json',
+    data: JSON.stringify(parms),
+    success: function(data) {
+      Gdimensions = data.DATA;
+      $.each(Object.values(data.DATA), function(i, dimension){
+        var option = '<option class="fontsize" value="' + dimension.name + '" data-subtext="' + '' + '">' + dimension.name + '</option>';
+        $('#selectDimension').append(option);
+      })
+      $('#selectDimension').selectpicker('refresh');
+    },
+    error: function(data) {
+      console.log(data);
+    }
+  });
+
+
+}
+
 function BuildDrillPath(){
 
   var dimension = $('#selectDimension').find("option:selected").val();
@@ -717,17 +758,13 @@ function BuildDrillPath(){
   var bk = $('#selectBK').find("option:selected").val();
   var hierarchyName = $('#hierarchyName').val();
 
-  console.log("drillFieldName");
-  console.log($('#drillFieldName').text());
   var alias = $('#drillFieldName').text().split('.')[0];
   var field = $('#drillFieldName').text().split('.')[1];
-  console.log(field);
 
 
   if($activeSubDatasTable != undefined){
     $.each($activeSubDatasTable.bootstrapTable("getData"), function(i, obj){
       if(obj.field_name == field){
-        console.log(obj);
         obj.dimension = dimension;
         if(!order){obj.order = ""} else{obj.order = '[DATA].[' + alias + '].[' + order + ']';}
         obj.bk = '[DATA].[' + alias + '].[' + bk + ']';
@@ -1166,12 +1203,10 @@ function buildSubTable($el, cols, data, parentData){
         }
 
         if(field == "dimension"){
-          console.log(row.dimension);
           var dimension = row.dimension;
           if(Array.isArray(dimension)){
             row.dimension = '[' + dimension.toString() + ']';
           };
-          console.log(row.dimension);
         }
 
       },
@@ -1380,15 +1415,8 @@ function buildSubTable($el, cols, data, parentData){
 
             var dimensionSet = getDimensionSet();
 
-            dimensionSet.forEach(function(value){
-              $('#selectDimension').append('<option>' + value + '</option>');
-            })
-            $('#selectDimension').selectpicker('refresh');
-            $('#selectOrder').selectpicker('refresh');
 
-            if(qsType.isFinal && !qsType.isRefChecked){
-              ChooseField($('#selectBK'), parentData.table_name);
-            }
+            getDimensions(dimensionSet);
 
             $('#DrillModal').modal('toggle');
 
