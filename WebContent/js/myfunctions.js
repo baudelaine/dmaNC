@@ -697,6 +697,12 @@ $('#selectDimension').on('changed.bs.select', function (e, clickedIndex, isSelec
 });
 
 function updateDimension(dimension){
+
+  $('#selectOrder').empty();
+  $('#selectOrder').selectpicker('refresh');
+  $('#selectBK').empty();
+  $('#selectBK').selectpicker('refresh');
+  
   console.log(Gdimensions[dimension].dimensionDetails);
 
   var orders = Gdimensions[dimension].dimensionDetails.orders;

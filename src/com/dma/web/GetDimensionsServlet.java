@@ -72,13 +72,9 @@ public class GetDimensionsServlet extends HttpServlet {
 							String qsFinalName = query_subject.getValue().getTable_alias();   //CONSTANTE, nom du QS final auquel l'arbre ref est accroché, le tronc, on peut le connaitre à tout moment de f1
 							String qSleftType = "Final";
 							
-							System.out.println("qsAlias=" + qsAlias);
 							dimension.getDimensionDetails().setQsFinalName(qsFinalName);
 							
-							
 							Tools.recurse0(qsAlias, gDirName, qsFinalName, qSleftType, dimension, query_subjects);
-							
-							System.out.println(Tools.toJSON(dimension));
 																	
 						}
 						
