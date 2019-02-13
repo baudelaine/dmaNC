@@ -64,6 +64,9 @@ public class SaveModelServlet extends HttpServlet {
 					if(!dimensionItem.isEmpty()) {
 						Map<String, String> dimension = new HashMap<String, String>();
 						dimension.put("dimension", dimensionItem);
+						dimension.put("order","");
+						dimension.put("bk","");
+						dimension.put("hierarchyName","");
 						
 						try {
 							dimension.put("order", orderList.get(index).split("-")[1]);
