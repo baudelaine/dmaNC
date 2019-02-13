@@ -713,14 +713,14 @@ function updateDimension(dimension){
   var bks = Gdimensions[dimension].bks;
   var alias = $('#drillFieldName').text().split('.')[0];
   $.each(orders, function(i, order){
-    var option = '<option class="fontsize" value="' + order.qsFinalName + '.' + order.order + '" data-subtext="' + order.qsFinalName + '">' + order.order + '</option>';
+    var option = '<option class="fontsize" value="' + order.qsFinalName + ' -- ' + order.order + '" data-subtext="' + order.qsFinalName + '">' + order.order + '</option>';
     $('#selectOrder').append(option);
 
   })
   $('#selectOrder').selectpicker('refresh');
 
   $.each(bks, function(i, bk){
-    var option = '<option class="fontsize" value="' + bk.qsFinalName + '.' + bk.bk + '" data-subtext="' + bk.qsFinalName + '">' + bk.bk + '</option>';
+    var option = '<option class="fontsize" value="' + bk.qsFinalName + ' -- ' + bk.bk + '" data-subtext="' + bk.qsFinalName + '">' + bk.bk + '</option>';
     $('#selectBK').append(option);
 
   })
@@ -770,15 +770,14 @@ function BuildDrillPath(){
   var dimension = $('#selectDimension').find("option:selected").val();
   var order = $('#selectOrder').find("option:selected").val();
   var bk = $('#selectBK').find("option:selected").val();
-  var orderQsFinalName = order.split('.').slice(0,1).toString();
-  var bkQsFinalName = bk.split('.').slice(0,1).toString();
-  var orderOrder = order.split('.').slice(1).toString();
-  var bkBk = bk.split('.').slice(1).toString();
+  var orderQsFinalName = order.split(' -- ').slice(0,1).toString();
+  var bkQsFinalName = bk.split(' -- ').slice(0,1).toString();
+  var orderOrder = order.split(' -- ').slice(1).toString();
+  var bkBk = bk.split(' -- ').slice(1).toString();
   var hierarchyName = $('#hierarchyName').val();
 
   var alias = $('#drillFieldName').text().split('.')[0];
   var field = $('#drillFieldName').text().split('.')[1];
-
 
   if($activeSubDatasTable != undefined){
     $.each($activeSubDatasTable.bootstrapTable("getData"), function(i, obj){
