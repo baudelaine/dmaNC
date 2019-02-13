@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
  * Servlet implementation class GetImportedKeysServlet
@@ -39,7 +43,55 @@ public class SaveModelServlet extends HttpServlet {
 		Map<String, Object> parms = Tools.fromJSON(request.getInputStream());
 		
 		String modelName = (String) parms.get("modelName");
+		
+		@SuppressWarnings("unchecked")
+		List<QuerySubject> querySubjects = (List<QuerySubject>) Tools.fromJSON(parms.get("data").toString(), new TypeReference<List<QuerySubject>>(){});		
 
+		
+		// Start mapping dimension, order, bk and hierarchName String to dimensions List<Map<String, String>>
+		
+		for(QuerySubject querySubject: querySubjects) {
+
+			for(Field field: querySubject.getFields()){
+				List<Map<String, String>> dimensions = new ArrayList<Map<String, String>>();
+				List<String> dimensionList = Arrays.asList(field.getDimension().split(","));
+				List<String> orderList = Arrays.asList(field.getOrder().split(","));
+				List<String> bkList = Arrays.asList(field.getBK().split(","));
+				List<String> hierarchyNameList = Arrays.asList(field.getHierarchyName().split(","));
+
+				int index = 0;
+				for(String dimensionItem: dimensionList) {
+					if(!dimensionItem.isEmpty()) {
+						Map<String, String> dimension = new HashMap<String, String>();
+						dimension.put("dimension", dimensionItem);
+						
+						try {
+							dimension.put("order", orderList.get(index).split("-")[1]);
+						}
+						catch(ArrayIndexOutOfBoundsException e) {}
+						
+						try {
+							dimension.put("bk", bkList.get(index).split("-")[1]);
+						}
+						catch(ArrayIndexOutOfBoundsException e) {}
+						
+						try {
+							dimension.put("hierarchyName", hierarchyNameList.get(index).split("-")[1]);
+						}
+						catch(ArrayIndexOutOfBoundsException e) {}
+						
+						dimensions.add(dimension);
+					}
+					index++;
+				}
+				field.setDimensions(dimensions);
+			}
+		
+		}
+		
+		// End mapping dimension, order, bk and hierarchName String to dimensions List<Map<String, String>>
+		
+		
 		Calendar c = Calendar.getInstance();
 //		c.setTimeInMillis(System.currentTimeMillis());
 
@@ -52,10 +104,11 @@ public class SaveModelServlet extends HttpServlet {
 		Path path = Paths.get((String) request.getSession().getAttribute("projectPath"));
 		
 		String fileName = path + "/models/" + modelName + "-" + date + "-" + time + ".json";
-		System.out.println("fileName=" + fileName);
 		Path output = Paths.get(fileName);
 
-		Files.write(output, Tools.toJSON(parms.get("data")).getBytes());
+		
+		
+		Files.write(output, Tools.toJSON(querySubjects).getBytes());
 		
 		List<Object> result = new ArrayList<Object>();
 		    

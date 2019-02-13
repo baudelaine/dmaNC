@@ -50,8 +50,6 @@ public class Test3 {
 					String qSleftType = "Final";
 					
 					System.out.println("qsAlias=" + qsAlias);
-					d0.getDimensionDetails().setQsFinalName(qsFinalName);
-					
 					
 					recurse0(qsAlias, gDirName, qsFinalName, qSleftType, d0);
 					
@@ -74,8 +72,8 @@ public class Test3 {
 		String gDirNameCurrent = "";
 		QuerySubject query_subject;
 		query_subject = query_subjects.get(qsAlias + qSleftType);
-    	List<String> orders = dimension.getDimensionDetails().getOrders();
-    	List<String> BKs = dimension.getDimensionDetails().getBKs();
+    	List<Map<String, String>> orders = dimension.getOrders();
+    	List<Map<String, String>> bks = dimension.getBks();
 			
 		for(Relation rel: query_subject.getRelations()){
 			if(rel.isRef()) { 
@@ -94,9 +92,17 @@ public class Test3 {
 					
 					for(Field field: query_subjects.get(pkAlias + "Ref").getFields()){
 					    if (field.getDimension().equals(dimension.getName())) {
-					    	orders.add(gDirNameCurrent.substring(1) + "." + field.getField_name());
+					    	// afficher dans la colonne order [DATA].[qsFinalName].[gDirNameCurrent + "." + field.getName()]
+					    	// afficher dans la liste order gDirNameCurrent + "." + field.getName() -- qsFinalName //grisé
+					    	Map<String, String> order = new HashMap<String, String>();
+					    	order.put("qsFinalName", qsFinalName);
+					    	order.put("order", gDirNameCurrent.substring(1) + "." + field.getField_name());
+					    	orders.add(order);
 					    }
-					    BKs.add(gDirNameCurrent.substring(1) + "." + field.getField_name());
+					    Map<String, String> bk = new HashMap<String, String>();
+				    	bk.put("qsFinalName", qsFinalName);
+				    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
+				    	bks.add(bk);
 					}
 					
 					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension);	

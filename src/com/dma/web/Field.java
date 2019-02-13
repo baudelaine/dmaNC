@@ -1,6 +1,8 @@
 package com.dma.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Field {
@@ -24,6 +26,7 @@ public class Field {
 	String expression = "";
 	Map<String, Object> descriptions = new HashMap<String, Object>();
 	String dimension = "";
+	List<Map<String, String>> dimensions = new ArrayList<Map<String, String>>();
 	String measure = "";
 	String order = "";
 	boolean custom = false;
@@ -35,6 +38,12 @@ public class Field {
 	}
 	public void setBK(String bK) {
 		BK = bK;
+	}
+	public List<Map<String, String>> getDimensions() {
+		return dimensions;
+	}
+	public void setDimensions(List<Map<String, String>> dimensions) {
+		this.dimensions = dimensions;
 	}
 	public String getHierarchyName() {
 		return hierarchyName;

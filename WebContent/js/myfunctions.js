@@ -2666,7 +2666,7 @@ function SaveModel(){
       return;
     }
 
-    var parms = {modelName: modelName, data: data};
+    var parms = {modelName: modelName, data: JSON.stringify(data)};
 
    	$.ajax({
    		type: 'POST',
