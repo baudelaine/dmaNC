@@ -94,6 +94,27 @@ public class SaveModelServlet extends HttpServlet {
 		
 		// End mapping dimension, order, bk and hierarchName String to dimensions List<Map<String, String>>
 		
+		// Start mapping label and description string to labels and description Map<String, String> 
+
+		String lang = ((String) request.getServletContext().getAttribute("cognosLocales"));
+		
+		if(lang != null && !lang.isEmpty()) {
+			lang = lang.split(",")[0].trim();
+			for(QuerySubject querySubject: querySubjects) {
+
+				for(Field field: querySubject.getFields()){
+					field.getLabels().put(lang, field.getLabel());
+					field.getDescriptions().put(lang, field.getDescription());
+					field.setLabel("");
+					field.setDescription("");
+				}
+			
+			}
+			
+		}
+
+		// Start mapping label and description string to labels and description Map<String, String> 
+		
 		
 		Calendar c = Calendar.getInstance();
 //		c.setTimeInMillis(System.currentTimeMillis());

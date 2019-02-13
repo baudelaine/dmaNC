@@ -14,7 +14,7 @@ public class Field {
 	boolean pk = false;
 	boolean index = false;
 	String label = "";
-	Map<String, Object> labels = new HashMap<String, Object>();
+	Map<String, String> labels = new HashMap<String, String>();
 	int field_size = 0;
 	String nullable = "NO";
 	boolean traduction = false;
@@ -24,7 +24,7 @@ public class Field {
 	String displayType = "Value";
 	String description = "";
 	String expression = "";
-	Map<String, Object> descriptions = new HashMap<String, Object>();
+	Map<String, String> descriptions = new HashMap<String, String>();
 	String dimension = "";
 	List<Map<String, String>> dimensions = new ArrayList<Map<String, String>>();
 	String measure = "";
@@ -57,16 +57,16 @@ public class Field {
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	public Map<String, Object> getLabels() {
+	public Map<String, String> getLabels() {
 		return labels;
 	}
-	public void setLabels(Map<String, Object> labels) {
+	public void setLabels(Map<String, String> labels) {
 		this.labels = labels;
 	}
-	public Map<String, Object> getDescriptions() {
+	public Map<String, String> getDescriptions() {
 		return descriptions;
 	}
-	public void setDescriptions(Map<String, Object> descriptions) {
+	public void setDescriptions(Map<String, String> descriptions) {
 		this.descriptions = descriptions;
 	}
 	public String get_ref() {
