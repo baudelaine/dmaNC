@@ -105,8 +105,8 @@ public class SaveModelServlet extends HttpServlet {
 				for(Field field: querySubject.getFields()){
 					field.getLabels().put(lang, field.getLabel());
 					field.getDescriptions().put(lang, field.getDescription());
-					field.setLabel("");
-					field.setDescription("");
+//					field.setLabel("");
+//					field.setDescription("");
 				}
 			
 			}
