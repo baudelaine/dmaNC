@@ -101,6 +101,9 @@ public class SaveModelServlet extends HttpServlet {
 		if(lang != null && !lang.isEmpty()) {
 			lang = lang.split(",")[0].trim();
 			for(QuerySubject querySubject: querySubjects) {
+				
+				querySubject.getLabels().put(lang, querySubject.getLabel());
+				querySubject.getDescriptions().put(lang, querySubject.getDescription());
 
 				for(Field field: querySubject.getFields()){
 					field.getLabels().put(lang, field.getLabel());
