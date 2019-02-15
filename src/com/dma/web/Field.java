@@ -14,7 +14,6 @@ public class Field {
 	boolean pk = false;
 	boolean index = false;
 	String label = "";
-	Map<String, String> labels = new HashMap<String, String>();
 	int field_size = 0;
 	String nullable = "NO";
 	boolean traduction = false;
@@ -24,6 +23,7 @@ public class Field {
 	String displayType = "Value";
 	String description = "";
 	String expression = "";
+	Map<String, String> labels = new HashMap<String, String>();
 	Map<String, String> descriptions = new HashMap<String, String>();
 	String dimension = "";
 	List<Map<String, String>> dimensions = new ArrayList<Map<String, String>>();

@@ -26,12 +26,27 @@ public class QuerySubject {
 	int recurseCount = 1;
 	long recCount= 0L;
 	String folder = "";
+	Map<String, String> labels = new HashMap<String, String>();
+	Map<String, String> descriptions = new HashMap<String, String>();
+	
 	
 	public String getFolder() {
 		return folder;
 	}
 	public void setFolder(String folder) {
 		this.folder = folder;
+	}
+	public Map<String, String> getLabels() {
+		return labels;
+	}
+	public void setLabels(Map<String, String> labels) {
+		this.labels = labels;
+	}
+	public Map<String, String> getDescriptions() {
+		return descriptions;
+	}
+	public void setDescriptions(Map<String, String> descriptions) {
+		this.descriptions = descriptions;
 	}
 	public int getRecurseCount() {
 		return recurseCount;

@@ -23,6 +23,9 @@ var cognosLocales;
 var dbDataType = [];
 var qsType = {isFinal: false, isRefChecked: false, isRef: false};
 var Gdimensions = {};
+var dimensionGlobal = ['time dimension'];
+var folderGlobal = [];
+
 
 var relationCols = [];
 // relationCols.push({field:"checkbox", checkbox: "true"});
@@ -33,7 +36,7 @@ relationCols.push({field:"key_type", title: "key_type", sortable: true});
 relationCols.push({field:"pktable_name", title: "pktable_name", sortable: true});
 relationCols.push({field:"pktable_alias", title: "pktable_alias", class: "pktable_alias", editable: {type: "text", mode: "inline"}, sortable: true, events: "pktable_aliasEvents"});
 relationCols.push({field:"label", title: "Label", sortable: true, editable: {type: "textarea", mode: "inline", rows: 4}});
-relationCols.push({field:"description", title: "Description", sortable: false});
+relationCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
 relationCols.push({field:"recCountPercent", title: "count(*) %", sortable: true});
 relationCols.push({field:"relationship", title: "relationship", editable: {type: "textarea", mode: "inline", rows: 4}});
 relationCols.push({field:"fin", title: "fin", formatter: "boolFormatter", align: "center"});
@@ -119,6 +122,8 @@ qsCols.push({field:"recurseCount", title: '<i class="glyphicon glyphicon-repeat"
 qsCols.push({field:"addPKRelation", title: '<i class="glyphicon glyphicon-magnet" title="Add PK relation(s)"></i>', formatter: "addPKRelationFormatter", align: "center"});
 qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new relation"></i>', formatter: "addRelationFormatter", align: "center"});
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
+qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new folder"></i>', formatter: "addFolderFormatter", align: "center"});
+qsCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
 qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 qsCols.push({field:"linker_ids", title: "linker_ids"});
@@ -194,25 +199,22 @@ var dateDimensions = {
   ]
 }
 
-var dimensions = {
-  type: "checklist",
-  mode: "inline",
-  value: [0],
-  source: [
-    {value: 0, text: 'value 0'},
-    {value: 1, text: 'value 1'},
-    {value: 2, text: 'value 2'},
-    {value: 3, text: 'value 3'}
-  ]
-}
+// fieldCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
+// fieldCols.push({field:"order", title: "Order", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
+// fieldCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
+// fieldCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
+// fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
+fieldCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
 
-fieldCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
-fieldCols.push({field:"order", title: "Order", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
-fieldCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
-fieldCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
-
-fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
 fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
+
+var dimensionCols = [];
+dimensionCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
+dimensionCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
+dimensionCols.push({field:"order", title: "Order", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
+dimensionCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
+dimensionCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
+dimensionCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
 
 $(document)
 .ready(function() {
@@ -274,6 +276,8 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'addRelation');
   $datasTable.bootstrapTable('hideColumn', 'addPKRelation');
   $datasTable.bootstrapTable('showColumn', 'addField');
+  $datasTable.bootstrapTable('showColumn', 'addFolder');
+  $datasTable.bootstrapTable('showColumn', 'addDimension');
   $datasTable.bootstrapTable('hideColumn', 'recurseCount');
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'above');
@@ -296,6 +300,8 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'addRelation');
   $datasTable.bootstrapTable('hideColumn', 'addField');
   $datasTable.bootstrapTable('hideColumn', 'addPKRelation');
+  $datasTable.bootstrapTable('hideColumn', 'addFolder');
+  $datasTable.bootstrapTable('hideColumn', 'addDimension');
   $datasTable.bootstrapTable('hideColumn', 'nommageRep');
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'linker');
@@ -316,6 +322,8 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'filter');
   $datasTable.bootstrapTable('showColumn', 'label');
   $datasTable.bootstrapTable('showColumn', 'addPKRelation');
+  $datasTable.bootstrapTable('hideColumn', 'addFolder');
+  $datasTable.bootstrapTable('hideColumn', 'addDimension');
   $datasTable.bootstrapTable('showColumn', 'addRelation');
   $datasTable.bootstrapTable('showColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'addField');
@@ -338,6 +346,8 @@ $secTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'filter');
   $datasTable.bootstrapTable('showColumn', 'label');
   $datasTable.bootstrapTable('showColumn', 'addPKRelation');
+  $datasTable.bootstrapTable('hideColumn', 'addFolder');
+  $datasTable.bootstrapTable('hideColumn', 'addDimension');
   $datasTable.bootstrapTable('showColumn', 'addRelation');
   $datasTable.bootstrapTable('hideColumn', 'addField');
   $datasTable.bootstrapTable('showColumn', 'recurseCount');
@@ -867,11 +877,28 @@ function addRelationFormatter(value, row, index) {
 
 function addFieldFormatter(value, row, index) {
     return [
-        '<a class="addRelation" href="javascript:void(0)" title="Add new field">',
+        '<a class="addField" href="javascript:void(0)" title="Add new field">',
         '<i class="glyphicon glyphicon-plus-sign"></i>',
         '</a>'
     ].join('');
 }
+
+function addFolderFormatter(value, row, index) {
+    return [
+        '<a class="addFolder" href="javascript:void(0)" title="Add new folder">',
+        '<i class="glyphicon glyphicon-plus-sign"></i>',
+        '</a>'
+    ].join('');
+}
+
+function addDimensionFormatter(value, row, index) {
+    return [
+        '<a class="addDimension" href="javascript:void(0)" title="Add new dimension">',
+        '<i class="glyphicon glyphicon-plus-sign"></i>',
+        '</a>'
+    ].join('');
+}
+
 
 function boolFormatter(value, row, index) {
 
@@ -1116,6 +1143,15 @@ function Search(){
 //   return description;
 // }
 
+
+function getSetFromArray(array){
+  var result = new Set();
+  $.each(array, function(i, obj){
+    result.add(obj);
+  })
+  return result;
+}
+
 function getDimensionSet(){
   var dimensionSet = new Set();
   $.each($datasTable.bootstrapTable("getData"), function(i, obj){
@@ -1123,8 +1159,6 @@ function getDimensionSet(){
       var dimension = field.dimension
       if(dimension != ''){
         if(!field.field_type.toUpperCase().match("DATE|TIMESTAMP|DATETIME")){
-          console.log(dimension);
-          console.log(field.field_type.toUpperCase());
           dimensionSet.add(dimension);
         }
       }
@@ -1154,6 +1188,78 @@ function expandTable($detail, cols, data, parentData) {
     buildSubTable($subtable, cols, data, parentData);
 }
 
+function expandDimensionTable($detail, cols, data, parentData) {
+    $subtable = $detail.html('<table></table>').find('table');
+    // console.log("expandTable.data=");
+    // console.log(data);
+    // console.log("expandTable.parentData=");
+    // console.log(parentData);
+
+    $activeSubDatasTable = $subtable;
+    buildDimensionTable($subtable, cols, data, parentData);
+}
+
+
+function buildDimensionTable($el, cols, data, parentData){
+
+  $el.bootstrapTable({
+      columns: cols,
+      // url: url,
+      data: data,
+      showToggle: false,
+      search: false,
+      checkboxHeader: false,
+      showColumns: false,
+      // sortName: "recCountPercent",
+      // sortOrder: "desc",
+      idField: "index",
+
+      onAll: function(name, args){
+        //Fires when all events trigger, the parameters contain: name: the event name, args: the event data.
+      },
+
+      onEditableInit: function(){
+        //Fired when all columns was initialized by $().editable() method.
+      },
+      onEditableShown: function(editable, field, row, $el){
+        //Fired when an editable cell is opened for edits.
+      },
+      onEditableHidden: function(field, row, $el, reason){
+        //Fired when an editable cell is hidden / closed.
+      },
+      onEditableSave: function (field, row, oldValue, editable) {
+        //Fired when an editable cell is saved.
+      },
+      onResetView: function(){
+        var $tableRows = $el.find('tbody tr');
+
+        $.each(data, function(i, row){
+          console.log(parentData);
+          console.log($tableRows.eq(i).find('a'));
+          $tableRows.eq(i).find('a').eq(0).editable('enable');
+        });
+
+      },
+
+      onClickCell: function (field, value, row, $element){
+
+        $activeSubDatasTable = $el;
+
+        switch(field){
+
+          case "dimension":
+          break;
+
+          default:
+
+        }
+      }
+
+
+    });
+
+}
+
 function buildSubTable($el, cols, data, parentData){
 
   $el.bootstrapTable({
@@ -1164,9 +1270,20 @@ function buildSubTable($el, cols, data, parentData){
       search: false,
       checkboxHeader: false,
       showColumns: false,
-      sortName: "recCountPercent",
+      // sortName: "recCountPercent",
       sortOrder: "desc",
       idField: "index",
+      detailView: true,
+
+      onExpandRow: function (index, row, $detail) {
+          console.log(index);
+          console.log(row);
+          console.log($detail);
+          console.log($el);
+          var $tableRows = $el.find('tbody td');
+          console.log($tableRows.eq(0));
+          expandDimensionTable($detail, dimensionCols, row.dimensions, row);
+      },
 
       onAll: function(name, args){
         //Fires when all events trigger, the parameters contain: name: the event name, args: the event data.
@@ -1235,8 +1352,9 @@ function buildSubTable($el, cols, data, parentData){
 
         $.each(data, function(i, row){
 
-
-          if(activeTab.match("Reference") && row.seqs.length > 0){
+          // If more than one seq change above from text to select editable
+          // $tableRows.eq(i).find('a').eq(6) = above
+          if(activeTab.match("Reference") && row.seqs.length > 1){
             $tableRows.eq(i).find('a').eq(5).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
             var defaultValue = '';
@@ -1251,15 +1369,15 @@ function buildSubTable($el, cols, data, parentData){
 
             customFieldType.source = source;
 
-
-            // customFieldType.source = dbDataType;
-            $tableRows.eq(i).find('a').eq(5).editable(customFieldType);
-            $tableRows.eq(i).find('a').eq(5).editable('option', 'defaultValue', defaultValue);
+            $tableRows.eq(i).find('a').eq(6).editable(customFieldType);
+            $tableRows.eq(i).find('a').eq(6).editable('option', 'defaultValue', defaultValue);
           }
 
+          // set usedForDimensionsSelect.source
+          // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
           if(activeTab == "Reference" && parentData.type == 'Final'){
-            console.log(parentData);
-            console.log($tableRows.eq(i).find('a'));
+            // console.log(parentData);
+            // console.log($tableRows.eq(i).find('a'));
 
             var dimensionSet = getDimensionSet();
 
@@ -1274,17 +1392,15 @@ function buildSubTable($el, cols, data, parentData){
 
             usedForDimensionsSelect.source = source;
 
-            // 7 = usedForDimensions
-            $tableRows.eq(i).find('a').eq(7).editable('destroy');
-            $tableRows.eq(i).find('a').eq(7).editable(usedForDimensionsSelect);
-            $tableRows.eq(i).find('a').eq(7).editable('option', 'defaultValue', '');
-
+            $tableRows.eq(i).find('a').eq(8).editable('destroy');
+            $tableRows.eq(i).find('a').eq(8).editable(usedForDimensionsSelect);
+            $tableRows.eq(i).find('a').eq(8).editable('option', 'defaultValue', '');
 
           }
 
+          // set usedForDimensionsSelect.source
+          // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
           if(activeTab == "Reference" && parentData.type == 'Ref'){
-            // console.log(parentData);
-            // console.log($tableRows.eq(i).find('a'));
 
             var source = [];
             source.push({"text": "", "value": ""});
@@ -1293,75 +1409,63 @@ function buildSubTable($el, cols, data, parentData){
 
             usedForDimensionsSelect.source = source;
 
-            // 7 = usedForDimensions
-            $tableRows.eq(i).find('a').eq(7).editable('destroy');
-            $tableRows.eq(i).find('a').eq(7).editable(usedForDimensionsSelect);
-            $tableRows.eq(i).find('a').eq(7).editable('option', 'defaultValue', '');
-
+            $tableRows.eq(i).find('a').eq(8).editable('destroy');
+            $tableRows.eq(i).find('a').eq(8).editable(usedForDimensionsSelect);
+            $tableRows.eq(i).find('a').eq(8).editable('option', 'defaultValue', '');
 
           }
 
-          // Disable RepTableName if !ref
-          if(activeTab == "Reference" && !row.ref){
-            $tableRows.eq(i).find('a').eq(4).editable('disable');
-            // $tableRows.eq(i).find('a').editable('disable');
-          }
-          if(activeTab == "Security" && !row.sec){
-            $tableRows.eq(i).find('a').eq(4).editable('disable');
-            // $tableRows.eq(i).find('a').editable('disable');
-          }
-          if(row.fin || row.ref || row.sec){
-            $tableRows.eq(i).find('a').eq(0).editable('disable');
-            // $tableRows.eq(i).find('a').editable('disable');
-          }
-          if(row.fin && activeTab.match("Reference|Security")){
-            $tableRows.eq(i).find('a').eq(3).editable('disable');
-            $tableRows.eq(i).find('a').eq(2).editable('disable');
-          }
-          if(row.ref && activeTab.match("Final|Security")){
-            $tableRows.eq(i).find('a').eq(3).editable('disable');
-            $tableRows.eq(i).find('a').eq(2).editable('disable');
-          }
-          if(row.sec && activeTab.match("Final|Reference")){
-            $tableRows.eq(i).find('a').eq(3).editable('disable');
-            $tableRows.eq(i).find('a').eq(2).editable('disable');
-          }
-          if(activeTab.match("Query Subject") && row.field_type != undefined){
-            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-              $tableRows.eq(i).find('a').eq(8).editable('destroy');
-              $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
-              console.log($tableRows.eq(i).find('a.buildDrillPath'));
-              $tableRows.eq(i).find('a.buildDrillPath').remove();
-            // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dateDimensions.source);
-            }
-            else{
-              // $tableRows.eq(i).find('a').eq(6).editable('option', 'source', dimensions.source);
+          // Disable RepTableName if !ref or !sec
+          // $tableRows.eq(i).find('a').eq(5) = RepTableName
+          if(activeTab.match("Reference|Security")){
+            if(!row.ref || !row.sec){
+              $tableRows.eq(i).find('a').eq(5).editable('disable');
+              // To disable all editables
+              // $tableRows.eq(i).find('a').editable('disable');
             }
           }
-          if(activeTab.match("Query Subject")){
 
-            // console.log($tableRows.eq(i).find('a'));
-
-            // console.log($tableRows.eq(i).find('a').length);
-
-            // for(href = 0; href < $tableRows.eq(i).find('a').length; href++){
-              // console.log($tableRows.eq(i).find('a').eq(href));
-            // }
-
-            if(row.custom != true){
+          // disable table_alias and relationship if fin, ref or sec checked
+          // $tableRows.eq(i).find('a').eq(0) = table_alias
+          // $tableRows.eq(i).find('a').eq(3) = relationship
+          if(activeTab.match("Final|Reference|Security")){
+            if(row.fin || row.ref || row.sec){
               $tableRows.eq(i).find('a').eq(0).editable('disable');
-              // console.log($tableRows.eq(i).find('a.remove').val('hidden'));
-              // console.log(row);
-              // $tableRows.eq(i).find('a.remove').prop("disabled",true);
-              $tableRows.eq(i).find('a.remove').remove();
+              $tableRows.eq(i).find('a').eq(3).editable('disable');
+              // To disable all editables
+              // $tableRows.eq(i).find('a').editable('disable');
             }
-            else{
-              $tableRows.eq(i).find('a').eq(0).editable('destroy');
-              // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
-              customFieldType.source = dbDataType;
-              $tableRows.eq(i).find('a').eq(0).editable(customFieldType);
-              $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
-            }
+          }
+
+          // Enable select editable for field_type if field is custom
+          // $tableRows.eq(i).find('a').eq(0) = field_type
+          if(activeTab.match("Query Subject") && row.custom){
+            console.log(parentData);
+            console.log($tableRows.eq(i).find('a'));
+            $tableRows.eq(i).find('a').eq(0).editable('destroy');
+            customFieldType.source = dbDataType;
+            $tableRows.eq(i).find('a').eq(0).editable(customFieldType);
+            $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
+          }
+
+          // Change dimension to checklist editable if field_type are time/date and remove zoom-in icon
+          // $tableRows.eq(i).find('a').eq(8) = dimension
+          if(activeTab.match("Query Subject")){
+              if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
+                $tableRows.eq(i).find('a').eq(8).editable('destroy');
+                $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
+                $tableRows.eq(i).find('a.buildDrillPath').remove();
+              }
+          }
+
+          // Disable editable for field_type if field is !custom and remove trash
+          // $tableRows.eq(i).find('a').eq(0) = field_type
+          if(activeTab.match("Query Subject") && $activeSubDatasTable == $el && !row.custom){
+            console.log(parentData);
+            console.log($tableRows.eq(i).find('a'));
+            $tableRows.eq(i).find('a').eq(0).editable('disable');
+            $tableRows.eq(i).find('a.remove').remove();
+
           }
 
         })
@@ -1374,28 +1478,18 @@ function buildSubTable($el, cols, data, parentData){
 
         switch(field){
 
-          case "dimension":
-            console.log("---------- buildSubTable: case dimension -------------");
-            console.log("field=");
-            console.log(field);
-            console.log("value=");
-            console.log(value);
-            console.log("row=");
-            console.log(row);
-            console.log("$element=");
-            console.log($element);
-            console.log("---------- buildSubTable: case dimension -------------");
+          case "addDimension":
 
-            // if(row.field_type == "DATE"){
-            //   $element.options.source = dateDimensions;
-            //   console.log("!!!!!!!!!!!!!!!!!!!!!!!");
-            //   console.log($(this).bootstrapTable('getOptions'));
-            //   var col = $(this).bootstrapTable('getOptions')[0].columns[0];
-            //   var src = col[8].editable.source
-            //   console.log(src);
-            //   $(this).bootstrapTable('getOptions')[0].columns[0][8].editable.source = dateDimensions;
-            //   // $(this).bootstrapTable('refreshOptions', $(this).bootstrapTable('getOptions'));
-            // }
+            console.log(field + " was clicked");
+            console.log(row);
+            var dimension = {dimension: '', order: '', bk: '', hierarchyName: ''};
+            row.dimensions.push(dimension);
+            console.log(row);
+            // expandDimensionTable($detail, dimensionCols, row.dimensions, row);
+            $el.bootstrapTable("expandRow", row.index);
+            $el.bootstrapTable("collapseRow", row.index);
+            $el.bootstrapTable("expandRow", row.index);
+
 
             break;
 
@@ -1920,6 +2014,38 @@ function buildTable($el, cols, data) {
               }
             }
 
+            if(activeTab.match("Query Subject")){
+
+              // Start build folderlist
+              // 1 = Folder
+
+              $tableRows.eq(i).find('a').eq(1).editable('destroy');
+
+              var folderSet = getSetFromArray(folderGlobal);
+
+              var source = [];
+              source.push({"text": "", "value": ""});
+
+              folderSet.forEach(function(value){
+                var option = {};
+                option.text = value;
+                option.value = value;
+                source.push(option);
+              })
+
+              var newEditable = {
+                type: "select",
+                mode: "inline",
+                source: source
+              };
+
+              $tableRows.eq(i).find('a').eq(1).editable(newEditable);
+              $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
+
+              // End build folderlist
+
+            }
+
           })
 
         },
@@ -1985,6 +2111,13 @@ function buildTable($el, cols, data) {
             }
           }
 
+          if(field.match("addFolder")){
+            AddNewFolder();
+          }
+
+          if(field.match("addDimension")){
+            AddNewDimension();
+          }
 
         },
         onExpandRow: function (index, row, $detail) {
@@ -2002,6 +2135,8 @@ function buildTable($el, cols, data) {
     $el.bootstrapTable('showColumn', 'label');
     $el.bootstrapTable('hideColumn', 'recurseCount');
     $el.bootstrapTable('hideColumn', 'addPKRelation');
+    $el.bootstrapTable('hideColumn', 'addFolder');
+    $el.bootstrapTable('hideColumn', 'addDimension');
     $el.bootstrapTable('hideColumn', 'addField');
     $el.bootstrapTable('showColumn', '_id');
     $el.bootstrapTable('hideColumn', 'linker');
@@ -2025,6 +2160,41 @@ function buildTable($el, cols, data) {
     // ApplyFilter();
 
 }
+
+
+function AddNewFolder() {
+
+  bootbox.prompt({
+    size: "small",
+    title: "Enter folder name",
+    callback: function(result){
+       /* result = String containing user input if OK clicked or null if Cancel clicked */
+      if(result != null){
+        folderGlobal.push(result);
+        $refTab.tab('show');
+        $qsTab.tab('show');
+      }
+    }
+  });
+
+}
+
+function AddNewDimension() {
+
+  bootbox.prompt({
+    size: "small",
+    title: "Enter dimension name",
+    callback: function(result){
+       /* result = String containing user input if OK clicked or null if Cancel clicked */
+       if(result != null){
+         dimensionGlobal.push(result);
+       }
+
+    }
+  });
+
+}
+
 
 function GetNewField($el) {
 
