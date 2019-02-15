@@ -1680,7 +1680,15 @@ public class FactorySVC {
 				prefix = prefix + "." + prefixTab[k];
 			}
 			System.out.println("hierarchy prefix : " + prefix + " * * * * * * * " + map.get(prefix));
-			String label = "(" + map.get(prefix) + ") " + map.get(hName.getStringValue());  // valeur de map
+			String label = "";
+			if (map.get(prefix)!=null) {
+				//Si il existe une traduction de dimension : prefix = dimensionName
+				label = "(" + map.get(prefix) + ") " + map.get(hName.getStringValue());  // valeur de map
+			} else {
+				//Pas de traduction de dimension
+				label = "(" + prefix + ") " + map.get(hName.getStringValue());  // valeur de map
+			}
+			
 			if (label != null) {
 				hNameLocale.setText(label);        // valeur de map
 				}
@@ -1721,7 +1729,13 @@ public class FactorySVC {
 				prefix = prefix + "." + prefixTab[k];
 			}
 			System.out.println("level prefix : " + prefix + " * * * * * * * " + map.get(prefix));
-			String label = "(" + map.get(prefix) + ") " +  map.get(levelName.getStringValue());  // valeur de map
+			String label = "";
+			if (map.get(prefix)!=null) {
+				label = "(" + map.get(prefix) + ") " +  map.get(levelName.getStringValue());  // valeur de map
+			} else {
+				label = "(" + prefix + ") " +  map.get(levelName.getStringValue());  // valeur de map
+			}
+			
 			if (label != null) {
 				levelNameLocale.setText(label);        // valeur de maps
 				}
