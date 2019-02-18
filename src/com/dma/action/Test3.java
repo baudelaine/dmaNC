@@ -18,13 +18,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 public class Test3 {
 
 	static Map<String, QuerySubject> query_subjects = new HashMap<String, QuerySubject>();
+	static String selectedQs = "DEPARTEMENTRef";
 	
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 //		Path path = Paths.get("/opt/wks/dmaNC/foodmart_multi_BK-2019-02-3-12-22-49.json");
-		Path path = Paths.get("/home/dma/seb/sample0/models/m0-2019-02-9-15-45-25.json");
+		Path path = Paths.get("/home/dma/seb/p0/models/m0-2019-02-16-17-17-24.json");
 		
 		
 		try {
@@ -37,8 +38,9 @@ public class Test3 {
 
 			// la dimension que tu scan pour trouver les les champs qui la compose
 //			String selectedDimension = "d0";  
-			Dimension d0 = new Dimension();
-			d0.setName("d0");
+			Dimension dimension = new Dimension();
+			dimension.setName("ddd");
+			
 			
 			for(Entry<String, QuerySubject> query_subject: query_subjects.entrySet()){
 				
@@ -51,9 +53,38 @@ public class Test3 {
 					
 					System.out.println("qsAlias=" + qsAlias);
 					
-					recurse0(qsAlias, gDirName, qsFinalName, qSleftType, d0);
+			    	List<Map<String, String>> orders = dimension.getOrders();
+			    	List<Map<String, String>> bks = dimension.getBks();							
 					
-					System.out.println(Tools.toJSON(d0));
+					for(Field field: query_subjects.get(qsFinalName + qSleftType).getFields()){
+						
+						for(Map<String, String> map: field.getDimensions()) {
+							if(map.get("dimension").contentEquals(dimension.getName())) {
+						    	Map<String, String> order = new HashMap<String, String>();
+						    	order.put("qsFinalName", qsFinalName);
+						    	order.put("order", field.getField_name());
+						    	orders.add(order);
+							}
+						}
+						
+//					    if (field.getDimension().equals(dimension.getName())) {
+//					    	Map<String, String> order = new HashMap<String, String>();
+//					    	order.put("qsFinalName", qsFinalName);
+//					    	order.put("order", field.getField_name());
+//					    	orders.add(order);
+//					    }
+//					    Map<String, String> bk = new HashMap<String, String>();
+//				    	bk.put("qsFinalName", qsFinalName);
+//				    	bk.put("bk", field.getField_name());
+//					    bks.add(bk);
+					}
+					
+					
+					String gDirNameCurrent = recurse0(qsAlias, gDirName, qsFinalName, qSleftType, dimension);
+					
+					System.out.println("Main gDirNameCurrent=" + gDirNameCurrent);
+					
+					System.out.println(Tools.toJSON(dimension));
 															
 				}
 				
@@ -66,7 +97,7 @@ public class Test3 {
 		
 	}
 	
-	protected static Dimension recurse0(String qsAlias, String gDirName, String qsFinalName, String qSleftType, Dimension dimension) {
+	protected static String recurse0(String qsAlias, String gDirName, String qsFinalName, String qSleftType, Dimension dimension) {
 		
 		
 		String gDirNameCurrent = "";
@@ -99,17 +130,21 @@ public class Test3 {
 					    	order.put("order", gDirNameCurrent.substring(1) + "." + field.getField_name());
 					    	orders.add(order);
 					    }
-					    Map<String, String> bk = new HashMap<String, String>();
-				    	bk.put("qsFinalName", qsFinalName);
-				    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
-				    	bks.add(bk);
+					    if((qsAlias + "Ref").contentEquals(selectedQs)) {
+						    Map<String, String> bk = new HashMap<String, String>();
+					    	bk.put("qsFinalName", qsFinalName);
+					    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
+					    	bks.add(bk);
+					    }
+
 					}
-					
+
+
 					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension);	
 				}
 			}
 		}
-		return dimension;
+		return gDirNameCurrent;
 	}	
 
 }

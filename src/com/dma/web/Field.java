@@ -32,12 +32,19 @@ public class Field {
 	boolean custom = false;
 	String BK = "";
 	String hierarchyName = "";
+	boolean timeDimension = false;
 	
 	public String getBK() {
 		return BK;
 	}
 	public void setBK(String bK) {
 		BK = bK;
+	}
+	public boolean isTimeDimension() {
+		return timeDimension;
+	}
+	public void setTimeDimension(boolean timeDimension) {
+		this.timeDimension = timeDimension;
 	}
 	public List<Map<String, String>> getDimensions() {
 		return dimensions;

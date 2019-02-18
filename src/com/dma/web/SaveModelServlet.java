@@ -43,78 +43,79 @@ public class SaveModelServlet extends HttpServlet {
 		Map<String, Object> parms = Tools.fromJSON(request.getInputStream());
 		
 		String modelName = (String) parms.get("modelName");
+
+		System.out.println("querySubjects=" + Tools.fromJSON(parms.get("data").toString()));
 		
 		@SuppressWarnings("unchecked")
 		List<QuerySubject> querySubjects = (List<QuerySubject>) Tools.fromJSON(parms.get("data").toString(), new TypeReference<List<QuerySubject>>(){});		
 
 		
+		
 		// Start mapping dimension, order, bk and hierarchName String to dimensions List<Map<String, String>>
 		
-		for(QuerySubject querySubject: querySubjects) {
-
-			for(Field field: querySubject.getFields()){
-				List<Map<String, String>> dimensions = new ArrayList<Map<String, String>>();
-				List<String> dimensionList = Arrays.asList(field.getDimension().split(","));
-				List<String> orderList = Arrays.asList(field.getOrder().split(","));
-				List<String> bkList = Arrays.asList(field.getBK().split(","));
-				List<String> hierarchyNameList = Arrays.asList(field.getHierarchyName().split(","));
-
-				int index = 0;
-				for(String dimensionItem: dimensionList) {
-					if(!dimensionItem.isEmpty()) {
-						Map<String, String> dimension = new HashMap<String, String>();
-						dimension.put("dimension", dimensionItem);
-						dimension.put("order","");
-						dimension.put("bk","");
-						dimension.put("hierarchyName","");
-						
-						try {
-							dimension.put("order", orderList.get(index).split("-")[1]);
-						}
-						catch(ArrayIndexOutOfBoundsException e) {}
-						
-						try {
-							dimension.put("bk", bkList.get(index).split("-")[1]);
-						}
-						catch(ArrayIndexOutOfBoundsException e) {}
-						
-						try {
-							dimension.put("hierarchyName", hierarchyNameList.get(index).split("-")[1]);
-						}
-						catch(ArrayIndexOutOfBoundsException e) {}
-						
-						dimensions.add(dimension);
-					}
-					index++;
-				}
-				field.setDimensions(dimensions);
-			}
-		
-		}
+//		for(QuerySubject querySubject: querySubjects) {
+//
+//			for(Field field: querySubject.getFields()){
+//				List<Map<String, String>> dimensions = new ArrayList<Map<String, String>>();
+//				List<String> dimensionList = Arrays.asList(field.getDimension().split(","));
+//				List<String> orderList = Arrays.asList(field.getOrder().split(","));
+//				List<String> bkList = Arrays.asList(field.getBK().split(","));
+//				List<String> hierarchyNameList = Arrays.asList(field.getHierarchyName().split(","));
+//
+//				int index = 0;
+//				for(String dimensionItem: dimensionList) {
+//					if(!dimensionItem.isEmpty()) {
+//						Map<String, String> dimension = new HashMap<String, String>();
+//						dimension.put("dimension", dimensionItem);
+//						dimension.put("order","");
+//						dimension.put("bk","");
+//						dimension.put("hierarchyName","");
+//						
+//						try {
+//							dimension.put("order", orderList.get(index).split("-")[1]);
+//						}
+//						catch(ArrayIndexOutOfBoundsException e) {}
+//						
+//						try {
+//							dimension.put("bk", bkList.get(index).split("-")[1]);
+//						}
+//						catch(ArrayIndexOutOfBoundsException e) {}
+//						
+//						try {
+//							dimension.put("hierarchyName", hierarchyNameList.get(index).split("-")[1]);
+//						}
+//						catch(ArrayIndexOutOfBoundsException e) {}
+//						
+//						dimensions.add(dimension);
+//					}
+//					index++;
+//				}
+//				field.setDimensions(dimensions);
+//			}
+//		
+//		}
 		
 		// End mapping dimension, order, bk and hierarchName String to dimensions List<Map<String, String>>
 		
 		// Start mapping label and description string to labels and description Map<String, String> 
 
-		String lang = ((String) request.getServletContext().getAttribute("cognosLocales"));
-		
-		if(lang != null && !lang.isEmpty()) {
-			lang = lang.split(",")[0].trim();
-			for(QuerySubject querySubject: querySubjects) {
-				
-				querySubject.getLabels().put(lang, querySubject.getLabel());
-				querySubject.getDescriptions().put(lang, querySubject.getDescription());
-
-				for(Field field: querySubject.getFields()){
-					field.getLabels().put(lang, field.getLabel());
-					field.getDescriptions().put(lang, field.getDescription());
-//					field.setLabel("");
-//					field.setDescription("");
-				}
-			
-			}
-			
-		}
+//		String lang = ((String) request.getServletContext().getAttribute("cognosLocales"));
+//		
+//		if(lang != null && !lang.isEmpty()) {
+//			lang = lang.split(",")[0].trim();
+//			for(QuerySubject querySubject: querySubjects) {
+//				
+//				querySubject.getLabels().put(lang, querySubject.getLabel());
+//				querySubject.getDescriptions().put(lang, querySubject.getDescription());
+//
+//				for(Field field: querySubject.getFields()){
+//					field.getLabels().put(lang, field.getLabel());
+//					field.getDescriptions().put(lang, field.getDescription());
+//				}
+//			
+//			}
+//			
+//		}
 
 		// Start mapping label and description string to labels and description Map<String, String> 
 		

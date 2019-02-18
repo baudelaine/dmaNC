@@ -48,13 +48,15 @@ public class GetDimensionsServlet extends HttpServlet {
 
 			Map<String, Object> parms = Tools.fromJSON(request.getInputStream());
 			
-			if(parms != null && parms.get("dimensions") != null && parms.get("qss") != null) {
+			if(parms != null && parms.get("dimensions") != null && parms.get("qss") != null && parms.get("selectedQs") != null) {
 			
 				Map<String, QuerySubject> query_subjects = 
 						(Map<String, QuerySubject>) Tools.fromJSON(parms.get("qss").toString(), new TypeReference<Map<String, QuerySubject>>(){});
 				
 				
 				List<String> dims = (List<String>) Tools.fromJSON(parms.get("dimensions").toString(), new TypeReference<List<String>>(){});
+				
+				String selectedQs = parms.get("selectedQs").toString();
 				
 				Map<String, Dimension> dimensions = new HashMap<String, Dimension>();
 				for(String dim: dims) {
@@ -74,12 +76,16 @@ public class GetDimensionsServlet extends HttpServlet {
 					    	List<Map<String, String>> bks = dimension.getBks();							
 							
 							for(Field field: query_subjects.get(qsFinalName + qSleftType).getFields()){
-							    if (field.getDimension().equals(dimension.getName())) {
-							    	Map<String, String> order = new HashMap<String, String>();
-							    	order.put("qsFinalName", qsFinalName);
-							    	order.put("order", field.getField_name());
-							    	orders.add(order);
-							    }
+								
+								for(Map<String, String> map: field.getDimensions()) {
+									if(map.get("dimension").contentEquals(dimension.getName())) {
+								    	Map<String, String> order = new HashMap<String, String>();
+								    	order.put("qsFinalName", qsFinalName);
+								    	order.put("order", field.getField_name());
+								    	orders.add(order);
+									}
+								}
+								
 							    Map<String, String> bk = new HashMap<String, String>();
 						    	bk.put("qsFinalName", qsFinalName);
 						    	bk.put("bk", field.getField_name());
@@ -87,7 +93,7 @@ public class GetDimensionsServlet extends HttpServlet {
 							}
 							
 							
-							recurse0(qsAlias, gDirName, qsFinalName, qSleftType, dimension, query_subjects);
+							recurse0(qsAlias, gDirName, qsFinalName, qSleftType, dimension, query_subjects, selectedQs);
 
 							dimensions.put(dim, dimension);
 							
@@ -128,7 +134,7 @@ public class GetDimensionsServlet extends HttpServlet {
 
 	}
 	
-	protected void recurse0(String qsAlias, String gDirName, String qsFinalName, String qSleftType, Dimension dimension, Map<String, QuerySubject> query_subjects) {
+	protected void recurse0(String qsAlias, String gDirName, String qsFinalName, String qSleftType, Dimension dimension, Map<String, QuerySubject> query_subjects, String selectedQs) {
 		
 		
 		String gDirNameCurrent = "";
@@ -156,21 +162,24 @@ public class GetDimensionsServlet extends HttpServlet {
 					
 					for(Field field: query_subjects.get(pkAlias + "Ref").getFields()){
 						
-					    if (field.getDimension().equals(dimension.getName())) {
-					    	// afficher dans la colonne order [DATA].[qsFinalName].[gDirNameCurrent + "." + field.getName()]
-					    	// afficher dans la liste order gDirNameCurrent + "." + field.getName() -- qsFinalName //grisé
-					    	Map<String, String> order = new HashMap<String, String>();
-					    	order.put("qsFinalName", qsFinalName);
-					    	order.put("order", gDirNameCurrent.substring(1) + "." + field.getField_name());
-					    	orders.add(order);
-					    }
+						for(Map<String, String> map: field.getDimensions()) {
+//					    	// afficher dans la colonne order [DATA].[qsFinalName].[gDirNameCurrent + "." + field.getName()]
+//					    	// afficher dans la liste order gDirNameCurrent + "." + field.getName() -- qsFinalName //grisé
+							if(map.get("dimension").contentEquals(dimension.getName())) {
+						    	Map<String, String> order = new HashMap<String, String>();
+						    	order.put("qsFinalName", qsFinalName);
+						    	order.put("order", gDirNameCurrent.substring(1) + "." + field.getField_name());
+						    	orders.add(order);
+							}
+						}
+						
 					    Map<String, String> bk = new HashMap<String, String>();
 				    	bk.put("qsFinalName", qsFinalName);
 				    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
 				    	bks.add(bk);
 					}
 					
-					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension, query_subjects);	
+					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension, query_subjects, selectedQs);	
 				}
 			}
 		}

@@ -12,6 +12,8 @@ var $secTab = $("a[href='#Security']");
 var $traTab = $("a[href='#Translation']");
 var activeTab = "Final";
 var previousTab;
+var activeTabObject = $("a[href='#Final']");
+var previousTabObject = $("a[href='#Reference']");
 var $activeSubDatasTable;
 var $newRowModal = $('#newRowModal');
 var $modelListModal = $('#modModelList');
@@ -23,9 +25,12 @@ var cognosLocales;
 var dbDataType = [];
 var qsType = {isFinal: false, isRefChecked: false, isRef: false};
 var Gdimensions = {};
-var dimensionGlobal = ['time dimension'];
+var dimensionGlobal = [];
 var folderGlobal = [];
-
+var langGlobal = [];
+var $selectedDimensionIndex;
+var currentProject;
+var currentLanguage;
 
 var relationCols = [];
 // relationCols.push({field:"checkbox", checkbox: "true"});
@@ -122,8 +127,8 @@ qsCols.push({field:"recurseCount", title: '<i class="glyphicon glyphicon-repeat"
 qsCols.push({field:"addPKRelation", title: '<i class="glyphicon glyphicon-magnet" title="Add PK relation(s)"></i>', formatter: "addPKRelationFormatter", align: "center"});
 qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new relation"></i>', formatter: "addRelationFormatter", align: "center"});
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
-qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new folder"></i>', formatter: "addFolderFormatter", align: "center"});
-qsCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
+qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-folder-open" title="Add new folder"></i>', formatter: "addFolderFormatter", align: "center"});
+qsCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
 qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 qsCols.push({field:"linker_ids", title: "linker_ids"});
@@ -181,6 +186,7 @@ var measure = {
 };
 
 fieldCols.push({field:"measure", title: "Measure", editable: measure});
+fieldCols.push({field:"dimensions", title: "Dimensions", formatter: "dimensionsFormatter", align: "center"});
 
 var dateDimensions = {
   type: "checklist",
@@ -204,7 +210,7 @@ var dateDimensions = {
 // fieldCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
 // fieldCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
 // fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
-fieldCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
+fieldCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
 
 fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 
@@ -215,6 +221,7 @@ dimensionCols.push({field:"order", title: "Order", editable: {type: "textarea", 
 dimensionCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
 dimensionCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
 dimensionCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
+dimensionCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 
 $(document)
 .ready(function() {
@@ -222,9 +229,10 @@ $(document)
   GetDBMDFromCache();
 
   buildTable($datasTable, qsCols, datas, true);
-  GetCognosLocales
   GetDBDataType();
   // buildComboList($('#selectDimension'));
+  GetCurrentProject();
+  GetCognosLocales();
 
 })
 .ajaxStart(function(){
@@ -261,9 +269,13 @@ $('#pktable_alias').on('save', function(e, params) {
 
 $navTab.on('show.bs.tab', function(event){
     activeTab = $(event.target).text();         // active tab
+    activeTabObject = $(event.target);
 		console.log("Event show.bs.tab: activeTab=" + activeTab);
+    console.log(activeTabObject);
     previousTab = $(event.relatedTarget).text();  // previous tab
+    previousTabObject = $(event.relatedTarget);
 		console.log("Event show.bs.tab: previousTab=" + previousTab);
+    console.log(previousTabObject);
 });
 
 $qsTab.on('shown.bs.tab', function(e) {
@@ -665,6 +677,69 @@ function addSelectInpKeyPress(t,ev){
    }
 }
 
+$('#languagesSelect').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  console.log("changed");
+
+  bootbox.confirm({
+    message: "Do you really want to change current language ?",
+    buttons: {
+        confirm: {
+            label: 'Yes',
+            className: 'btn-primary'
+        },
+        cancel: {
+            label: 'No',
+            className: 'btn-default'
+        }
+    },
+    callback: function (result) {
+      if(!result){
+        $("#languagesSelect").selectpicker('val', currentLanguage);
+        $("#languagesSelect").selectpicker('refresh');
+        return;
+      }
+      currentLanguage = $('#languagesSelect').find("option:selected").val();
+      SetLanguage(currentLanguage);
+    }
+
+  });
+
+});
+
+function SetLanguage(language){
+
+  console.log(language);
+
+  if($datasTable.bootstrapTable("getData").length > 0){
+    var firstQs = $datasTable.bootstrapTable("getData")[0];
+    var needInit = true;
+    $.each(Object.keys(firstQs.labels), function(i, lang){
+      if(lang == language){
+        console.log(language + " is already set.");
+        needInit = false;
+      }
+    });
+    if(needInit){
+      console.log("Let's initialize...");
+      $.each($datasTable.bootstrapTable("getData"), function(i, qs){
+        qs.labels[language] = "";
+        qs.descriptions[language] = "";
+        $.each(qs.fields, function(j, field){
+          field.labels[language] = "";
+          field.descriptions[language] = "";
+        })
+      });
+      var prevTab = previousTabObject;
+      var curTab = activeTabObject;
+      prevTab.tab('show');
+      curTab.tab('show');
+
+    }
+
+  }
+
+}
+
 $('#selectDimension').change(function () {
   console.log("change");
   var selectedText = $(this).find("option:selected").val();
@@ -737,7 +812,7 @@ function updateDimension(dimension){
   $('#selectBK').selectpicker('refresh');
 }
 
-function getDimensions(dimensionSet){
+function getDimensions(dimensionSet, selectedQs){
 
   var dimensions = [];
   var qss = {};
@@ -751,7 +826,7 @@ function getDimensions(dimensionSet){
     qss[obj._id] = obj;
   });
 
-  var parms = {dimensions: JSON.stringify(dimensions), qss: JSON.stringify(qss)};
+  var parms = {dimensions: JSON.stringify(dimensions), qss: JSON.stringify(qss), selectedQs: selectedQs};
 
   $.ajax({
     type: 'POST',
@@ -790,18 +865,16 @@ function BuildDrillPath(){
   var field = $('#drillFieldName').text().split('.')[1];
 
   if($activeSubDatasTable != undefined){
-    $.each($activeSubDatasTable.bootstrapTable("getData"), function(i, obj){
-      if(obj.field_name == field){
-        obj.dimension = dimension;
-        if(!order){obj.order = ""} else{obj.order = '[DATA].[' + orderQsFinalName + '].[' + orderOrder + ']';}
-        obj.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']';
-        obj.hierarchyName = hierarchyName;
-        updateRow($activeSubDatasTable, obj.index, obj);
-      }
 
-    });
+    var dim = $activeSubDatasTable.bootstrapTable("getData")[$selectedDimensionIndex];
+    dim.dimension = dimension;
+    if(!order){dim.order = ""} else{dim.order = '[DATA].[' + orderQsFinalName + '].[' + orderOrder + ']';}
+    dim.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']';
+    dim.hierarchyName = hierarchyName;
+    updateRow($activeSubDatasTable, $selectedDimensionIndex, dim);
 
   }
+
   $('#DrillModal').modal('toggle');
 
 }
@@ -832,7 +905,14 @@ function aboveFormatter(value, row, index){
   }
 }
 
-
+function dimensionsFormatter (value, row, index) {
+  if(row.dimensions.length > 0){
+    return row.dimensions[0].dimension + "...";
+  }
+  else{
+    return '';
+  }
+}
 
 function operateRelationFormatter(value, row, index) {
     return [
@@ -886,7 +966,7 @@ function addFieldFormatter(value, row, index) {
 function addFolderFormatter(value, row, index) {
     return [
         '<a class="addFolder" href="javascript:void(0)" title="Add new folder">',
-        '<i class="glyphicon glyphicon-plus-sign"></i>',
+        '<i class="glyphicon glyphicon-folder-open"></i>',
         '</a>'
     ].join('');
 }
@@ -894,7 +974,7 @@ function addFolderFormatter(value, row, index) {
 function addDimensionFormatter(value, row, index) {
     return [
         '<a class="addDimension" href="javascript:void(0)" title="Add new dimension">',
-        '<i class="glyphicon glyphicon-plus-sign"></i>',
+        '<i class="glyphicon glyphicon-zoom-in"></i>',
         '</a>'
     ].join('');
 }
@@ -1152,6 +1232,14 @@ function getSetFromArray(array){
   return result;
 }
 
+function getArrayFromSet(set){
+  var result = [];
+  set.forEach(function(value){
+    result.push(value);
+  });
+  return result;
+}
+
 function getDimensionSet(){
   var dimensionSet = new Set();
   $.each($datasTable.bootstrapTable("getData"), function(i, obj){
@@ -1177,30 +1265,25 @@ function clearDrillModal(){
   $('#drillFieldName').text('');
 }
 
-function expandTable($detail, cols, data, parentData) {
+function expandRelationTable($detail, cols, data, qs) {
     $subtable = $detail.html('<table></table>').find('table');
-    // console.log("expandTable.data=");
-    // console.log(data);
-    // console.log("expandTable.parentData=");
-    // console.log(parentData);
-
     $activeSubDatasTable = $subtable;
-    buildSubTable($subtable, cols, data, parentData);
+    buildRelationTable($subtable, cols, data, qs);
 }
 
-function expandDimensionTable($detail, cols, data, parentData) {
+function expandDimensionTable($detail, cols, data, field, qs) {
     $subtable = $detail.html('<table></table>').find('table');
-    // console.log("expandTable.data=");
-    // console.log(data);
-    // console.log("expandTable.parentData=");
-    // console.log(parentData);
-
     $activeSubDatasTable = $subtable;
-    buildDimensionTable($subtable, cols, data, parentData);
+    buildDimensionTable($subtable, cols, data, field, qs);
 }
 
+function expandFieldTable($detail, cols, data, qs) {
+    $subtable = $detail.html('<table></table>').find('table');
+    $activeSubDatasTable = $subtable;
+    buildFieldTable($subtable, cols, data, qs);
+}
 
-function buildDimensionTable($el, cols, data, parentData){
+function buildDimensionTable($el, cols, data, fld, qs){
 
   $el.bootstrapTable({
       columns: cols,
@@ -1229,14 +1312,61 @@ function buildDimensionTable($el, cols, data, parentData){
       },
       onEditableSave: function (field, row, oldValue, editable) {
         //Fired when an editable cell is saved.
+
+        if(field == "dimension"){
+          var dimension = row.dimension;
+          if(Array.isArray(dimension)){
+            row.dimension = '[' + dimension.toString() + ']';
+          };
+        }
+
       },
       onResetView: function(){
         var $tableRows = $el.find('tbody tr');
 
         $.each(data, function(i, row){
-          console.log(parentData);
+          console.log(fld);
+          console.log(qs);
           console.log($tableRows.eq(i).find('a'));
-          $tableRows.eq(i).find('a').eq(0).editable('enable');
+          // $tableRows.eq(i).find('a').eq(0).editable('enable');
+
+          // Change dimension to checklist editable if field_type are time/date and remove zoom-in icon
+          // $tableRows.eq(i).find('a').eq(0) = dimension
+          if(fld.timeDimension){
+            row.order = '';
+            row.bk = '';
+            row.hierarchyName = '';
+            $tableRows.eq(i).find('a').eq(1).editable('disable');
+            $tableRows.eq(i).find('a').eq(2).editable('disable');
+            $tableRows.eq(i).find('a').eq(3).editable('disable');
+            $tableRows.eq(i).find('a').eq(0).editable('destroy');
+            $tableRows.eq(i).find('a').eq(0).editable(dateDimensions);
+            $tableRows.eq(i).find('a.buildDrillPath').remove();
+          }
+          else{
+            $tableRows.eq(i).find('a').eq(0).editable('destroy');
+            var dimensionSet = getSetFromArray(dimensionGlobal);
+
+            var source = [];
+            source.push({"text": "", "value": ""});
+
+            dimensionSet.forEach(function(value){
+              var option = {};
+              option.text = value;
+              option.value = value;
+              source.push(option);
+            })
+
+            var newEditable = {
+              type: "select",
+              mode: "inline",
+              source: source
+            };
+
+            $tableRows.eq(i).find('a').eq(0).editable(newEditable);
+            $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
+          }
+
         });
 
       },
@@ -1248,19 +1378,190 @@ function buildDimensionTable($el, cols, data, parentData){
         switch(field){
 
           case "dimension":
-          break;
+            break;
+
+          case "remove":
+            $el.bootstrapTable('remove', {
+                field: 'index',
+                values: [row.index]
+            });
+            return;
+
+          case "buildDrillPath":
+
+            if(field.timeDimension){
+              return;
+            }
+
+            //Check if QS is either Final, RefChecked or Ref
+            qsType = {isFinal: false, isRefChecked: false, isRef: false};
+
+            $.each($datasTable.bootstrapTable("getData"), function(i, obj){
+              if(obj.table_alias == qs.table_alias){
+                if(obj.type == 'Final'){
+                  qsType.isFinal = true;
+                  $.each(obj.relations, function(j, relation){
+                    if(relation.ref){
+                      qsType.isRefChecked = true;
+                    }
+                  });
+                }
+                if(obj.type != 'Final'){
+                      qsType.isRef = true;
+                }
+              }
+            });
+
+            clearDrillModal();
+
+            var fieldName = qs.table_alias + '.' + fld.field_name;
+            $('#drillFieldName').text(fieldName);
+
+            var dimensionSet = getSetFromArray(dimensionGlobal);
+
+            getDimensions(dimensionSet, qs._id);
+
+            $selectedDimensionIndex = row.index;
+
+            $('#DrillModal').modal('toggle');
+
+
+            break;
 
           default:
 
         }
       }
 
-
     });
 
 }
 
-function buildSubTable($el, cols, data, parentData){
+function buildFieldTable($el, cols, data, qs){
+
+      $el.bootstrapTable({
+          columns: cols,
+          // url: url,
+          data: data,
+          showToggle: false,
+          search: false,
+          checkboxHeader: false,
+          showColumns: false,
+          // sortName: "recCountPercent",
+          // sortOrder: "desc",
+          idField: "index",
+          detailView: true,
+
+          onExpandRow: function (index, row, $detail) {
+              console.log(index);
+              console.log(row);
+              console.log($detail);
+              console.log($el);
+              var $tableRows = $el.find('tbody td');
+              console.log($tableRows.eq(0));
+              expandDimensionTable($detail, dimensionCols, row.dimensions, row, qs);
+          },
+
+          onAll: function(name, args){
+            //Fires when all events trigger, the parameters contain: name: the event name, args: the event data.
+          },
+
+          onEditableInit: function(){
+            //Fired when all columns was initialized by $().editable() method.
+          },
+          onEditableShown: function(editable, field, row, $el){
+            //Fired when an editable cell is opened for edits.
+          },
+          onEditableHidden: function(field, row, $el, reason){
+            //Fired when an editable cell is hidden / closed.
+          },
+          onEditableSave: function (field, row, oldValue, editable) {
+            //Fired when an editable cell is saved.
+            console.log(row);
+            if(field.match("label")){
+              row.labels[currentLanguage] = row.label;
+            }
+            if(field.match("description")){
+              row.descriptions[currentLanguage] = row.description;
+            }
+            console.log(row);
+
+          },
+
+          onResetView: function(){
+
+            var $tableRows = $el.find('tbody tr');
+
+
+            $.each(data, function(i, row){
+
+              // Disable editable for field_type if field is !custom and remove trash
+              // $tableRows.eq(i).find('a').eq(0) = field_type
+              if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
+                console.log(row.custom)
+                console.log(qs);
+                console.log($tableRows.eq(i).find('a'));
+                if(!row.custom){
+                  // $tableRows.eq(i).find('a').eq(1).editable('destroy');
+                  $tableRows.eq(i).find('a').eq(1).editable('disable');
+                  $tableRows.eq(i).find('a.remove').remove();
+                }
+                else{
+                  $tableRows.eq(i).find('a').eq(1).editable('destroy');
+                  customFieldType.source = dbDataType;
+                  $tableRows.eq(i).find('a').eq(1).editable(customFieldType);
+                  $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
+                }
+              }
+
+            })
+
+          },
+
+          onClickCell: function (field, value, row, $element){
+
+            $activeSubDatasTable = $el;
+
+            switch(field){
+
+              case "addDimension":
+
+                var dimension = {dimension: '', order: '', bk: '', hierarchyName: ''};
+                row.dimensions.push(dimension);
+                $el.bootstrapTable("expandRow", row.index);
+                $el.bootstrapTable("collapseRow", row.index);
+                $el.bootstrapTable("expandRow", row.index);
+
+                break;
+
+              case "hidden":
+                var newValue = value == false ? true : false;
+                updateCell($el, row.index, field, newValue);
+                break;
+
+              case "remove":
+                if(activeTab.match("Query Subject")){
+                  if(row.custom == true){
+                    $el.bootstrapTable('remove', {
+                        field: 'index',
+                        values: [row.index]
+                    });
+                  }
+                }
+                return;
+
+
+              default:
+
+            }
+
+          }
+
+      });
+
+}
+
+function buildRelationTable($el, cols, data, qs){
 
   $el.bootstrapTable({
       columns: cols,
@@ -1271,27 +1572,11 @@ function buildSubTable($el, cols, data, parentData){
       checkboxHeader: false,
       showColumns: false,
       // sortName: "recCountPercent",
-      sortOrder: "desc",
+      // sortOrder: "desc",
       idField: "index",
-      detailView: true,
-
-      onExpandRow: function (index, row, $detail) {
-          console.log(index);
-          console.log(row);
-          console.log($detail);
-          console.log($el);
-          var $tableRows = $el.find('tbody td');
-          console.log($tableRows.eq(0));
-          expandDimensionTable($detail, dimensionCols, row.dimensions, row);
-      },
 
       onAll: function(name, args){
         //Fires when all events trigger, the parameters contain: name: the event name, args: the event data.
-        // console.log("---------- buildSubTable: onAll -------------");
-        // console.log("name=" + name);
-        // console.log("args=");
-        // console.log(args);
-        // console.log("---------- buildSubTable: onAll -------------");
       },
 
       onEditableInit: function(){
@@ -1299,32 +1584,12 @@ function buildSubTable($el, cols, data, parentData){
       },
       onEditableShown: function(editable, field, row, $el){
         //Fired when an editable cell is opened for edits.
-        // console.log("---------- buildSubTable: onEditableShown -------------");
-        // console.log("editable=");
-        // console.log(editable);
-        // console.log("field=");
-        // console.log(field);
-        // console.log("row=");
-        // console.log(row);
-        // console.log("$el=");
-        // console.log($el);
-        // console.log("---------- buildSubTable: onEditableShown -------------");
       },
       onEditableHidden: function(field, row, $el, reason){
         //Fired when an editable cell is hidden / closed.
       },
       onEditableSave: function (field, row, oldValue, editable) {
         //Fired when an editable cell is saved.
-        // console.log("---------- buildSubTable: onEditableSave -------------");
-        // console.log("editable=");
-        // console.log(editable);
-        // console.log("field=");
-        // console.log(field);
-        // console.log("row=");
-        // console.log(row);
-        // console.log("oldValue=");
-        // console.log(oldValue);
-        // console.log("---------- buildSubTable: onEditableSave -------------");
 
         row._id = row.key_type + 'K_' + row.pktable_alias + '_' + row.table_alias + '_' + row.type;
         if(field == "pktable_alias"){
@@ -1334,13 +1599,6 @@ function buildSubTable($el, cols, data, parentData){
             // updateCell($activeSubDatasTable, row.index, 'relationship', row.relationship.split(" [" + oldValue + "]").join(" [" + newValue + "]"));
             updateCell($activeSubDatasTable, row.index, 'relationship', row.relationship.replace(re, " [" + newValue + "]"));
           }
-        }
-
-        if(field == "dimension"){
-          var dimension = row.dimension;
-          if(Array.isArray(dimension)){
-            row.dimension = '[' + dimension.toString() + ']';
-          };
         }
 
       },
@@ -1354,7 +1612,7 @@ function buildSubTable($el, cols, data, parentData){
 
           // If more than one seq change above from text to select editable
           // $tableRows.eq(i).find('a').eq(6) = above
-          if(activeTab.match("Reference") && row.seqs.length > 1){
+          if(activeTab.match("Reference") && row.seqs.length > 0){
             $tableRows.eq(i).find('a').eq(5).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
             var defaultValue = '';
@@ -1375,11 +1633,11 @@ function buildSubTable($el, cols, data, parentData){
 
           // set usedForDimensionsSelect.source
           // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
-          if(activeTab == "Reference" && parentData.type == 'Final'){
-            // console.log(parentData);
-            // console.log($tableRows.eq(i).find('a'));
+          if(activeTab == "Reference" && qs.type == 'Final'){
+            console.log(qs);
+            console.log($tableRows.eq(i).find('a'));
 
-            var dimensionSet = getDimensionSet();
+            var dimensionSet = getSetFromArray(dimensionGlobal);
 
             var source = [];
             source.push({"text": "", "value": ""});
@@ -1400,7 +1658,7 @@ function buildSubTable($el, cols, data, parentData){
 
           // set usedForDimensionsSelect.source
           // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
-          if(activeTab == "Reference" && parentData.type == 'Ref'){
+          if(activeTab == "Reference" && qs.type == 'Ref'){
 
             var source = [];
             source.push({"text": "", "value": ""});
@@ -1437,37 +1695,6 @@ function buildSubTable($el, cols, data, parentData){
             }
           }
 
-          // Enable select editable for field_type if field is custom
-          // $tableRows.eq(i).find('a').eq(0) = field_type
-          if(activeTab.match("Query Subject") && row.custom){
-            console.log(parentData);
-            console.log($tableRows.eq(i).find('a'));
-            $tableRows.eq(i).find('a').eq(0).editable('destroy');
-            customFieldType.source = dbDataType;
-            $tableRows.eq(i).find('a').eq(0).editable(customFieldType);
-            $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
-          }
-
-          // Change dimension to checklist editable if field_type are time/date and remove zoom-in icon
-          // $tableRows.eq(i).find('a').eq(8) = dimension
-          if(activeTab.match("Query Subject")){
-              if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-                $tableRows.eq(i).find('a').eq(8).editable('destroy');
-                $tableRows.eq(i).find('a').eq(8).editable(dateDimensions);
-                $tableRows.eq(i).find('a.buildDrillPath').remove();
-              }
-          }
-
-          // Disable editable for field_type if field is !custom and remove trash
-          // $tableRows.eq(i).find('a').eq(0) = field_type
-          if(activeTab.match("Query Subject") && $activeSubDatasTable == $el && !row.custom){
-            console.log(parentData);
-            console.log($tableRows.eq(i).find('a'));
-            $tableRows.eq(i).find('a').eq(0).editable('disable');
-            $tableRows.eq(i).find('a.remove').remove();
-
-          }
-
         })
 
       },
@@ -1478,71 +1705,10 @@ function buildSubTable($el, cols, data, parentData){
 
         switch(field){
 
-          case "addDimension":
-
-            console.log(field + " was clicked");
-            console.log(row);
-            var dimension = {dimension: '', order: '', bk: '', hierarchyName: ''};
-            row.dimensions.push(dimension);
-            console.log(row);
-            // expandDimensionTable($detail, dimensionCols, row.dimensions, row);
-            $el.bootstrapTable("expandRow", row.index);
-            $el.bootstrapTable("collapseRow", row.index);
-            $el.bootstrapTable("expandRow", row.index);
-
-
-            break;
-
-          case "buildDrillPath":
-
-            if(row.field_type.toUpperCase() == "DATE" || row.field_type.toUpperCase() == "TIMESTAMP" || row.field_type.toUpperCase() == "DATETIME"){
-              return;
-            }
-
-            //Check if QS is either Final, RefChecked or Ref
-            qsType = {isFinal: false, isRefChecked: false, isRef: false};
-
-            $.each($datasTable.bootstrapTable("getData"), function(i, obj){
-              if(obj.table_alias == parentData.table_alias){
-                if(obj.type == 'Final'){
-                  qsType.isFinal = true;
-                  $.each(obj.relations, function(j, relation){
-                    if(relation.ref){
-                      qsType.isRefChecked = true;
-                    }
-                  });
-                }
-                if(obj.type != 'Final'){
-                      qsType.isRef = true;
-                }
-              }
-            });
-            console.log(qsType);
-
-            clearDrillModal();
-
-            var fieldName = parentData.table_alias + '.' + row.field_name;
-            $('#drillFieldName').text(fieldName);
-
-            var dimensionSet = getDimensionSet();
-
-
-            getDimensions(dimensionSet);
-
-            $('#DrillModal').modal('toggle');
-
-
-            break;
-
           case "traduction":
-          case "hidden":
           case "timezone":
           case "leftJoin":
-          // case "usedForDimensions":
           case "rightJoin":
-            console.log(field);
-            console.log(value);
-            console.log(row);
             var newValue = value == false ? true : false;
             updateCell($el, row.index, field, newValue);
             break;
@@ -1562,14 +1728,9 @@ function buildSubTable($el, cols, data, parentData){
             }
 
             if(value == false){
-              console.log(allowNommageRep);
               // interdire de cocher n fois pour un même pkAlias dans un qs donné
               $.each($el.bootstrapTable("getData"), function(i, obj){
                 if(obj.pktable_alias == row.pktable_alias){
-                  console.log(obj);
-                  console.log(obj.pktable_alias + " -> " + obj.nommageRep);
-                  console.log(row);
-                  console.log(row.pktable_alias + " -> " + row.nommageRep);
                   if(obj.sec && activeTab.match("Security") && obj.nommageRep){
                     allowNommageRep = false;
                   }
@@ -1632,22 +1793,11 @@ function buildSubTable($el, cols, data, parentData){
                 showalert("buildSubTable()", row._id + " is checked.", "alert-warning", "bottom");
               }
             }
-            if(activeTab.match("Query Subject")){
-              if(row.custom == true){
-                $el.bootstrapTable('remove', {
-                    field: 'index',
-                    values: [row.index]
-                });
-              }
-            }
             return;
 
           case "fin":
           case "ref":
           case "sec":
-
-            console.log(row);
-            console.log(value);
 
             if(row.ref && activeTab.match("Final|Security")){
               showalert("buildSubTable()", row._id + " is already checked as REF.", "alert-warning", "bottom");
@@ -1667,17 +1817,12 @@ function buildSubTable($el, cols, data, parentData){
             }
             var newValue = value == false ? true : false;
             var pkAlias = '[' + row.pktable_alias + ']';
-            console.log("pkAlias=" + pkAlias);
-            console.log(newValue);
             if(value == true){
-              console.log('++++++PrepareRemoveKey');
-              PrepareRemoveKeys(row, parentData);
-              console.log('++++++');
-              console.log(qs2rm);
+              PrepareRemoveKeys(row, qs);
               if(qs2rm.qsList.length > 0){
 
-                RemoveKeys(row, parentData);
-                ChangeIcon(row, parentData, "Attribute");
+                RemoveKeys(row, qs);
+                ChangeIcon(row, qs, "Attribute");
                 return;
               }
               else{
@@ -1695,12 +1840,12 @@ function buildSubTable($el, cols, data, parentData){
                 }
 
                 var linked = false;
-                $.each(parentData.relations, function(i, obj){
+                $.each(qs.relations, function(i, obj){
                   if(obj.fin || obj.ref || obj.sec){
                     linked = true;
                   }
                 });
-                updateCell($datasTable, parentData.index, "linker", linked);
+                updateCell($datasTable, qs.index, "linker", linked);
 
               }
             }
@@ -1718,44 +1863,36 @@ function buildSubTable($el, cols, data, parentData){
                 row.relationship = row.relationship.replace(re, " [SEC].[" + row.pktable_alias + "]");
               }
               updateCell($el, row.index, field, newValue);
-              ChangeIcon(row, parentData, "Identifier");
+              ChangeIcon(row, qs, "Identifier");
               if(row.fin && activeTab == "Final"){
-                GetQuerySubjects(row.pktable_name, row.pktable_alias, "Final", row._id, parentData.index);
+                GetQuerySubjects(row.pktable_name, row.pktable_alias, "Final", row._id, qs.index);
               }
               if(row.ref && activeTab == "Reference"){
-                GetQuerySubjects(row.pktable_name, row.pktable_alias, "Ref", row._id, parentData.index);
+                GetQuerySubjects(row.pktable_name, row.pktable_alias, "Ref", row._id, qs.index);
               }
               if(row.sec && activeTab == "Security"){
-                GetQuerySubjects(row.pktable_name, row.pktable_alias, "Sec", row._id, parentData.index);
+                GetQuerySubjects(row.pktable_name, row.pktable_alias, "Sec", row._id, qs.index);
               }
-              updateCell($datasTable, parentData.index, "linker", true);
-//              $datasTable.bootstrapTable('collapseRow', parentData.index);
-  //            $datasTable.bootstrapTable('expandRow', parentData.index);
+              updateCell($datasTable, qs.index, "linker", true);
 
             }
             var linked = false;
-            $.each(parentData.relations, function(i, obj){
+            $.each(qs.relations, function(i, obj){
               if(obj.fin || obj.ref || obj.sec){
                 linked = true;
               }
             });
-            updateCell($datasTable, parentData.index, "linker", linked);
+            updateCell($datasTable, qs.index, "linker", linked);
 
             break;
 
           default:
-
-            // console.log(row);
-            // console.log(value);
-            // console.log(newValue);
 
         }
 
       }
 
   });
-
-  // $el.bootstrapTable('hideColumn', '_id');
 
   if(activeTab == "Reference"){
     $el.bootstrapTable('hideColumn', 'fin');
@@ -1817,10 +1954,7 @@ function ChangeIcon(row, qs, icon){
 
 $("#removeKeysModal").on('hidden.bs.modal', function (e) {
   // do something...
-  console.log("removeKeysModal hidden event %%%%%%%%%%")
   if(qs2rm != undefined && $activeSubDatasTable != undefined){
-    console.log("qs2rm.row.index="+qs2rm.row.index);
-    console.log("qs2rm.row.fin="+qs2rm.row.fin);
     var pkAlias = '[' + qs2rm.row.pktable_alias + ']';
     if(activeTab == "Final"){
       qs2rm.row.relationship = qs2rm.row.relationship.split(pkAlias).join("[FINAL]." + pkAlias);
@@ -1846,33 +1980,20 @@ function PrepareRemoveKeys(o, qs){
                 var tableData = $datasTable.bootstrapTable("getData");
                 tableData.forEach(function(e){
                         if(e.linker_ids.indexOf(o._id) > -1){
-                                console.log("RemoveKeys _id found: " + o._id + " in QS " + e._id );
-                                console.log("RemoveKeys linker_ids.length for QS " + e._id + " is: " + e.linker_ids.length);
                                 if(e.linker_ids.length == 1){
-                                  console.log("RemoveKeys linker_ids for QS " + e._id + " == 1");
-                                  console.log("RemoveKeys linker_ids for QS " + e._id + " relations:");
                                   $.each(e.relations, function(k, v){
-                                    console.log("k=" + k);
-                                    console.log("v=");
-                                    console.log(v);
                                     if(v.fin || v.ref || v.sec){
-                                      console.log("RemoveKeys: " + v._id + " is checked. Recurse...");
                                       return recurse(v);
                                     }
                                   });
                                   indexes2rm.push(e._id);
-                                  console.log("RemoveImportedKeys push to indexes2rm: " + e._id);
                                 }
                                 if(e.linker_ids.length > 1){
                                         ids2rm[e._id] = ids2rm[e._id] || [];
                                         ids2rm[e._id].push(o._id);
                                         e.linker_ids.splice(e.linker_ids.indexOf(o._id), 1);
                                         var newValue = e.linker_ids;
-                                        console.log("newValue=" + newValue);
-                                        // updateCell($datasTable, e.index, "linker_ids", newValue);
-                                        console.log("RemoveImportedKeys remove from linker_ids: " + e._id);
                                 }
-                                // return recurse(tableData[e.index]);
                         }
                         else {
                                 return;
@@ -1886,9 +2007,6 @@ function PrepareRemoveKeys(o, qs){
         qs2rm.qsList = indexes2rm;
         qs2rm.ids2rm = ids2rm;
 
-        console.log(qs2rm);
-
-        // ApplyFilter();
 }
 
 function RemoveKeys(row, qs){
@@ -1949,8 +2067,6 @@ function RemoveKeys(row, qs){
 
 function RemoveKeysAccepted(){
   if(qs2rm != undefined && $activeSubDatasTable != undefined){
-    console.log("qs2rm.row.index="+qs2rm.row.index);
-    console.log("qs2rm.row.fin="+qs2rm.row.fin);
     var pkAlias = '[' + qs2rm.row.pktable_alias + ']';
     if(activeTab == "Final"){
       // qs2rm.row.relationship = qs2rm.row.relationship.split("[FINAL]." + pkAlias).join(pkAlias);
@@ -1995,6 +2111,46 @@ function buildTable($el, cols, data) {
 				// toolbar: "#DatasToolbar",
         detailView: true,
 
+        onAll: function(name, args){
+          //Fires when all events trigger, the parameters contain: name: the event name, args: the event data.
+        },
+
+        onEditableInit: function(){
+          //Fired when all columns was initialized by $().editable() method.
+        },
+        onEditableShown: function(editable, field, row, $el){
+          //Fired when an editable cell is opened for edits.
+        },
+        onEditableHidden: function(field, row, $el, reason){
+          //Fired when an editable cell is hidden / closed.
+        },
+
+        onEditableSave: function (field, row, oldValue, editable) {
+          //Fired when an editable cell is saved.
+          console.log(row);
+          if(field.match("label")){
+            row.labels[currentLanguage] = row.label;
+          }
+          if(field.match("description")){
+            row.descriptions[currentLanguage] = row.description;
+          }
+          console.log(row);
+        },
+
+        onPreBody: function(data){
+          //Fires before the table body is rendered, the parameters contain: data: the rendered data.
+          if(data.length > 0){
+            $.each(data, function(i, obj){
+              obj.label = obj.labels[currentLanguage];
+              obj.description = obj.descriptions[currentLanguage];
+            });
+          }
+        },
+
+        onPostBody: function(data){
+          // Fires after the table body is rendered and available in the DOM, the parameters contain: data: the rendered data.
+        },
+
         onResetView: function(){
 
           var $tableRows = $el.find('tbody tr');
@@ -2014,10 +2170,7 @@ function buildTable($el, cols, data) {
               }
             }
 
-            if(activeTab.match("Query Subject")){
-
-              // Start build folderlist
-              // 1 = Folder
+            if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
 
               $tableRows.eq(i).find('a').eq(1).editable('destroy');
 
@@ -2042,8 +2195,6 @@ function buildTable($el, cols, data) {
               $tableRows.eq(i).find('a').eq(1).editable(newEditable);
               $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
 
-              // End build folderlist
-
             }
 
           })
@@ -2053,6 +2204,7 @@ function buildTable($el, cols, data) {
         onClickCell: function (field, value, row, $element){
 
           // RemoveFilter();
+          $activeSubDatasTable = $el
 
           if(activeTab.match("Final")){
             if(field.match("remove")){
@@ -2090,7 +2242,8 @@ function buildTable($el, cols, data) {
             if($activeSubDatasTable != undefined){
               $newRowModal.modal('toggle');
               console.log(row);
-              var qs = row.table_alias + ' - ' + row.type + ' - ' + row.table_name + ' - ' + row.label;
+              // var qs = row.table_alias + ' - ' + row.type + ' - ' + row.table_name + ' - ' + row.label;
+              var qs = row.table_alias;
               // $('#modQuerySubject').selectpicker('val', qs);
 
               $('#modQuerySubject').text(qs);
@@ -2122,10 +2275,10 @@ function buildTable($el, cols, data) {
         },
         onExpandRow: function (index, row, $detail) {
           if(activeTab.match("Final|Reference|Security|Translation")){
-            expandTable($detail, relationCols, row.relations, row);
+            expandRelationTable($detail, relationCols, row.relations, row);
           }
           else{
-            expandTable($detail, fieldCols, row.fields, row);
+            expandFieldTable($detail, fieldCols, row.fields, row);
           }
         }
     });
@@ -2136,6 +2289,7 @@ function buildTable($el, cols, data) {
     $el.bootstrapTable('hideColumn', 'recurseCount');
     $el.bootstrapTable('hideColumn', 'addPKRelation');
     $el.bootstrapTable('hideColumn', 'addFolder');
+    $el.bootstrapTable('hideColumn', 'folder');
     $el.bootstrapTable('hideColumn', 'addDimension');
     $el.bootstrapTable('hideColumn', 'addField');
     $el.bootstrapTable('showColumn', '_id');
@@ -2188,6 +2342,8 @@ function AddNewDimension() {
        /* result = String containing user input if OK clicked or null if Cancel clicked */
        if(result != null){
          dimensionGlobal.push(result);
+         $refTab.tab('show');
+         $qsTab.tab('show');
        }
 
     }
@@ -2375,7 +2531,7 @@ function GetQuerySubjects(table_name, table_alias, type, linker_id, index) {
     return;
   }
 
-	var parms = "table=" + table_name + "&alias=" + table_alias + "&type=" + type + "&linker_id=" + linker_id;
+	var parms = "table=" + table_name + "&alias=" + table_alias + "&type=" + type + "&linker_id=" + linker_id + "&language=" + currentProject.languages[0];
 
 	console.log("calling GetQuerySubjects() with: " + parms);
 
@@ -2580,6 +2736,12 @@ function GetCognosLocales(){
       success: function(data) {
         cognosLocales = data.cognosLocales;
         console.log(cognosLocales);
+        $.each(cognosLocales, function(i, locale){
+          var option = '<option class="fontsize" value="' + locale + '">' + locale + '</option>';
+          $("#languagesSelect").append(option);
+        });
+        $("#languagesSelect").selectpicker('refresh');
+        $("#languagesSelect").selectpicker('val', currentLanguage);
       },
       error: function(data) {
           console.log(data);
@@ -2815,16 +2977,10 @@ function SaveModel(){
     return;
   }
 
-  $.each(data, function(i, qs){
-    var labels = {};
-    qs.labels = labels;
-    var descriptions = {};
-    qs.descriptions = descriptions;
-    $.each(cognosLocales, function(j, locale){
-      qs.labels[locale] = qs.label;
-      qs.descriptions[locale] = qs.description;
-    })
-  })
+  $.each(data, function(i, obj){
+    obj.label = "";
+    obj.description = "";
+  });
 
   bootbox.prompt({
     size: "small",
@@ -2837,6 +2993,7 @@ function SaveModel(){
     }
 
     var parms = {modelName: modelName, data: JSON.stringify(data)};
+    console.log(parms);
 
    	$.ajax({
    		type: 'POST',
@@ -2885,6 +3042,32 @@ function GetModelList(){
 
 }
 
+function initGlobals(){
+
+  var qss = $datasTable.bootstrapTable("getData");
+
+  var folderSet = new Set();
+  var dimensionSet = new Set();
+
+  $.each(qss,function(i, qs){
+    if(qs.folder != ''){
+      folderSet.add(qs.folder);
+    }
+    $.each(qs.fields, function(j, field){
+      $.each(field.dimensions, function(k, dimension){
+        if(!dimension.dimension.startsWith('[')){
+          dimensionSet.add(dimension.dimension);
+        }
+      })
+    })
+  });
+
+  folderGlobal = getArrayFromSet(folderSet);
+  dimensionGlobal = getArrayFromSet(dimensionSet);
+  langGlobal = Object.keys(qss[0].labels);
+
+}
+
 function OpenModel(id){
 
   var modelName;
@@ -2895,8 +3078,6 @@ function OpenModel(id){
     }
   });
 
-  console.log("modelName=" + modelName);
-
 	$.ajax({
 		type: 'POST',
 		url: "OpenModel",
@@ -2905,6 +3086,9 @@ function OpenModel(id){
 
 		success: function(data) {
       $datasTable.bootstrapTable("load", data);
+      initGlobals();
+      $finTab.tab('show');
+
       if(activeTab == "Final"){
         $datasTable.bootstrapTable("filterBy", {type: ['Final']});
       }
@@ -3075,4 +3259,19 @@ function GetDBMDFromCache(){
       }
     );
 
+}
+
+function GetCurrentProject(){
+  $.ajax({
+    type: 'POST',
+    url: "GetCurrentProject",
+    dataType: 'json',
+    async: true,
+    success: function(data) {
+      currentProject = data.data;
+      currentLanguage = currentProject.languages[0];
+      console.log(currentProject);
+      console.log(currentLanguage);
+    }
+  })
 }
