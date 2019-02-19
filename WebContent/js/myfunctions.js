@@ -12,8 +12,6 @@ var $secTab = $("a[href='#Security']");
 var $traTab = $("a[href='#Translation']");
 var activeTab = "Final";
 var previousTab;
-var activeTabObject = $("a[href='#Final']");
-var previousTabObject = $("a[href='#Reference']");
 var $activeSubDatasTable;
 var $newRowModal = $('#newRowModal');
 var $modelListModal = $('#modModelList');
@@ -127,8 +125,8 @@ qsCols.push({field:"recurseCount", title: '<i class="glyphicon glyphicon-repeat"
 qsCols.push({field:"addPKRelation", title: '<i class="glyphicon glyphicon-magnet" title="Add PK relation(s)"></i>', formatter: "addPKRelationFormatter", align: "center"});
 qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new relation"></i>', formatter: "addRelationFormatter", align: "center"});
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
-qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-folder-open" title="Add new folder"></i>', formatter: "addFolderFormatter", align: "center"});
-qsCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
+qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-folder-open" title="Add new folder name"></i>', formatter: "addFolderFormatter", align: "center"});
+qsCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension name"></i>', formatter: "addDimensionFormatter", align: "center"});
 qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 qsCols.push({field:"linker_ids", title: "linker_ids"});
@@ -231,8 +229,8 @@ $(document)
   buildTable($datasTable, qsCols, datas, true);
   GetDBDataType();
   // buildComboList($('#selectDimension'));
-  GetCurrentProject();
   GetCognosLocales();
+  GetCurrentProject();
 
 })
 .ajaxStart(function(){
@@ -729,13 +727,14 @@ function SetLanguage(language){
           field.descriptions[language] = "";
         })
       });
-      var prevTab = previousTabObject;
-      var curTab = activeTabObject;
-      prevTab.tab('show');
-      curTab.tab('show');
-
     }
-
+    if(activeTab.match("Query Subject")){
+      $refTab.tab('show');
+      $qsTab.tab('show');
+    }
+    else{
+      $qsTab.tab('show');
+    }
   }
 
 }
@@ -1082,7 +1081,7 @@ function modAddRelation(){
   console.log(pkColMatches);
 
   if(colMatches.length == 0){
-    showalert("modAddRelation()", "No valid relation found in Relations textarea.<br>Relations does not match " + exp + " pattern.", "alert-warning", "bottom");
+    ShowAlert("No valid relation found in Relations textarea.<br>Relations does not match " + exp + " pattern.", "alert-warning", $("#newRowModalAlert"));
     return;
   }
 
@@ -1127,7 +1126,7 @@ function modAddRelation(){
       },
       error: function(data) {
           console.log(data);
-          showalert("GetNewRelation()", "Error when getting new relation from server.", "alert-warning", "bottom");
+          ShowAlert("Error when getting new relation from server.", "alert-warning", $("#newRowModalAlert"));
       }
   });
 
@@ -1160,17 +1159,17 @@ function modWriteRelation(relation){
 function validNewRelation(){
 
   if ($("#modPKTable").find("option:selected").text() == 'Choose a pktable...') {
-    showalert("modValidate()", "No pktable selected.", "alert-warning", "bottom");
+    ShowAlert("No pktable selected.", "alert-warning", $("#newRowModalAlert"));
     return false;
   }
 
   if ($("#modPKColumn").find("option:selected").text() == 'Choose a pkcolumn...') {
-    showalert("modValidate()", "No pkcolumn selected.", "alert-warning", "bottom");
+    ShowAlert("No pkcolumn selected.", "alert-warning", $("#newRowModalAlert"));
     return false;
   }
 
   if ($("#modColumn").find("option:selected").text() == 'Choose a column...') {
-    showalert("modValidate()", "No column selected.", "alert-warning", "bottom");
+    ShowAlert("No column selected.", "alert-warning", $("#newRowModalAlert"));
     return false;
   }
 
@@ -1180,49 +1179,6 @@ function validNewRelation(){
 function Search(){
   window.open("search.html");
 }
-
-// function getLabel(tableName, columnName){
-//
-//   // console.log("tableName=" + tableName);
-//   // console.log("columnName=" + columnName);
-//
-//   var label = null;
-//
-//   var dbmd = JSON.parse(localStorage.getItem('dbmd'));
-//   if(dbmd != 'null' && dbmd){
-//     if(dbmd[tableName] && !columnName){
-//       label = dbmd[tableName].table_remarks;
-//     }
-//     if(dbmd[tableName] && columnName){
-//       if(dbmd[tableName].columns[columnName]){
-//         label = dbmd[tableName].columns[columnName].column_remarks;
-//       }
-//     }
-//   }
-//   return label;
-// }
-
-// function getDescription(tableName, columnName){
-//
-//   // console.log("tableName=" + tableName);
-//   // console.log("columnName=" + columnName);
-//
-//   var description = null;
-//
-//   var labels = JSON.parse(localStorage.getItem('dbmd'));
-//   if(labels){
-//     if(labels[tableName] && !columnName){
-//       description = labels[tableName].table_description;
-//     }
-//     if(labels[tableName] && columnName){
-//       if(labels[tableName].columns[columnName]){
-//         description = labels[tableName].columns[columnName].column_description;
-//       }
-//     }
-//   }
-//   return description;
-// }
-
 
 function getSetFromArray(array){
   var result = new Set();
@@ -1238,21 +1194,6 @@ function getArrayFromSet(set){
     result.push(value);
   });
   return result;
-}
-
-function getDimensionSet(){
-  var dimensionSet = new Set();
-  $.each($datasTable.bootstrapTable("getData"), function(i, obj){
-    $.each(obj.fields, function(j, field){
-      var dimension = field.dimension
-      if(dimension != ''){
-        if(!field.field_type.toUpperCase().match("DATE|TIMESTAMP|DATETIME")){
-          dimensionSet.add(dimension);
-        }
-      }
-    })
-  })
-  return dimensionSet;
 }
 
 function clearDrillModal(){
@@ -1488,6 +1429,21 @@ function buildFieldTable($el, cols, data, qs){
 
           },
 
+          onPreBody: function(data){
+            //Fires before the table body is rendered, the parameters contain: data: the rendered data.
+            console.log(data);
+            if(data.length > 0){
+              $.each(data, function(i, obj){
+                obj.label = obj.labels[currentLanguage];
+                obj.description = obj.descriptions[currentLanguage];
+              });
+            }
+          },
+
+          onPostBody: function(data){
+            // Fires after the table body is rendered and available in the DOM, the parameters contain: data: the rendered data.
+          },
+
           onResetView: function(){
 
             var $tableRows = $el.find('tbody tr');
@@ -1498,9 +1454,6 @@ function buildFieldTable($el, cols, data, qs){
               // Disable editable for field_type if field is !custom and remove trash
               // $tableRows.eq(i).find('a').eq(0) = field_type
               if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
-                console.log(row.custom)
-                console.log(qs);
-                console.log($tableRows.eq(i).find('a'));
                 if(!row.custom){
                   // $tableRows.eq(i).find('a').eq(1).editable('destroy');
                   $tableRows.eq(i).find('a').eq(1).editable('disable');
@@ -1561,6 +1514,35 @@ function buildFieldTable($el, cols, data, qs){
 
 }
 
+function buildLabelsMap(){
+
+  var result = {};
+
+  $.each($datasTable.bootstrapTable("getData"), function(i, qs){
+    result[qs._id.toUpperCase()] = qs.labels[currentLanguage];
+    result[qs._id.toUpperCase()].description = qs.descriptions[currentLanguage];
+  });
+
+  console.log(result);
+
+  return result;
+
+}
+
+function buildDescriptionsMap(){
+
+  var result = {};
+
+  $.each($datasTable.bootstrapTable("getData"), function(i, qs){
+    result[qs._id.toUpperCase()] = qs.descriptions[currentLanguage];
+  });
+
+  console.log(result);
+
+  return result;
+
+}
+
 function buildRelationTable($el, cols, data, qs){
 
   $el.bootstrapTable({
@@ -1603,10 +1585,31 @@ function buildRelationTable($el, cols, data, qs){
 
       },
 
+      onPreBody: function(data){
+        //Fires before the table body is rendered, the parameters contain: data: the rendered data.
+        // if(data.length > 0){
+        //   $.each(data, function(i, rel){
+        //     console.log(rel);
+        //     var qsId = (rel.pktable_alias + rel.type).toUpperCase();
+        //     var label = labelsMap[qsId];
+        //     if(label){
+        //       rel.label = label;
+        //     }
+        //     var description = descriptionsMap[qsId];
+        //     if(description){
+        //       rel.description = description;
+        //     }
+        //   });
+        // }
+      },
+
+      onPostBody: function(data){
+        // Fires after the table body is rendered and available in the DOM, the parameters contain: data: the rendered data.
+      },
+
       onResetView: function(){
 
         var $tableRows = $el.find('tbody tr');
-
 
         $.each(data, function(i, row){
 
@@ -1634,8 +1637,6 @@ function buildRelationTable($el, cols, data, qs){
           // set usedForDimensionsSelect.source
           // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
           if(activeTab == "Reference" && qs.type == 'Final'){
-            console.log(qs);
-            console.log($tableRows.eq(i).find('a'));
 
             var dimensionSet = getSetFromArray(dimensionGlobal);
 
@@ -2224,13 +2225,6 @@ function buildTable($el, cols, data) {
 
           if(field == "visible"){
             var newValue = value == false ? true : false;
-
-            console.log($el.bootstrapTable("getData"));
-
-            console.log("row.index=" + row.index);
-            console.log("field=" + field);
-            console.log("newValue=" + newValue);
-
             updateCell($el, row.index, field, newValue);
 
           }
@@ -2241,9 +2235,12 @@ function buildTable($el, cols, data) {
 
             if($activeSubDatasTable != undefined){
               $newRowModal.modal('toggle');
-              console.log(row);
-              // var qs = row.table_alias + ' - ' + row.type + ' - ' + row.table_name + ' - ' + row.label;
-              var qs = row.table_alias;
+              if(row.label){
+                var qs = row.table_alias + ' - ' + row.type + ' - ' + row.table_name + ' - ' + row.label;
+              }
+              else{
+                var qs = row.table_alias + ' - ' + row.type + ' - ' + row.table_name;
+              }
               // $('#modQuerySubject').selectpicker('val', qs);
 
               $('#modQuerySubject').text(qs);
@@ -2728,26 +2725,30 @@ function ChooseTable(table, sort) {
 }
 
 function GetCognosLocales(){
-  $.ajax({
-      type: 'POST',
-      url: "GetCognosLocales",
-      dataType: 'json',
+  $.when(
+    $.ajax({
+        type: 'POST',
+        url: "GetCognosLocales",
+        dataType: 'json',
 
-      success: function(data) {
-        cognosLocales = data.cognosLocales;
-        console.log(cognosLocales);
-        $.each(cognosLocales, function(i, locale){
-          var option = '<option class="fontsize" value="' + locale + '">' + locale + '</option>';
-          $("#languagesSelect").append(option);
-        });
-        $("#languagesSelect").selectpicker('refresh');
-        $("#languagesSelect").selectpicker('val', currentLanguage);
-      },
-      error: function(data) {
-          console.log(data);
-          showalert("GetCognosLocales()", "GetCognosLocales failed.", "alert-danger", "bottom");
-      }
-  });
+        success: function(data) {
+          cognosLocales = data.cognosLocales;
+          console.log(cognosLocales);
+          $.each(cognosLocales, function(i, locale){
+            var option = '<option class="fontsize" value="' + locale + '">' + locale + '</option>';
+            $("#languagesSelect").append(option);
+          });
+          $("#languagesSelect").selectpicker('refresh');
+        },
+        error: function(data) {
+            console.log(data);
+            showalert("GetCognosLocales()", "GetCognosLocales failed.", "alert-danger", "bottom");
+        }
+    })
+  )
+  .then(
+      GetCurrentProject()
+  );
 }
 
 function ChooseField(table, id){
@@ -2815,7 +2816,7 @@ function ChooseField(table, id){
 
 }
 
-function showalert(title, message, alertType, area) {
+function showalert(title, message, alertType, area, $el) {
 
     $('#alertmsg').remove();
 
@@ -2859,7 +2860,12 @@ function showalert(title, message, alertType, area) {
        .addClass('alert ' + alertType + ' alert-dismissible flyover flyover-' + area);
     }
 
-    $('#Alert').append($newDiv);
+    if($el){
+      $el.append($newDiv);
+    }
+    else{
+      $('#Alert').append($newDiv);
+    }
 
     if ( !$('#alertmsg').is( '.in' ) ) {
       $('#alertmsg').addClass('in');
@@ -3087,11 +3093,11 @@ function OpenModel(id){
 		success: function(data) {
       $datasTable.bootstrapTable("load", data);
       initGlobals();
-      $finTab.tab('show');
+      $qsTab.tab('show');
 
-      if(activeTab == "Final"){
-        $datasTable.bootstrapTable("filterBy", {type: ['Final']});
-      }
+      // if(activeTab == "Final"){
+      //   $datasTable.bootstrapTable("filterBy", {type: ['Final']});
+      // }
 			// showalert("OpenModel()", "Model opened successfully.", "alert-success", "bottom");
 
 		},
@@ -3269,9 +3275,249 @@ function GetCurrentProject(){
     async: true,
     success: function(data) {
       currentProject = data.data;
-      currentLanguage = currentProject.languages[0];
+      if(currentProject){
+        currentLanguage = currentProject.languages[0];
+        $("#languagesSelect").selectpicker('val', currentLanguage);
+      }
       console.log(currentProject);
       console.log(currentLanguage);
     }
   })
+}
+
+function OpenQueryModal(){
+  $('#queryModal').modal('toggle');
+  // GetLabelsQueries();
+}
+
+function SaveQueries(){
+
+  var backupName;
+
+  var vide = true;
+
+  if($("#tableLabel").val().trim().length > 1) {
+    vide = false;
+  }
+  if($("#tableDescription").val().trim().length > 1) {
+    vide = false;
+  }
+  if($("#columnLabel").val().trim().length > 1) {
+    vide = false;
+  }
+  if($("#columnDescription").val().trim().length > 1) {
+    vide = false;
+  }
+
+  console.log(vide);
+
+  if(vide){
+    ShowAlert("Nothing to save.", "alert-warning", $("#queryModalAlert"));
+    return;
+  }
+
+
+  bootbox.prompt({
+    size: "small",
+    title: "Enter backup name",
+    callback: function(result){
+       /* result = String containing user input if OK clicked or null if Cancel clicked */
+      backupName = result;
+      if(!backupName){
+        return;
+      }
+
+      var queries = {};
+      queries.tlQuery = $('#tableLabel').val();
+      queries.tdQuery = $('#tableDescription').val();
+      queries.clQuery = $('#columnLabel').val();
+      queries.cdQuery = $('#columnDescription').val();
+
+      var parms = {backupName: backupName, data: queries};
+
+     	$.ajax({
+     		type: 'POST',
+     		url: "SaveQueries",
+     		dataType: 'json',
+     		data: JSON.stringify(parms),
+
+     		success: function(data) {
+     			ShowAlert("Queries saved successfully.", "alert-success", $("#queryModalAlert"));
+     		},
+     		error: function(data) {
+     			ShowAlert("Saving Queries failed.", "alert-danger", $("#queryModalAlert"));
+     		}
+     	});
+    }
+  });
+
+}
+
+function ShowAlert(message, alertType, $el) {
+
+    $('#alertmsg').remove();
+
+    var timeout = 3000;
+
+    if(alertType.match('alert-warning')){
+      timeout = 10000;
+    }
+    if(alertType.match('alert-danger')){
+      timeout = 15000;
+    }
+
+    var $newDiv;
+
+    if(alertType.match('alert-success|alert-info')){
+      $newDiv = $('<div/>')
+       .attr( 'id', 'alertmsg' )
+       .html(
+          '<p>' +
+          message +
+          '</p>'
+        )
+       .addClass('alert ' + alertType);
+    }
+    else{
+      $newDiv = $('<div/>')
+       .attr( 'id', 'alertmsg' )
+       .html(
+          '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+          '<p>' +
+          '<strong>' + message + '</strong>' +
+          '</p>'
+        )
+       .addClass('alert ' + alertType + ' alert-dismissible');
+    }
+
+    $el.append($newDiv);
+
+    setTimeout(function() {
+       $('#alertmsg').remove();
+    }, timeout);
+
+}
+
+function GetQueriesList(){
+
+	$.ajax({
+		type: 'POST',
+		url: "GetQueriesList",
+		dataType: 'json',
+
+		success: function(data) {
+      queriesList = data;
+      data.sort(function(a, b) {
+        return b - a;
+      });
+      console.log(queriesList);
+			// ShowAlert("GetQueriesList()", "Queries list get successfull.", "alert-success", "bottom");
+      if(queriesList.length > 0){
+        $('#modQueriesList').modal('toggle');
+      }
+      else{
+        ShowAlert("No queries list available on server.", "alert-info", $("#queryModalAlert"));
+      }
+
+		},
+		error: function(data) {
+      $('#modQueriesList').modal('toggle');
+			ShowAlert("Getting queries list failed.", "alert-danger", $("#queryModalAlert"));
+		}
+	});
+
+}
+
+function GetLabels(){
+
+  var tablesSet = new Set();
+  $datasTable.bootstrapTable("filterBy", {});
+  $.each($datasTable.bootstrapTable('getData'), function(i, qs){
+    console.log(qs)
+    tablesSet.add(qs.table_name);
+  })
+
+  var parms = {};
+  parms.tables = getArrayFromSet(tablesSet);
+  parms.tlQuery = $('#tableLabel').val();
+  parms.tdQuery = $('#tableDescription').val();
+  parms.clQuery = $('#columnLabel').val();
+  parms.cdQuery = $('#columnDescription').val();
+
+  console.log(JSON.stringify(parms));
+
+  $.ajax({
+    type: 'POST',
+    url: "GetLabels",
+    dataType: 'json',
+    data: JSON.stringify(parms),
+
+    success: function(labels) {
+      $.each($datasTable.bootstrapTable('getData'), function(i, qs){
+        qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
+        qs.descriptions[currentLanguage] = labels[qs.table_name].table_description;
+        $.each(qs.fields, function(j, field){
+          field.labels[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_remarks;
+          field.descriptions[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_description;
+        })
+      })
+      $refTab.tab('show');
+      $qsTab.tab('show');
+    },
+    error: function(data) {
+      console.log(data);
+    }
+  });
+
+  $('#queryModal').modal('toggle');
+
+}
+
+$('#modQueriesList').on('shown.bs.modal', function() {
+  $(this).find('.modal-body').empty();
+  var list = '<div class="container-fluid"><div class="row"><form role="form"><div class="form-group">';
+  list += '<input id="searchinput" class="form-control" type="search" placeholder="Search..." /></div>';
+  list += '<div id="searchlist" class="list-group">';
+
+  $.each(queriesList, function(index, object){
+    list += '<a href="#" class="list-group-item" onClick="OpenQueries(' + object.id + '); return false;"><span>' + object.name + '</span></a>';
+  });
+  list += '</div></form><script>$("#searchlist").btsListFilter("#searchinput", {itemChild: "span", initial: false, casesensitive: false});</script>';
+  $(this).find('.modal-body').append(list);
+});
+
+function OpenQueries(id){
+
+  var queriesName;
+
+  $.each(queriesList, function(i, obj){
+    if(obj.id == id){
+      queriesName = obj.name;
+    }
+  });
+
+  console.log("queriesName=" + queriesName);
+
+	$.ajax({
+		type: 'POST',
+		url: "OpenQueries",
+		dataType: 'json',
+    data: "queries=" + queriesName,
+
+		success: function(queries) {
+      console.log(queries);
+      $('#tableLabel').val(queries.tlQuery);
+      $('#tableDescription').val(queries.tdQuery);
+      $('#columnLabel').val(queries.clQuery);
+      $('#columnDescription').val(queries.cdQuery);
+      // showalert("OpenQueries()", "Queries opened successfully.", "alert-success", "bottom");
+
+		},
+		error: function(data) {
+			showalert("OpenQueries()", "Opening queries failed.", "alert-danger", "bottom");
+		}
+	});
+
+  $('#modQueriesList').modal('toggle');
+
 }
