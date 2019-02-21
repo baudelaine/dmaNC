@@ -22,7 +22,7 @@ var newRelation;
 var cognosLocales;
 var dbDataType = [];
 var qsType = {isFinal: false, isRefChecked: false, isRef: false};
-var Gdimensions = {};
+var Gdimensions;
 var dimensionGlobal = [];
 var folderGlobal = [];
 var langGlobal = [];
@@ -742,14 +742,17 @@ function SetLanguage(language){
 $('#selectDimension').change(function () {
   console.log("change");
   var selectedText = $(this).find("option:selected").val();
-  updateDimension(selectedText);
-
+  if(selectedText){
+    updateDimension(selectedText);
+  }
 });
 
 $('#selectDimension').on('show.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("show");
   var selectedText = $(this).find("option:selected").val();
-  updateDimension(selectedText);
+  if(selectedText){
+    updateDimension(selectedText);
+  }
 });
 
 $('#selectDimension').on('shown.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -801,6 +804,8 @@ function updateDimension(dimension){
     $('#selectOrder').append(option);
 
   })
+  var blankOption = '<option class="fontsize" value="" data-subtext=""></option>';
+  $('#selectOrder').append(blankOption);
   $('#selectOrder').selectpicker('refresh');
 
   $.each(bks, function(i, bk){
@@ -808,6 +813,11 @@ function updateDimension(dimension){
     $('#selectBK').append(option);
 
   })
+  var blankSelectedOption = '<option class="fontsize" value="" data-subtext="" selected="selected"></option>';
+  // if($("#selectBK option[value='']").length > 0){
+    $('#selectBK').append(blankSelectedOption);
+  // }
+
   $('#selectBK').selectpicker('refresh');
 }
 
@@ -1488,6 +1498,11 @@ function buildFieldTable($el, cols, data, qs){
             switch(field){
 
               case "addDimension":
+
+                if(dimensionGlobal.length < 1){
+                  showalert("buildDimensionTable()", 'No dimension created yet. Create one clicking <i class="glyphicon glyphicon-zoom-in"></i> above.', "alert-warning", "bottom");
+                  return;
+                }
 
                 var dimension = {dimension: '', order: '', bk: '', hierarchyName: ''};
                 row.dimensions.push(dimension);
@@ -2276,7 +2291,24 @@ function buildTable($el, cols, data) {
           }
 
           if(field.match("addDimension")){
-            AddNewDimension();
+            // AddNewDimension();
+
+            bootbox.prompt({
+              size: "small",
+              title: "Enter dimension name",
+              callback: function(result){
+                 /* result = String containing user input if OK clicked or null if Cancel clicked */
+                 if(result != null){
+                   dimensionGlobal.push(result);
+                   $refTab.tab('show');
+                   $qsTab.tab('show');
+                   $el.bootstrapTable('expandRow', row.index);
+                 }
+
+              }
+            });
+
+
           }
 
         },
