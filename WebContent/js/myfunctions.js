@@ -126,7 +126,7 @@ qsCols.push({field:"addPKRelation", title: '<i class="glyphicon glyphicon-magnet
 qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new relation"></i>', formatter: "addRelationFormatter", align: "center"});
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
 qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-folder-open" title="Add new folder name"></i>', formatter: "addFolderFormatter", align: "center"});
-qsCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension name"></i>', formatter: "addDimensionFormatter", align: "center"});
+qsCols.push({field:"addDimensionName", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension name"></i>', formatter: "addDimensionNameFormatter", align: "center"});
 qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 qsCols.push({field:"linker_ids", title: "linker_ids"});
@@ -208,7 +208,7 @@ var dateDimensions = {
 // fieldCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
 // fieldCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
 // fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
-fieldCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
+fieldCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
 
 fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
 
@@ -287,7 +287,7 @@ $qsTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('hideColumn', 'addPKRelation');
   $datasTable.bootstrapTable('showColumn', 'addField');
   $datasTable.bootstrapTable('showColumn', 'addFolder');
-  $datasTable.bootstrapTable('showColumn', 'addDimension');
+  $datasTable.bootstrapTable('showColumn', 'addDimensionName');
   $datasTable.bootstrapTable('hideColumn', 'recurseCount');
   $datasTable.bootstrapTable('hideColumn', '_id');
   $datasTable.bootstrapTable('hideColumn', 'above');
@@ -854,10 +854,12 @@ function BuildDrillPath(){
   var dimension = $('#selectDimension').find("option:selected").val();
   var order = $('#selectOrder').find("option:selected").val();
   var bk = $('#selectBK').find("option:selected").val();
-  var orderQsFinalName = order.split(' -- ').slice(0,1).toString();
-  var bkQsFinalName = bk.split(' -- ').slice(0,1).toString();
-  var orderOrder = order.split(' -- ').slice(1).toString();
-  var bkBk = bk.split(' -- ').slice(1).toString();
+  if(order && bk){
+    var orderQsFinalName = order.split(' -- ').slice(0,1).toString();
+    var bkQsFinalName = bk.split(' -- ').slice(0,1).toString();
+    var orderOrder = order.split(' -- ').slice(1).toString();
+    var bkBk = bk.split(' -- ').slice(1).toString();
+  }
   var hierarchyName = $('#hierarchyName').val();
 
   var alias = $('#drillFieldName').text().split('.')[0];
@@ -866,9 +868,9 @@ function BuildDrillPath(){
   if($activeSubDatasTable != undefined){
 
     var dim = $activeSubDatasTable.bootstrapTable("getData")[$selectedDimensionIndex];
-    dim.dimension = dimension;
+    if(!dimension){dim.dimension = ""} else{dim.dimension = dimension};
     if(!order){dim.order = ""} else{dim.order = '[DATA].[' + orderQsFinalName + '].[' + orderOrder + ']';}
-    dim.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']';
+    if(!bk){dim.bk = ""} else{dim.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']'};
     dim.hierarchyName = hierarchyName;
     updateRow($activeSubDatasTable, $selectedDimensionIndex, dim);
 
@@ -970,10 +972,18 @@ function addFolderFormatter(value, row, index) {
     ].join('');
 }
 
+function addDimensionNameFormatter(value, row, index) {
+    return [
+        '<a class="addDimension" href="javascript:void(0)" title="Add new dimension name">',
+        '<i class="glyphicon glyphicon-zoom-in"></i>',
+        '</a>'
+    ].join('');
+}
+
 function addDimensionFormatter(value, row, index) {
     return [
         '<a class="addDimension" href="javascript:void(0)" title="Add new dimension">',
-        '<i class="glyphicon glyphicon-zoom-in"></i>',
+        '<i class="glyphicon glyphicon-plus-sign"></i>',
         '</a>'
     ].join('');
 }
@@ -1686,7 +1696,7 @@ function buildRelationTable($el, cols, data, qs){
 
           // disable table_alias and relationship if fin, ref or sec checked
           // $tableRows.eq(i).find('a').eq(0) = table_alias
-          // $tableRows.eq(i).find('a').eq(4) = relationship
+          // $tableRows.eq(i).find('a').eq(4) = fin, ref or sec
           if(activeTab.match("Final|Reference|Security")){
             if(row.fin || row.ref || row.sec){
               $tableRows.eq(i).find('a').eq(0).editable('disable');
