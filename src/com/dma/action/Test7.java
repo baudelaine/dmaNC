@@ -17,7 +17,7 @@ public class Test7 {
 		// TODO Auto-generated method stub
 
 		String schema = "DB2INST1";
-		String lang = "FR";
+		String lang = "fr";
 		
 		try{
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
