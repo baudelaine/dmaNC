@@ -1686,11 +1686,11 @@ function buildRelationTable($el, cols, data, qs){
 
           // disable table_alias and relationship if fin, ref or sec checked
           // $tableRows.eq(i).find('a').eq(0) = table_alias
-          // $tableRows.eq(i).find('a').eq(3) = relationship
+          // $tableRows.eq(i).find('a').eq(4) = relationship
           if(activeTab.match("Final|Reference|Security")){
             if(row.fin || row.ref || row.sec){
               $tableRows.eq(i).find('a').eq(0).editable('disable');
-              $tableRows.eq(i).find('a').eq(3).editable('disable');
+              $tableRows.eq(i).find('a').eq(4).editable('disable');
               // To disable all editables
               // $tableRows.eq(i).find('a').editable('disable');
             }
