@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -42,24 +43,68 @@ public class ContextListener implements ServletContextListener {
 			sc.setAttribute("ic", ic);
 			sc.setAttribute("resources", Tools.getResources());
 			
-    		String cognosFolder = (String) ic.lookup("CognosFolder");
+    		String cognosFolder = "";
+    		try {
+    			cognosFolder = (String) ic.lookup("CognosFolder");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosFolder", cognosFolder);
-    		String cognosModelsPath = (String) ic.lookup("CognosModelsPath"); 
+    		
+    		String cognosModelsPath = "";
+    		try {
+    			cognosModelsPath = (String) ic.lookup("CognosModelsPath");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosModelsPath", cognosModelsPath);
-    		String cognosDispatcher= (String) ic.lookup("CognosDispatcher");
+
+    		String cognosDispatcher = "";
+    		try {
+    			cognosDispatcher = (String) ic.lookup("CognosDispatcher");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosDispatcher", cognosDispatcher);
-    		String cognosLogin = (String) ic.lookup("CognosLogin");
+
+    		String cognosLogin = "";
+    		try {
+    			cognosLogin = (String) ic.lookup("CognosLogin");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosLogin", cognosLogin);
-    		String cognosPassword = (String) ic.lookup("CognosPassword");
+    		
+    		String cognosPassword = "";
+    		try {
+    			cognosPassword = (String) ic.lookup("CognosPassword");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosPassword", cognosPassword);
-    		String cognosNamespace = (String) ic.lookup("CognosNamespace");
+    		
+    		String cognosNamespace = "";
+    		try {
+    		cognosNamespace = (String) ic.lookup("CognosNamespace");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosNamespace", cognosNamespace);
-    		String cognosDefaultLocale = (String) ic.lookup("CognosDefaultLocale"); 
+
+    		String cognosDefaultLocale = "";
+    		try {
+    			cognosDefaultLocale = (String) ic.lookup("CognosDefaultLocale");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosDefaultLocale", cognosDefaultLocale);
-    		String cognosLocales = (String) ic.lookup("CognosLocales");
+    		
+    		String cognosLocales = "ar, de, en, es, fr, it, nl";
+    		try {
+    			cognosLocales = (String) ic.lookup("CognosLocales");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("cognosLocales", cognosLocales);
 			
-    		boolean withRecCount = (Boolean) ic.lookup("WithRecCount");
+    		
+    		boolean withRecCount = false;
+    		try {
+    			withRecCount = (Boolean) ic.lookup("WithRecCount");
+    		}
+    		catch(NameNotFoundException nnfe) {}
     		sc.setAttribute("withRecCount", withRecCount);
     		
     		Enumeration<?> e = sc.getAttributeNames();

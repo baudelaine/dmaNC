@@ -3495,13 +3495,18 @@ function GetLabels(){
     data: JSON.stringify(parms),
 
     success: function(labels) {
+      console.log(labels);
       $.each($datasTable.bootstrapTable('getData'), function(i, qs){
-        qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
-        qs.descriptions[currentLanguage] = labels[qs.table_name].table_description;
-        $.each(qs.fields, function(j, field){
-          field.labels[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_remarks;
-          field.descriptions[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_description;
-        })
+        if(labels[qs.table_name]){
+          qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
+          qs.descriptions[currentLanguage] = labels[qs.table_name].table_description;
+          $.each(qs.fields, function(j, field){
+            if(labels[qs.table_name].columns[field.field_name]){
+              field.labels[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_remarks;
+              field.descriptions[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_description;
+            }
+          })
+        }
       })
       $refTab.tab('show');
       $qsTab.tab('show');
