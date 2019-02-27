@@ -3495,7 +3495,6 @@ function GetLabels(){
     data: JSON.stringify(parms),
 
     success: function(labels) {
-      console.log(labels);
       $.each($datasTable.bootstrapTable('getData'), function(i, qs){
         if(labels[qs.table_name]){
           qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
