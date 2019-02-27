@@ -3496,6 +3496,10 @@ function GetLabels(){
 
     success: function(labels) {
       $.each($datasTable.bootstrapTable('getData'), function(i, qs){
+
+	console.log(labels);
+	console.log(qs);
+
         qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
         qs.descriptions[currentLanguage] = labels[qs.table_name].table_description;
         $.each(qs.fields, function(j, field){

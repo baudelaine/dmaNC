@@ -53,12 +53,13 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 	Map<String, Integer> gRefMap;
 	List<RelationShip> rsList;
 	Map<String, QuerySubject> query_subjects;
-	static Map<String, Map<String, String>> labelMap;
-	static Map<String, Map<String, String>> qsScreenTipMap;
-	static Map<String, Map<String, String>> qiScreenTipMap;
-	static Map<String, Map<String, String>> qifScreenTipMap;
+	Map<String, Map<String, String>> labelMap;
+	Map<String, Map<String, String>> qsScreenTipMap;
+	Map<String, Map<String, String>> qiScreenTipMap;
+	Map<String, Map<String, String>> qifScreenTipMap;
 	Map<String, String> filterMap;
 	Map<String, String> filterMapApply;
+	Map<String, Boolean> folerMap;
 	List<QuerySubject> qsList = null;
 	CognosSVC csvc;
 	FactorySVC fsvc;
@@ -263,6 +264,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				qifScreenTipMap = new HashMap<String, Map<String, String>>();
 				filterMap = new HashMap<String, String>();
 				filterMapApply = new HashMap<String, String>();
+				folerMap = new HashMap<String, Boolean>();
 				
 				// creer un for avec la liste des langues du projets pour créer le labelMap et le ScreenTipMap
 				Map<String, String> lm = new HashMap<String, String>();
@@ -292,6 +294,17 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							fsvc.createQuerySubject("FINAL", "DATA", query_subject.getValue().getTable_alias() , query_subject.getValue().getTable_alias());
 						}
 						//end filter
+						//folder pour les qs Finaux
+						if(query_subject.getValue().getFolder()!=null && !query_subject.getValue().getFolder().equals("")) {
+							
+							if(folerMap.get(query_subject.getValue().getFolder())==null) {
+								fsvc.createFolder("[DATA]", query_subject.getValue().getFolder());
+								folerMap.put(query_subject.getValue().getFolder(), true);
+							}
+							fsvc.moveQuerySubjectInFolder("[DATA].[" + query_subject.getValue().getTable_alias() + "]", "[DATA].[" + query_subject.getValue().getFolder() + "]");
+						}
+						//end folder
+						
 						//tooltip
 					/*	String desc = "";
 						if(query_subject.getValue().getDescription() != null) {desc = ": " + query_subject.getValue().getDescription();}
@@ -303,6 +316,8 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 								qsScreenTipMap.get(langDesc.getKey()).put("[DATA].[" + query_subject.getValue().getTable_alias() + "]", query_subject.getValue().getTable_name());
 								} else {
 									System.out.println("QS langDesc : " + langDesc.getValue());
+									System.out.println("QS langDesc : " + langDesc.getValue());
+									System.out.println("qsScreenTipMap : " + qsScreenTipMap.toString());
 									qsScreenTipMap.get(langDesc.getKey()).put("[DATA].[" + query_subject.getValue().getTable_alias() + "]", query_subject.getValue().getTable_name() + ": " + langDesc.getValue());
 								}
 						}
@@ -358,6 +373,8 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							if (field.isCustom()) {
 								
 								fsvc.createQueryItem("[DATA].[" + query_subject.getValue().getTable_alias() + "]", field.getField_name(), field.getExpression(), cognosDefaultLocale);
+								
+								//end regular agg
 							}
 							//labels fields
 							for(Entry<String, String> langLabel: field.getLabels().entrySet()){
@@ -396,6 +413,12 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							{
 								fsvc.changeQueryItemProperty("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", "hidden", "true");
 								
+							}
+							//regular agg a préciser avec une liste des types qui entrainent une somme pour chaque type de base.
+//							System.out.println("regularAgg : fieldType : " + field.getField_type().toLowerCase());
+							if (field.isCustom() && field.getField_type().toLowerCase().equals("decimal")) {
+//								System.out.println("regularAgg : fieldType dans le if : " + field.getField_type().toLowerCase());
+								fsvc.changeQueryItemProperty("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", "regularAggregate", "sum");
 							}
 						//end change
 						}
