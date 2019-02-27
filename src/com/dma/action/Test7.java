@@ -17,7 +17,7 @@ public class Test7 {
 		// TODO Auto-generated method stub
 
 		String schema = "DB2INST1";
-		String lang = "fr";
+		String lang = "en";
 		
 		try{
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
@@ -48,8 +48,8 @@ public class Test7 {
 	    	stmt = conn.prepareStatement(sql);
 	    	stmt.setString(1, table_name);
 	    	stmt.setString(2, lang);
-	    	stmt.setString(3, "Ce champs est le label " + lang + " de la table " + table_name);
-	    	stmt.setString(4, "Ce champs est la description " + lang + " de la table " + table_name);
+	    	stmt.setString(3, "This field is the label " + lang + " of table " + table_name);
+	    	stmt.setString(4, "This field is the description " + lang + " of table " + table_name);
 	    	try {
 	    		stmt.execute();
 		    }
@@ -67,8 +67,8 @@ public class Test7 {
 		    	stmt.setString(1, table_name);
 		    	stmt.setString(2, column_name);
 		    	stmt.setString(3, lang);
-		    	stmt.setString(4, "Ce champs est le label " + lang + " de la colonne " + column_name + " de la table " + table_name);
-		    	stmt.setString(5, "Ce champs est la description " + lang + " de la colonne " + column_name + " de la table " + table_name);
+		    	stmt.setString(4, "This field is the label " + lang + " of column " + column_name + " of table " + table_name);
+		    	stmt.setString(5, "This field is the description " + lang + " of column " + column_name + " of table " + table_name);
 		    	try {
 		    		stmt.execute();
 			    }

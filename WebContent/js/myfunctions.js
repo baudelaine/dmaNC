@@ -38,8 +38,8 @@ relationCols.push({field:"index", title: "index", formatter: "indexFormatter", s
 relationCols.push({field:"key_type", title: "key_type", sortable: true});
 relationCols.push({field:"pktable_name", title: "pktable_name", sortable: true});
 relationCols.push({field:"pktable_alias", title: "pktable_alias", class: "pktable_alias", editable: {type: "text", mode: "inline"}, sortable: true, events: "pktable_aliasEvents"});
-relationCols.push({field:"label", title: "Label", sortable: true, editable: {type: "textarea", mode: "inline", rows: 4}});
-relationCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
+relationCols.push({field:"label", title: "Label", sortable: true});
+relationCols.push({field:"description", title: "Description", sortable: false});
 relationCols.push({field:"recCountPercent", title: "count(*) %", sortable: true});
 relationCols.push({field:"relationship", title: "relationship", editable: {type: "textarea", mode: "inline", rows: 4}});
 relationCols.push({field:"fin", title: "fin", formatter: "boolFormatter", align: "center"});
@@ -62,7 +62,7 @@ var usedForDimensionsSelect = {
 
 // relationCols.push({field:"rightJoin", title: "Right Join", formatter: "boolFormatter", align: "center"});
 relationCols.push({field:"duplicate", title: '<i class="glyphicon glyphicon-duplicate"></i>', formatter: "duplicateFormatter", align: "center"});
-relationCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
+relationCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeRelationFormatter", align: "center"});
 // relationCols.push({field:"operate", title: "operate", formatter: "operateRelationFormatter", align: "center", events: "operateRelationEvents"});
 
 // relationCols.push({field:"linker", formatter: "boolFormatter", align: "center", title: "linker"});
@@ -87,7 +87,7 @@ var newRelationCols = [];
 newRelationCols.push();
 
 var qsCols = [];
-// qsCols.push({field:"checkbox", checkbox: "true"});
+qsCols.push({field:"checkbox", checkbox: "true"});
 qsCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
 // qsCols.push({field:"_id", title: "_id", sortable: true});
 qsCols.push({field:"table_name", title: "table_name", sortable: true});
@@ -127,11 +127,12 @@ qsCols.push({field:"addRelation", title: '<i class="glyphicon glyphicon-plus-sig
 qsCols.push({field:"addField", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new field"></i>', formatter: "addFieldFormatter", align: "center"});
 qsCols.push({field:"addFolder", title: '<i class="glyphicon glyphicon-folder-open" title="Add new folder name"></i>', formatter: "addFolderFormatter", align: "center"});
 qsCols.push({field:"addDimensionName", title: '<i class="glyphicon glyphicon-zoom-in" title="Add new dimension name"></i>', formatter: "addDimensionNameFormatter", align: "center"});
-qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
+qsCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeRootTableFormatter", align: "center"});
 qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align: "center"});
 qsCols.push({field:"linker_ids", title: "linker_ids"});
 
 var fieldCols = [];
+fieldCols.push({field:"checkbox", checkbox: "true"});
 fieldCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
 fieldCols.push({field:"field_name", title: "Name", sortable: true });
 fieldCols.push({class:"field_type", field:"field_type", title: "Type", editable: {type: "text", mode: "inline"}, sortable: true});
@@ -210,7 +211,7 @@ var dateDimensions = {
 // fieldCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
 fieldCols.push({field:"addDimension", title: '<i class="glyphicon glyphicon-plus-sign" title="Add new dimension"></i>', formatter: "addDimensionFormatter", align: "center"});
 
-fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
+fieldCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFieldFormatter", align: "center"});
 
 var dimensionCols = [];
 dimensionCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
@@ -279,6 +280,7 @@ $navTab.on('show.bs.tab', function(event){
 $qsTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, fieldCols, "fields");
   $datasTable.bootstrapTable("filterBy", {});
+  $datasTable.bootstrapTable('showColumn', 'checkbox');
   $datasTable.bootstrapTable('showColumn', 'visible');
   $datasTable.bootstrapTable('showColumn', 'filter');
   $datasTable.bootstrapTable('showColumn', 'label');
@@ -301,6 +303,7 @@ $finTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, relationCols, "relations");
   $datasTable.bootstrapTable("filterBy", {});
   $datasTable.bootstrapTable("filterBy", {type: ['Final']});
+  $datasTable.bootstrapTable('hideColumn', 'checkbox');
   $datasTable.bootstrapTable('hideColumn', 'key_name');
   $datasTable.bootstrapTable('showColumn', 'operate');
   $datasTable.bootstrapTable('hideColumn', 'visible');
@@ -325,7 +328,7 @@ $refTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, relationCols, "relations");
   // $datasTable.bootstrapTable("filterBy", {type: ['Final', 'Ref']});
   $datasTable.bootstrapTable("filterBy", {});
-
+  $datasTable.bootstrapTable('hideColumn', 'checkbox');
   $datasTable.bootstrapTable('hideColumn', 'key_name');
   $datasTable.bootstrapTable('showColumn', 'operate');
   $datasTable.bootstrapTable('hideColumn', 'visible');
@@ -350,6 +353,7 @@ $secTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, relationCols, "relations");
   // $datasTable.bootstrapTable("filterBy", {type: ['Final', 'Ref', 'Sec']});
   $datasTable.bootstrapTable("filterBy", {});
+  $datasTable.bootstrapTable('hideColumn', 'checkbox');
   $datasTable.bootstrapTable('hideColumn', 'key_name');
   $datasTable.bootstrapTable('showColumn', 'operate');
   $datasTable.bootstrapTable('hideColumn', 'visible');
@@ -1027,13 +1031,54 @@ function duplicateFormatter(value, row, index) {
   ].join('');
 }
 
-function removeFormatter(value, row, index) {
+function removeRootTableFormatter(value, row, index) {
+
+  if(!row.linker && row.linker_ids[0] == "Root"){
+
   return [
       '<a class="remove" href="javascript:void(0)" title="Remove">',
       '<i class="glyphicon glyphicon-trash"></i>',
       '</a>'
   ].join('');
+  }
+  else {
+    return "";
+  }
+
 }
+
+function removeRelationFormatter(value, row, index) {
+
+  if(!row.fin && !row.ref && !row.sec){
+
+  return [
+      '<a class="remove" href="javascript:void(0)" title="Remove">',
+      '<i class="glyphicon glyphicon-trash"></i>',
+      '</a>'
+  ].join('');
+  }
+  else {
+    return "";
+  }
+
+}
+
+function removeFieldFormatter(value, row, index) {
+
+  if(row.custom){
+
+  return [
+      '<a class="remove" href="javascript:void(0)" title="Remove">',
+      '<i class="glyphicon glyphicon-trash"></i>',
+      '</a>'
+  ].join('');
+  }
+  else {
+    return "";
+  }
+
+}
+
 
 function buildDrillPathFormatter(value, row, index) {
   return [
@@ -1466,28 +1511,28 @@ function buildFieldTable($el, cols, data, qs){
 
           onResetView: function(){
 
-            var $tableRows = $el.find('tbody tr');
-
-
-            $.each(data, function(i, row){
-
-              // Disable editable for field_type if field is !custom and remove trash
-              // $tableRows.eq(i).find('a').eq(0) = field_type
-              if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
-                if(!row.custom){
-                  // $tableRows.eq(i).find('a').eq(1).editable('destroy');
-                  $tableRows.eq(i).find('a').eq(1).editable('disable');
-                  $tableRows.eq(i).find('a.remove').remove();
-                }
-                else{
-                  $tableRows.eq(i).find('a').eq(1).editable('destroy');
-                  customFieldType.source = dbDataType;
-                  $tableRows.eq(i).find('a').eq(1).editable(customFieldType);
-                  $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
-                }
-              }
-
-            })
+            // var $tableRows = $el.find('tbody tr');
+            //
+            //
+            // $.each(data, function(i, row){
+            //
+            //   // Disable editable for field_type if field is !custom and remove trash
+            //   // $tableRows.eq(i).find('a').eq(0) = field_type
+            //   if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
+            //     if(!row.custom){
+            //       // $tableRows.eq(i).find('a').eq(1).editable('destroy');
+            //       $tableRows.eq(i).find('a').eq(1).editable('disable');
+            //       $tableRows.eq(i).find('a.remove').remove();
+            //     }
+            //     else{
+            //       $tableRows.eq(i).find('a').eq(1).editable('destroy');
+            //       customFieldType.source = dbDataType;
+            //       $tableRows.eq(i).find('a').eq(1).editable(customFieldType);
+            //       $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
+            //     }
+            //   }
+            //
+            // })
 
           },
 
@@ -1638,10 +1683,13 @@ function buildRelationTable($el, cols, data, qs){
 
         $.each(data, function(i, row){
 
+          // uncomment to trace i
+          // console.log($tableRows.eq(i).find('a'));
+
           // If more than one seq change above from text to select editable
-          // $tableRows.eq(i).find('a').eq(6) = above
+          // $tableRows.eq(i).find('a').eq(4) = above
           if(activeTab.match("Reference") && row.seqs.length > 0){
-            $tableRows.eq(i).find('a').eq(5).editable('destroy');
+            $tableRows.eq(i).find('a').eq(4).editable('destroy');
             // $tableRows.eq(i).find('a').eq(0).editable('setValue', ['VARCHAR']);
             var defaultValue = '';
             var source = [];
@@ -1655,12 +1703,12 @@ function buildRelationTable($el, cols, data, qs){
 
             customFieldType.source = source;
 
-            $tableRows.eq(i).find('a').eq(6).editable(customFieldType);
-            $tableRows.eq(i).find('a').eq(6).editable('option', 'defaultValue', defaultValue);
+            $tableRows.eq(i).find('a').eq(4).editable(customFieldType);
+            $tableRows.eq(i).find('a').eq(4).editable('option', 'defaultValue', defaultValue);
           }
 
           // set usedForDimensionsSelect.source
-          // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
+          // $tableRows.eq(i).find('a').eq(6) = usedForDimensions
           if(activeTab == "Reference" && qs.type == 'Final'){
 
             var dimensionSet = getSetFromArray(dimensionGlobal);
@@ -1676,14 +1724,14 @@ function buildRelationTable($el, cols, data, qs){
 
             usedForDimensionsSelect.source = source;
 
-            $tableRows.eq(i).find('a').eq(8).editable('destroy');
-            $tableRows.eq(i).find('a').eq(8).editable(usedForDimensionsSelect);
-            $tableRows.eq(i).find('a').eq(8).editable('option', 'defaultValue', '');
+            $tableRows.eq(i).find('a').eq(6).editable('destroy');
+            $tableRows.eq(i).find('a').eq(6).editable(usedForDimensionsSelect);
+            $tableRows.eq(i).find('a').eq(6).editable('option', 'defaultValue', '');
 
           }
 
           // set usedForDimensionsSelect.source
-          // $tableRows.eq(i).find('a').eq(8) = usedForDimensions
+          // $tableRows.eq(i).find('a').eq(6) = usedForDimensions
           if(activeTab == "Reference" && qs.type == 'Ref'){
 
             var source = [];
@@ -1693,17 +1741,17 @@ function buildRelationTable($el, cols, data, qs){
 
             usedForDimensionsSelect.source = source;
 
-            $tableRows.eq(i).find('a').eq(8).editable('destroy');
-            $tableRows.eq(i).find('a').eq(8).editable(usedForDimensionsSelect);
-            $tableRows.eq(i).find('a').eq(8).editable('option', 'defaultValue', '');
+            $tableRows.eq(i).find('a').eq(6).editable('destroy');
+            $tableRows.eq(i).find('a').eq(6).editable(usedForDimensionsSelect);
+            $tableRows.eq(i).find('a').eq(6).editable('option', 'defaultValue', '');
 
           }
 
           // Disable RepTableName if !ref or !sec
-          // $tableRows.eq(i).find('a').eq(5) = RepTableName
+          // $tableRows.eq(i).find('a').eq(3) = RepTableName
           if(activeTab.match("Reference|Security")){
             if(!row.ref || !row.sec){
-              $tableRows.eq(i).find('a').eq(5).editable('disable');
+              $tableRows.eq(i).find('a').eq(3).editable('disable');
               // To disable all editables
               // $tableRows.eq(i).find('a').editable('disable');
             }
@@ -1711,11 +1759,12 @@ function buildRelationTable($el, cols, data, qs){
 
           // disable table_alias and relationship if fin, ref or sec checked
           // $tableRows.eq(i).find('a').eq(0) = table_alias
-          // $tableRows.eq(i).find('a').eq(4) = fin, ref or sec
+          // $tableRows.eq(i).find('a').eq(2) = fin, ref or sec
           if(activeTab.match("Final|Reference|Security")){
             if(row.fin || row.ref || row.sec){
               $tableRows.eq(i).find('a').eq(0).editable('disable');
-              $tableRows.eq(i).find('a').eq(4).editable('disable');
+              $tableRows.eq(i).find('a').eq(2).editable('disable');
+              // $tableRows.eq(i).find('a.remove').remove();
               // To disable all editables
               // $tableRows.eq(i).find('a').editable('disable');
             }
@@ -2156,9 +2205,25 @@ function buildTable($el, cols, data) {
           console.log(row);
           if(field.match("label")){
             row.labels[currentLanguage] = row.label;
+            $.each($datasTable.bootstrapTable('getData'), function(i, qs){
+              console.log(qs);
+              $.each(qs.relations, function(j, relation){
+                if(relation.pktable_alias == qs.table_alias){
+                  relation.label = row.label;
+                }
+              })
+            })
           }
           if(field.match("description")){
             row.descriptions[currentLanguage] = row.description;
+            $.each($datasTable.bootstrapTable('getData'), function(i, qs){
+              console.log(qs);
+              $.each(qs.relations, function(j, relation){
+                if(relation.pktable_alias == qs.table_alias){
+                  relation.description = row.description;
+                }
+              })
+            })
           }
           console.log(row);
         },
@@ -2183,18 +2248,19 @@ function buildTable($el, cols, data) {
 
           $.each($el.bootstrapTable("getData"), function(i, row){
 
-            if(!activeTab.match("Final")){
-              $tableRows.eq(i).find('a.remove').remove();
-            }
-            else{
-              if(row.linker_ids){
-                if(row.linker_ids[0].match("Root") && !row.linker){
-                }
-                else{
-                  $tableRows.eq(i).find('a.remove').remove();
+              // if(!activeTab.match("Final") && $activeSubDatasTable == $el){
+              //   $tableRows.eq(i).find('a.remove').remove();
+              // }
+              if(activeTab.match("Final") && $activeSubDatasTable == $el){
+                console.log(row);
+                if(row.linker_ids){
+                  if(row.linker_ids[0].match("Root") && !row.linker){
+                  }
+                  else{
+                    $tableRows.eq(i).find('a.remove').remove();
+                  }
                 }
               }
-            }
 
             if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
 
@@ -2225,6 +2291,11 @@ function buildTable($el, cols, data) {
 
           })
 
+        },
+
+        onCheck: function(row, $element){
+          console.log(row);
+          console.log($element);
         },
 
         onClickCell: function (field, value, row, $element){
@@ -2322,6 +2393,7 @@ function buildTable($el, cols, data) {
         }
     });
 
+    $el.bootstrapTable('hideColumn', 'checkbox');
     $el.bootstrapTable('hideColumn', 'visible');
     $el.bootstrapTable('hideColumn', 'filter');
     $el.bootstrapTable('showColumn', 'label');
@@ -3477,6 +3549,9 @@ function GetLabels(){
   $.each($datasTable.bootstrapTable('getData'), function(i, qs){
     console.log(qs)
     tablesSet.add(qs.table_name);
+    $.each(qs.relations, function(j, relation){
+      tablesSet.add(relation.pktable_name);
+    })
   })
 
   var parms = {};
@@ -3495,6 +3570,7 @@ function GetLabels(){
     data: JSON.stringify(parms),
 
     success: function(labels) {
+      console.log(labels);
       $.each($datasTable.bootstrapTable('getData'), function(i, qs){
         if(labels[qs.table_name]){
           qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
@@ -3503,6 +3579,12 @@ function GetLabels(){
             if(labels[qs.table_name].columns[field.field_name]){
               field.labels[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_remarks;
               field.descriptions[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_description;
+            }
+          })
+          $.each(qs.relations, function(j, relation){
+            if(labels[relation.pktable_name]){
+              relation.label = labels[relation.pktable_name].table_remarks;
+              relation.description = labels[relation.pktable_name].table_description;
             }
           })
         }
