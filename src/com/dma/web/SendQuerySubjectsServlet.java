@@ -229,7 +229,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				String cognosSchema = (String) request.getSession().getAttribute("cognosSchema");
 				String cognosDefaultLocale = (String) request.getServletContext().getAttribute("cognosDefaultLocale");
 				String cognosLocales = (String) request.getServletContext().getAttribute("cognosLocales");
-				System.out.println("cognosLocales=" + cognosLocales);
 
 				csvc = new CognosSVC(cognosDispatcher);
 				csvc.setPathToXML(pathToXML);
@@ -266,16 +265,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				filterMapApply = new HashMap<String, String>();
 				folerMap = new HashMap<String, Boolean>();
 				
-				// creer un for avec la liste des langues du projets pour créer le labelMap et le ScreenTipMap
-				Map<String, String> lm = new HashMap<String, String>();
-				labelMap.put(cognosLocales, lm);
-				Map<String, String> qsSTM = new HashMap<String, String>();
-				qsScreenTipMap.put(cognosLocales, qsSTM);
-				Map<String, String> qiSTM = new HashMap<String, String>();
-				qiScreenTipMap.put(cognosLocales, qiSTM);
-				Map<String, String> qifSTM = new HashMap<String, String>();
-				qifScreenTipMap.put(cognosLocales, qifSTM);
-				
 				for(Entry<String, QuerySubject> query_subject: query_subjects.entrySet()){
 					
 					if (query_subject.getValue().getType().equalsIgnoreCase("Final")){
@@ -305,19 +294,27 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 						}
 						//end folder
 						
-						//tooltip
-					/*	String desc = "";
-						if(query_subject.getValue().getDescription() != null) {desc = ": " + query_subject.getValue().getDescription();}
-						fsvc.createScreenTip("querySubject", "[DATA].[" + query_subject.getValue().getTable_alias() + "]" , query_subject.getValue().getTable_name() + desc );
-						*/
+						//init language project one time
+						for(Entry<String, String> langKey: query_subject.getValue().getDescriptions().entrySet()){
+							// creer un for avec la liste des langues du projets pour créer le labelMap et le ScreenTipMap
+							String langue = langKey.getKey();
+							if (labelMap.get(langue)==null) {
+								Map<String, String> lm = new HashMap<String, String>();
+								labelMap.put(langue, lm);
+								Map<String, String> qsSTM = new HashMap<String, String>();
+								qsScreenTipMap.put(langue, qsSTM);
+								Map<String, String> qiSTM = new HashMap<String, String>();
+								qiScreenTipMap.put(langue, qiSTM);
+								Map<String, String> qifSTM = new HashMap<String, String>();
+								qifScreenTipMap.put(langue, qifSTM);
+							}		
+						}
+						//end init
 						//map tooltip
 						for(Entry<String, String> langDesc: query_subject.getValue().getDescriptions().entrySet()){
 							if(langDesc.getValue() == null || langDesc.getValue().equals("")) {
 								qsScreenTipMap.get(langDesc.getKey()).put("[DATA].[" + query_subject.getValue().getTable_alias() + "]", query_subject.getValue().getTable_name());
 								} else {
-									System.out.println("QS langDesc : " + langDesc.getValue());
-									System.out.println("QS langDesc : " + langDesc.getValue());
-									System.out.println("qsScreenTipMap : " + qsScreenTipMap.toString());
 									qsScreenTipMap.get(langDesc.getKey()).put("[DATA].[" + query_subject.getValue().getTable_alias() + "]", query_subject.getValue().getTable_name() + ": " + langDesc.getValue());
 								}
 						}
@@ -363,7 +360,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							if(langLabel.getValue() == null || langLabel.getValue().equals("")) {
 								labelMap.get(langLabel.getKey()).put(query_subject.getValue().getTable_alias(), query_subject.getValue().getTable_name());
 								} else {
-									System.out.println("QS langLabel : " + langLabel.getValue());
 									labelMap.get(langLabel.getKey()).put(query_subject.getValue().getTable_alias(), langLabel.getValue());
 								}
 						}
@@ -385,18 +381,12 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 								}
 							}
 							//end labels fields
-							//add tooltip
-							/*
-							desc = "";
-							if(field.getDescription() != null) {desc = ": " + field.getDescription();}	
-							fsvc.createScreenTip("queryItem", "[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", query_subject.getValue().getTable_name() + "." + field.getField_name() + desc);
-							*/
+
 							//maptooltip
 							for(Entry<String, String> langDesc: field.getDescriptions().entrySet()){
 								if(langDesc.getValue() == null || langDesc.getValue().equals("")) {
 									qiScreenTipMap.get(langDesc.getKey()).put("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", query_subject.getValue().getTable_name() + "." + field.getField_name());
 									} else {
-								//		System.out.println("QI langDesc : " + langDesc.getValue());
 										qiScreenTipMap.get(langDesc.getKey()).put("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", query_subject.getValue().getTable_name() + "." + field.getField_name() + ": " + langDesc.getValue());
 									}
 							}
@@ -415,9 +405,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 								
 							}
 							//regular agg a préciser avec une liste des types qui entrainent une somme pour chaque type de base.
-//							System.out.println("regularAgg : fieldType : " + field.getField_type().toLowerCase());
 							if (field.isCustom() && field.getField_type().toLowerCase().equals("decimal")) {
-//								System.out.println("regularAgg : fieldType dans le if : " + field.getField_type().toLowerCase());
 								fsvc.changeQueryItemProperty("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", "regularAggregate", "sum");
 							}
 						//end change
@@ -426,7 +414,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 					}
 					
 				}
-				//IICCreateRelation(rsList);
+
 				for(RelationShip rs: rsList){
 					fsvc.createRelationship(rs);
 				}
@@ -444,7 +432,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							qSIDStart = query_subject.getValue().get_id();
 							System.out.println(query_subject.getValue().get_id() + " ids : " + s);
 							createMeasures("", qSIDStart, true, measures);
-//							System.out.println("MeasureMap : " + measures.toString());
 						}
 					}
 				}
@@ -462,7 +449,11 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 		// end multidimensional
 
 				
-				fsvc.addLocale(cognosLocales.toLowerCase(), cognosDefaultLocale);
+				//add locales
+				for(Entry<String, Map<String, String>> langueKey: labelMap.entrySet()){
+					fsvc.addLocale(langueKey.getKey().toLowerCase(), cognosDefaultLocale);
+				}
+				//end add locales
 				
 				
 				//on ecrit les tooltip dans chaque langue pour les QS, QI, QI folder
@@ -531,7 +522,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 					
 					// modifs
 					
-	//				File xmlFile = new File(ConfigProperties.modelXML);
 					SAXReader reader = new SAXReader();
 					Document document = reader.read(new ByteArrayInputStream(datas.getBytes(StandardCharsets.UTF_8)));
 					
@@ -706,12 +696,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 						}
 						labelMap.get(langLabel.getKey()).put(qsFinalName + gDirNameCurrent, label);
 					}
-					/* 
-					if(query_subjects.get(pkAlias + namespaceID).getLabel() == null || query_subjects.get(pkAlias + namespaceID).getLabel().equals(""))
-					{label = pkAlias;} else {label = query_subjects.get(pkAlias + namespaceID).getLabel();
-					}
-					labelMap.put(qsFinalName + gDirNameCurrent, label);
-					*/
 				}
 				else{
 					if (qSleftType.equals("Final")) {
@@ -774,12 +758,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 						fsvc.createSubFolderInSubFolderIIC(rep, gDirNameCurrent);
 					}
 	
-					//add tooltip
-					/*
-					String desc = "";
-					if(query_subjects.get(pkAlias + namespaceID).getDescription() != null) {desc = ": " + query_subjects.get(pkAlias + namespaceID).getDescription();}
-					fsvc.createScreenTip("queryItemFolder", qsFinal + ".[" + gDirNameCurrent + "]", query_subjects.get(pkAlias + namespaceID).getTable_name() + desc);
-					*/
 					for(Entry<String, String> langDesc: query_subjects.get(pkAlias + namespaceID).getDescriptions().entrySet()){
 						if(langDesc.getValue() == null || langDesc.getValue().equals("")) {
 							qifScreenTipMap.get(langDesc.getKey()).put(qsFinal + ".[" + gDirNameCurrent + "]", query_subjects.get(pkAlias + namespaceID).getTable_name());
@@ -819,12 +797,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 						
 						// end label
 						
-						// add tooltip
-						/*
-						desc = "";
-						if(field.getDescription() != null) {desc = ": " + field.getDescription();}
-						fsvc.createScreenTip("queryItem", qsFinal + ".[" + gFieldName + "." + field.getField_name() + "]", query_subjects.get(pkAlias + namespaceID).getTable_name() + "." + field.getField_name() + desc);
-						*/
 						// map tooltip
 						for(Entry<String, String> langDesc: field.getDescriptions().entrySet()){
 							if(langDesc.getValue() == null || langDesc.getValue().equals("")) {
@@ -957,9 +929,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 						String attDimension = dimensionAttributes.get("dimension");
 						if (!attDimension.startsWith("[") && !attDimension.endsWith("]")) {
 								//Multi map
-								
-								System.out.println("Recup fields : " + dimensionAttributes.get("dimension") + " " + dimensionAttributes.get("order") + " " + dimensionAttributes.get("bk") + dimensionAttributes.get("hierarchyName"));
-								
+																
 								if (!dimensions.containsKey(attDimension)) {
 									Map<String, String> hierarchiesFields = new HashMap<String, String>();
 									Map<String, String> hierarchiesFieldsBK = new HashMap<String, String>();
@@ -968,19 +938,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 									dimensions.put(attDimension, hierarchiesFields);
 									dimensionsBK.put(attDimension, hierarchiesFieldsBK);
 									dimensionsHN.put(attDimension, hierarchiesFieldsHN);
-								}
-							
-							//end Multi map
-							/*String dim[] = StringUtils.split(field.getDimension(), ",");
-							for (int i=0; i < dim.length; i++) {
-								//un tableau pour les eventuelles multiples dimensions pour un champ de ref. 
-								String dimension = dim[i];
-								if (!dimensions.containsKey(dimension)) {
-									Map<String, String> hierarchiesFields = new HashMap<String, String>();
-									//On crée la dimension
-									dimensions.put(dimension, hierarchiesFields);
-								}
-							}*/
+								}							
 						} else {
 							// create time dimension
 							System.out.println("Recup fields : " + dimensionAttributes.get("dimension") );
@@ -1001,16 +959,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				if (query_subject.getValue().getType().equalsIgnoreCase("Final")){
 					
 					for(Field field: query_subject.getValue().getFields()) {
-		
-						/*if (field.getDimension().equals(dimension.getKey())) {
-							Map<String, String> hierarchiesFields = dimension.getValue();
-							//S'il n'y est pas deja, on ajoute le champ dans le map des fields, tous les champs de la dimension seront dans ce map.
-							if (!hierarchiesFields.containsKey("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]")) {
-								//on ajoute le champ concerné dans le map des fields afin de determiner plus tard le nombre de hierarchies et les hierarchies
-								hierarchiesFields.put("[DATA].[" + query_subject.getValue().getTable_alias() + "].[" + field.getField_name() + "]", field.getOrder());
-							}
-						}*/
-						
+								
 						//multi_map
 						List<Map<String, String>> fieldDimensions = field.getDimensions();
 						for (Map<String, String> dimensionAttributes : fieldDimensions) {
@@ -1185,19 +1134,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							namedHierarchies.put(hierarchyName, hierarchy.getValue());
 							System.out.println("hierarchyName : " + hierarchyName);
 						}
-						//test pour traduction hierarchies
-			/*			
-						if (hierarchyNameExp.length > 2) {
-							String hierarchyName = hierarchyNameExp[1] + "." + StringUtils.replace(hierarchyNameExp[2], "]", "");
-									System.out.println("Hierarchy Name Label Map : " + hierarchyName + " : " + labelMap.get(hierarchyName));
-									// a changer lorsque nous aurons les traductions pour un hierarchyName, 
-									//il faudra afficher la trad du HN au lieu de la trad du champ qui porte le dernier level de la hierarchy
-									labelMap.put(choosenHierarchyName,labelMap.get(hierarchyName));
-									labelMap.put(choosenHierarchyName + "(All)",labelMap.get(hierarchyName));
-									System.out.println("Hierarchy Name Label Map renamed : " + labelMap.get(choosenHierarchyName));
-						}
-				*/		
-						//fin test
 					}
 				}
 				dimensions.put(dimension.getKey(), namedHierarchies);
@@ -1223,7 +1159,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				String qiName = split[1];
 				path = StringUtils.replace(path, ".", "].[");
 				path = "[DATA].[" + path + "]";
-				System.out.println("createTimeDimension : " + path + ", " + dimension.getKey() + ", " + qiName);
 				fsvc.createTimeDimension(path, dimension.getKey(), qiName);
 			} else 
 			{
@@ -1273,7 +1208,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 						
 						fsvc.createDimensionRole_MC("[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "].[" + name + "]");
 						fsvc.createDimensionRole_MD("[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "].[" + name + "]");
-//						fsvc.createDimensionRole_BK("[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "].[" + name + "]");
 						
 						//screenTip QueryItem
 						fsvc.createScreenTip("queryItem", "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "].[" + name + "]", exp, 0);
@@ -1288,7 +1222,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 							Boolean isHigher = isQsHigherThanMeasure(measureDimensionQs + "Final", tableScope + "Final");
 													
 							//System.out.println("isQsHigherThanMeasure(" + measureDimensionQs + "Final, " + tableScope + "Final" + ")");
-							//System.out.println(isHigher);
 							if (isHigher) {
 								for (Entry<String, String> measure: measureDimension.getValue().entrySet()) {
 									//scopesToEnable
@@ -1296,7 +1229,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 									// value : dimensionPath ; level
 									scopesToEnable.put(measureDimension.getKey() + ";" + measure.getValue() + ";" + "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "]", "[DIMENSIONAL].[" + dimension.getKey() + "]" + ";" + "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "]");
 									fsvc.adjustScopeRelationship(measureDimension.getKey(), measure.getValue(), "[DIMENSIONAL].[" + dimension.getKey() + "]", "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "]", "0");
-									//System.out.println("adjustScopeRelationship( " + measureDimension.getKey() + ", " + measure.getValue() + ", " + "[DIMENSIONAL].[" + dimension.getKey() + "]" + ", " + "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + "]");
 								}
 								//manage screenTip for dimension, hierarchy, level
 								//level
@@ -1342,10 +1274,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 										
 										// key : measure dimensionPath - measurePath - levelPath
 										// value : dimensionPath
-								//old	scopesToDisable.put(measureDimension.getKey() + ";" + measure.getValue() + ";" + "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + all + "]", "[DIMENSIONAL].[" + dimension.getKey() + "]");
-										scopesToDisable.put(measureDimension.getKey() + ";" + measure.getValue() + ";" + "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + hierarchy.getKey() + all + "]", "[DIMENSIONAL].[" + dimension.getKey() + "]");
-										
-										//fsvc.adjustScopeRelationship(measureDimension.getKey(), measure.getValue(), "[DIMENSIONAL].[" + dimension.getKey() + "]", "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + name + all + "]", "1");
+										scopesToDisable.put(measureDimension.getKey() + ";" + measure.getValue() + ";" + "[DIMENSIONAL].[" + dimension.getKey() + "].[" + hierarchy.getKey() + "].[" + hierarchy.getKey() + all + "]", "[DIMENSIONAL].[" + dimension.getKey() + "]");										
 									}
 								}
 							}
@@ -1371,7 +1300,6 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 					Boolean isHigher = isQsHigherThanMeasure(measureDimensionQs + "Final", tableScope + "Final");
 					
 					//System.out.println("isQsHigherThanMeasure(" + measureDimensionQs + "Final, " + tableScope + "Final" + ")");
-					//System.out.println(isHigher);
 					if (!isHigher) {
 						for (Entry<String, String> measure: measureDimension.getValue().entrySet()) {
 							fsvc.adjustScopeRelationship(measureDimension.getKey(), measure.getValue(), "[DIMENSIONAL].[" + dimension.getKey() + "]", "[DIMENSIONAL].[" + dimension.getKey() + "].[" + qiName + " (By month)].[" + qiName + " (By month)(All)]", "1");

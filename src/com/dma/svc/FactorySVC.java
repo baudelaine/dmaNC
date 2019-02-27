@@ -1370,11 +1370,8 @@ public class FactorySVC {
 			handle2.setText("/O/expression[0]/O/" + levelPath + ".[" + queryItemName + "]");
 			qiExp.setText(exp);
 			
-			if (queryItemName.equals("QUARTER_KEY")) {
-			System.out.println("IF QUARTER");
 			System.out.println("levelPath : " + levelPath + ", queryItemOldName : " + queryItemOldName + ", queryItemName : " +  queryItemName +  ", exp :" + exp);
-			System.out.println(document.asXML());
-			}
+//			System.out.println(document.asXML());
 				csvc.executeModel(document);
 			} catch (DocumentException ex) {
 				lg(ex.getMessage());
