@@ -284,6 +284,26 @@ public class FactorySVC {
 		}
 	}
 
+	public void moveQuerySubjectInFolder(String qsPath, String folderPath) {
+		try {
+			File xmlFile = new File(csvc.getPathToXML() + "/moveQuerySubjectInFolder.xml");
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(xmlFile);
+			Node n1 = document.selectSingleNode("/bmtactionlog/transaction/action[1]/inputparams/param[1]/value");
+			n1.setText(folderPath);
+
+			Node n2 = document.selectSingleNode("/bmtactionlog/transaction/action[1]/inputparams/param[2]/value");
+			n2.setText(qsPath);
+
+			System.out.println("moveQuerySubjectInFolder: qsPath " + qsPath + ", folderPath " + folderPath);
+//			System.out.println(document.asXML());
+			csvc.executeModel(document);
+
+		} catch (DocumentException ex) {
+			lg(ex.getMessage());
+		}
+	}
+	
 	public void createNamespace(String NameSpace, String Parent) {
 		try {
 			File xmlFile = new File(csvc.getPathToXML() + "/createNamespace.xml");
@@ -1350,11 +1370,8 @@ public class FactorySVC {
 			handle2.setText("/O/expression[0]/O/" + levelPath + ".[" + queryItemName + "]");
 			qiExp.setText(exp);
 			
-			if (queryItemName.equals("QUARTER_KEY")) {
-			System.out.println("IF QUARTER");
 			System.out.println("levelPath : " + levelPath + ", queryItemOldName : " + queryItemOldName + ", queryItemName : " +  queryItemName +  ", exp :" + exp);
-			System.out.println(document.asXML());
-			}
+//			System.out.println(document.asXML());
 				csvc.executeModel(document);
 			} catch (DocumentException ex) {
 				lg(ex.getMessage());
@@ -1389,13 +1406,13 @@ public class FactorySVC {
 	//level quarter	
 			addHierarchyLevel("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)]", "[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)].[YEAR]", "[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)].[" + dateQueryItemName + "]", dateQueryItemPath);
 			modifyLevelName("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)]", dateQueryItemName, "QUARTER");
-			exp = "if (_month (" + dateQueryItemPath + ") < 4) then (1) else ( "
-			+ "if (_month (" + dateQueryItemPath + ") < 7) then (2) else ( "
-			+ "if (_month (" + dateQueryItemPath + ") < 10) then (3) else (4)))";
+			exp = "if (_month (" + dateQueryItemPath + ") in_range {1:3}) then (1) else ( "
+			+ "if (_month (" + dateQueryItemPath + ") in_range {4:6}) then (2) else ( "
+			+ "if (_month (" + dateQueryItemPath + ") in_range {7:9}) then (3) else (4)))";
 			modifyLevelQueryItemName("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)].[QUARTER]", dateQueryItemName, "QUARTER_KEY", exp);
-			exp = "if (  (#sq($runLocale)#) = 'fr' ) then ('Trimestre') else ('Quarter') || ' ' || if (_month (" + dateQueryItemPath + ") < 4) then (1) else ( "
-			+ "if (_month (" + dateQueryItemPath + ") < 7) then (2) else ( "
-			+ "if (_month (" + dateQueryItemPath + ") < 10) then (3) else (4)))";
+			exp = "if (  (#sq($runLocale)#) = 'fr' ) then ('Trimestre') else ('Quarter') || ' ' || if (_month (" + dateQueryItemPath + ") in_range {1:3}) then (1) else ( "
+			+ "if (_month (" + dateQueryItemPath + ") in_range {4:6}) then (2) else ( "
+			+ "if (_month (" + dateQueryItemPath + ") in_range {7:9}) then (3) else (4)))";
 			createHierarchyLevelQueryItem("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)].[QUARTER]", "QUARTER", exp);
 			createDimensionRole_MC("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)].[QUARTER].[QUARTER]");
 			createDimensionRole_MD("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (By month)].[QUARTER].[QUARTER]");
@@ -1679,7 +1696,7 @@ public class FactorySVC {
 			createDimensionRole_MC("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (Rolling month)].[DATE].[DATE]");
 			createDimensionRole_MD("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (Rolling month)].[DATE].[DATE]");
 			createDimensionRole_BK("[DIMENSIONAL].[" + dimensionName + "].[" + dateQueryItemName + " (Rolling month)].[DATE].[DATE_KEY]");
-			
+		
 	}
 	
 	public void recursiveParserQI(Document document, String spath, String locale, Map <String, String> map, String qsFinal) {
