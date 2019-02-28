@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import com.dma.web.Field;
 import com.dma.web.QuerySubject;
 import com.dma.web.Tools;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,20 +23,6 @@ public class Test5 {
 		
 		try {
 			List<QuerySubject> querySubjects = (List<QuerySubject>) Tools.fromJSON(path.toFile(), new TypeReference<List<QuerySubject>>(){});
-			
-			
-//			for(QuerySubject querySubject: querySubjects) {
-//
-//				for(Field field: querySubject.getFields()){
-//					System.out.println(field.getLabel());
-//					System.out.println(field.getDescription());
-//					field.getLabels().put(lang, field.getLabel());
-//					field.getDescriptions().put(lang, field.getDescription());
-//					field.setLabel("");
-//					field.setDescription("");
-//				}
-//			
-//			}
 			
 			Files.write(output, Tools.toJSON(querySubjects).getBytes());
 
