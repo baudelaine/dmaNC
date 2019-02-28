@@ -1,7 +1,9 @@
 package com.dma.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Relation {
 
@@ -16,6 +18,8 @@ public class Relation {
 	String pktable_alias = "";	
 	String label = "";
 	String description = "";
+	Map<String, String> labels = new HashMap<String, String>();
+	Map<String, String> descriptions = new HashMap<String, String>();
 	boolean fin = false;
 	boolean ref = false;
 	boolean sec = false;
@@ -110,6 +114,18 @@ public class Relation {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Map<String, String> getLabels() {
+		return labels;
+	}
+	public void setLabels(Map<String, String> labels) {
+		this.labels = labels;
+	}
+	public Map<String, String> getDescriptions() {
+		return descriptions;
+	}
+	public void setDescriptions(Map<String, String> descriptions) {
+		this.descriptions = descriptions;
 	}
 	public boolean isFin() {
 		return fin;

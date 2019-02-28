@@ -26,6 +26,7 @@ var Gdimensions;
 var dimensionGlobal = [];
 var folderGlobal = [];
 var langGlobal = [];
+var labelsGlobal = {};
 var $selectedDimensionIndex;
 var currentProject;
 var currentLanguage;
@@ -94,7 +95,7 @@ qsCols.push({field:"table_name", title: "table_name", sortable: true});
 qsCols.push({field:"table_alias", title: "table_alias", editable: false, sortable: true});
 qsCols.push({field:"type", title: "type", sortable: true});
 // qsCols.push({field:"visible", title: "visible", formatter: "boolFormatter", align: "center", sortable: false});
-qsCols.push({field:"folder", title: "Folder", editable: {type: "text", mode: "inline"}, sortable: true});
+qsCols.push({field:"folder", title: "Folder", editable: {type: "select", mode: "inline", value: "", source: [{value: "", text: ""}]}, sortable: true});
 qsCols.push({field:"filter", title: "filter", editable: {type: "textarea", mode: "inline"}, sortable: true});
 qsCols.push({field:"label", title: "label", editable: {type: "textarea", mode: "inline"}, sortable: true});
 qsCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
@@ -311,6 +312,7 @@ $finTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'label');
   $datasTable.bootstrapTable('hideColumn', 'recurseCount');
   $datasTable.bootstrapTable('showColumn', 'addRelation');
+  $datasTable.bootstrapTable('hideColumn', 'addDimensionName');
   $datasTable.bootstrapTable('hideColumn', 'addField');
   $datasTable.bootstrapTable('hideColumn', 'addPKRelation');
   $datasTable.bootstrapTable('hideColumn', 'addFolder');
@@ -337,6 +339,7 @@ $refTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'addPKRelation');
   $datasTable.bootstrapTable('hideColumn', 'addFolder');
   $datasTable.bootstrapTable('hideColumn', 'addDimension');
+  $datasTable.bootstrapTable('hideColumn', 'addDimensionName');
   $datasTable.bootstrapTable('showColumn', 'addRelation');
   $datasTable.bootstrapTable('showColumn', 'above');
   $datasTable.bootstrapTable('hideColumn', 'addField');
@@ -362,6 +365,7 @@ $secTab.on('shown.bs.tab', function(e) {
   $datasTable.bootstrapTable('showColumn', 'addPKRelation');
   $datasTable.bootstrapTable('hideColumn', 'addFolder');
   $datasTable.bootstrapTable('hideColumn', 'addDimension');
+  $datasTable.bootstrapTable('hideColumn', 'addDimensionName');
   $datasTable.bootstrapTable('showColumn', 'addRelation');
   $datasTable.bootstrapTable('hideColumn', 'addField');
   $datasTable.bootstrapTable('showColumn', 'recurseCount');
@@ -721,16 +725,42 @@ function SetLanguage(language){
         needInit = false;
       }
     });
+
+    if(!needInit){
+        $.each($datasTable.bootstrapTable("getData"), function(i, qs){
+          console.log(qs);
+          qs.label = qs.labels[language];
+          qs.description = qs.descriptions[language];
+          $.each(qs.fields, function(j, field){
+            field.label = field.labels[language];
+            field.description = field.descriptions[language];
+          })
+          $.each(qs.relations, function(j, relation){
+            relation.description = relation.descriptions[language];
+            relation.label = relation.labels[language];
+          })
+        });
+    }
+
     if(needInit){
       console.log("Let's initialize...");
       $.each($datasTable.bootstrapTable("getData"), function(i, qs){
         qs.labels[language] = "";
         qs.descriptions[language] = "";
+        qs.label = qs.labels[language];
+        qs.description = qs.descriptions[language];
         $.each(qs.fields, function(j, field){
           field.labels[language] = "";
           field.descriptions[language] = "";
+          field.label = field.labels[language];
+          field.description = field.descriptions[language];
+        })
+        $.each(qs.relations, function(j, relation){
+          relation.description = "";
+          relation.label = "";
         })
       });
+
     }
     if(activeTab.match("Query Subject")){
       $refTab.tab('show');
@@ -1496,13 +1526,6 @@ function buildFieldTable($el, cols, data, qs){
 
           onPreBody: function(data){
             //Fires before the table body is rendered, the parameters contain: data: the rendered data.
-            console.log(data);
-            if(data.length > 0){
-              $.each(data, function(i, obj){
-                obj.label = obj.labels[currentLanguage];
-                obj.description = obj.descriptions[currentLanguage];
-              });
-            }
           },
 
           onPostBody: function(data){
@@ -1779,6 +1802,14 @@ function buildRelationTable($el, cols, data, qs){
         $activeSubDatasTable = $el;
 
         switch(field){
+
+          case "usedForDimensions":
+            if(dimensionGlobal.length < 1){
+              showalert("buildTable()", 'No dimension created yet. Create one clicking <i class="glyphicon glyphicon-zoom-in"></i> in Query Subject tab.', "alert-warning", "bottom");
+              return;
+            }
+
+            break;
 
           case "traduction":
           case "timezone":
@@ -2230,12 +2261,6 @@ function buildTable($el, cols, data) {
 
         onPreBody: function(data){
           //Fires before the table body is rendered, the parameters contain: data: the rendered data.
-          if(data.length > 0){
-            $.each(data, function(i, obj){
-              obj.label = obj.labels[currentLanguage];
-              obj.description = obj.descriptions[currentLanguage];
-            });
-          }
         },
 
         onPostBody: function(data){
@@ -2302,6 +2327,12 @@ function buildTable($el, cols, data) {
 
           // RemoveFilter();
           $activeSubDatasTable = $el
+
+          if(field.match("folder") && folderGlobal.length < 1){
+            showalert("buildTable()", 'No folder created yet. Create one clicking <i class="glyphicon glyphicon-folder-open"></i> on the right.', "alert-warning", "bottom");
+            return;
+          }
+
 
           if(activeTab.match("Final")){
             if(field.match("remove")){
@@ -2401,6 +2432,7 @@ function buildTable($el, cols, data) {
     $el.bootstrapTable('hideColumn', 'addPKRelation');
     $el.bootstrapTable('hideColumn', 'addFolder');
     $el.bootstrapTable('hideColumn', 'folder');
+    $el.bootstrapTable('hideColumn', 'addDimensionName');
     $el.bootstrapTable('hideColumn', 'addDimension');
     $el.bootstrapTable('hideColumn', 'addField');
     $el.bootstrapTable('showColumn', '_id');
@@ -3524,7 +3556,6 @@ function GetQueriesList(){
       data.sort(function(a, b) {
         return b - a;
       });
-      console.log(queriesList);
 			// ShowAlert("GetQueriesList()", "Queries list get successfull.", "alert-success", "bottom");
       if(queriesList.length > 0){
         $('#modQueriesList').modal('toggle');
@@ -3535,7 +3566,6 @@ function GetQueriesList(){
 
 		},
 		error: function(data) {
-      $('#modQueriesList').modal('toggle');
 			ShowAlert("Getting queries list failed.", "alert-danger", $("#queryModalAlert"));
 		}
 	});
@@ -3575,16 +3605,22 @@ function GetLabels(){
         if(labels[qs.table_name]){
           qs.labels[currentLanguage] = labels[qs.table_name].table_remarks;
           qs.descriptions[currentLanguage] = labels[qs.table_name].table_description;
+          qs.label = qs.labels[currentLanguage];
+          qs.description = qs.descriptions[currentLanguage];
           $.each(qs.fields, function(j, field){
             if(labels[qs.table_name].columns[field.field_name]){
               field.labels[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_remarks;
               field.descriptions[currentLanguage] = labels[qs.table_name].columns[field.field_name].column_description;
+              field.label = field.labels[currentLanguage];
+              field.description = field.descriptions[currentLanguage];
             }
           })
           $.each(qs.relations, function(j, relation){
             if(labels[relation.pktable_name]){
-              relation.label = labels[relation.pktable_name].table_remarks;
-              relation.description = labels[relation.pktable_name].table_description;
+              relation.labels[currentLanguage] = labels[relation.pktable_name].table_remarks;
+              relation.descriptions[currentLanguage] = labels[relation.pktable_name].table_description;
+              relation.label = relation.labels[currentLanguage];
+              relation.description = relation.descriptions[currentLanguage];
             }
           })
         }

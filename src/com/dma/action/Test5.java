@@ -18,29 +18,26 @@ public class Test5 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Path path = Paths.get("/opt/wks/dmaNC/testDevSeb-2019-02-11-15-37-27.json");
+		Path path = Paths.get("/opt/wks/dmaNC/mmm-2019-02-28-13-30-13.json");
 		Path output = Paths.get("/opt/wks/dmaNC/output.json");
-//		String lang = "de,  fr".split(",")[0].trim();
-		String lang = null;
-		lang = lang.split(",")[0].trim();
 		
 		
 		try {
 			List<QuerySubject> querySubjects = (List<QuerySubject>) Tools.fromJSON(path.toFile(), new TypeReference<List<QuerySubject>>(){});
 			
 			
-			for(QuerySubject querySubject: querySubjects) {
-
-				for(Field field: querySubject.getFields()){
-					System.out.println(field.getLabel());
-					System.out.println(field.getDescription());
-					field.getLabels().put(lang, field.getLabel());
-					field.getDescriptions().put(lang, field.getDescription());
-					field.setLabel("");
-					field.setDescription("");
-				}
-			
-			}
+//			for(QuerySubject querySubject: querySubjects) {
+//
+//				for(Field field: querySubject.getFields()){
+//					System.out.println(field.getLabel());
+//					System.out.println(field.getDescription());
+//					field.getLabels().put(lang, field.getLabel());
+//					field.getDescriptions().put(lang, field.getDescription());
+//					field.setLabel("");
+//					field.setDescription("");
+//				}
+//			
+//			}
 			
 			Files.write(output, Tools.toJSON(querySubjects).getBytes());
 
