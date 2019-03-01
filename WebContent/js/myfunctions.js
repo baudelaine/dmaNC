@@ -97,9 +97,7 @@ qsCols.push({field:"table_alias", title: "table_alias", editable: false, sortabl
 qsCols.push({field:"type", title: "type", sortable: true});
 // qsCols.push({field:"visible", title: "visible", formatter: "boolFormatter", align: "center", sortable: false});
 
-var folderEditable = {type: "select", mode: "inline", value: "", source: [{value: "", text: ""}]};
-
-qsCols.push({field:"folder", title: "Folder", editable: folderEditable, sortable: true});
+qsCols.push({field:"folder", title: "Folder", editable: {type: "select", mode: "inline", value: "", source: [{value: "", text: ""}]}, sortable: true});
 // qsCols.push({field:"folder", title: "Folder", editable: {type: "select", mode: "inline"}, sortable: true});
 // qsCols.push({field:"folder", title: "Folder", editable: {type: "text", mode: "inline"}, sortable: true});
 qsCols.push({field:"filter", title: "filter", editable: {type: "textarea", mode: "inline"}, sortable: true});
@@ -823,11 +821,6 @@ $('#selectDimension').on('changed.bs.select', function (e, clickedIndex, isSelec
 
 $('#selectTimeDimension').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   // do something...
-  console.log(e);
-  console.log(clickedIndex);
-  console.log(isSelected);
-  console.log(previousValue);
-  console.log($(this).val());
   if($(this).val().length > 0){
     $('#selectDimension').selectpicker('val','');
     $('#selectOrder').empty();
@@ -843,20 +836,14 @@ $('#selectTimeDimension').on('changed.bs.select', function (e, clickedIndex, isS
 });
 
 $("#DrillModal").on('shown.bs.modal', function(){
-  console.log(Gdimensions);
-  console.log($selectedDimension);
-  console.log(Gdimensions[$selectedDimension.dimension]);
   if($selectedDimension.dimension != "" && Gdimensions[$selectedDimension.dimension] != undefined){
     $('#selectTimeDimension').selectpicker('deselectAll');
     $('#selectDimension').selectpicker('val', $selectedDimension.dimension);
     $('#selectDimension').selectpicker('refresh');
     updateDimension($selectedDimension.dimension);
     if($selectedDimension.order != ""){
-      console.log($selectedDimension.order);
       var orderQsFinalName = $selectedDimension.order.split('.').slice(1,2).toString().replace(/[\[\]]/g, '');
-      console.log(orderQsFinalName);
       var orderOrder = $selectedDimension.order.split('.').slice(2,3).toString().replace(/[\[\]]/g, '');
-      console.log(orderOrder);
 
       $('#selectOrder').selectpicker('val', orderQsFinalName + ' -- ' + orderOrder);
       $('#selectOrder').selectpicker('refresh');
@@ -868,7 +855,6 @@ $("#DrillModal").on('shown.bs.modal', function(){
     $("#bkExpression").val($selectedDimension.bk);
   }
   if($selectedDimension.dimension != "" && Gdimensions[$selectedDimension.dimension] == undefined){
-    console.log($selectedDimension.dimension);
     dimension = $selectedDimension.dimension.replace(/[\[\]]/g, '').split(',');
     $('#selectTimeDimension').selectpicker('val',dimension);
   }
@@ -1987,7 +1973,6 @@ function buildRelationTable($el, cols, data, qs){
 
             $el.bootstrapTable("filterBy", {});
             nextIndex = row.index + 1;
-            console.log("nextIndex=" + nextIndex);
             var newRow = $.extend({}, row);
             newRow.checkbox = false;
             newRow.pktable_alias = "";
@@ -2009,8 +1994,6 @@ function buildRelationTable($el, cols, data, qs){
               newRow._id = "PK_" + newRow.pktable_alias + "_" + row.table_alias + '_' +row.type;
               // newRow._id = newRow.key_name + "P";
             }
-            console.log("newRow");
-            console.log(newRow);
             $el.bootstrapTable('insertRow', {index: nextIndex, row: newRow});
             return;
 
@@ -2360,11 +2343,9 @@ function buildTable($el, cols, data) {
 
         onEditableSave: function (field, row, oldValue, editable) {
           //Fired when an editable cell is saved.
-          console.log(row);
           if(field.match("label")){
             row.labels[currentLanguage] = row.label;
             $.each($datasTable.bootstrapTable('getData'), function(i, qs){
-              console.log(qs);
               $.each(qs.relations, function(j, relation){
                 if(relation.pktable_alias == qs.table_alias){
                   relation.label = row.label;
@@ -2375,7 +2356,6 @@ function buildTable($el, cols, data) {
           if(field.match("description")){
             row.descriptions[currentLanguage] = row.description;
             $.each($datasTable.bootstrapTable('getData'), function(i, qs){
-              console.log(qs);
               $.each(qs.relations, function(j, relation){
                 if(relation.pktable_alias == qs.table_alias){
                   relation.description = row.description;
@@ -2383,7 +2363,6 @@ function buildTable($el, cols, data) {
               })
             })
           }
-          console.log(row);
         },
 
         onPreBody: function(data){
@@ -2396,8 +2375,6 @@ function buildTable($el, cols, data) {
 
         onResetView: function(){
 
-          console.log("on pass dans onResetView de buildTable");
-
           var $tableRows = $el.find('tbody tr');
 
           $.each($el.bootstrapTable("getData"), function(i, row){
@@ -2406,7 +2383,6 @@ function buildTable($el, cols, data) {
               //   $tableRows.eq(i).find('a.remove').remove();
               // }
               if(activeTab.match("Final") && $activeSubDatasTable == $el){
-                console.log(row);
                 if(row.linker_ids){
                   if(row.linker_ids[0].match("Root") && !row.linker){
                   }
@@ -2417,10 +2393,6 @@ function buildTable($el, cols, data) {
               }
 
             if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
-              console.log(row);
-              console.log(cols);
-              console.log($tableRows.eq(i).find('a'));
-              console.log($tableRows.eq(i).find('a').eq(1).editable());
 
               $tableRows.eq(i).find('a').eq(1).editable('destroy');
 
@@ -2442,12 +2414,7 @@ function buildTable($el, cols, data) {
                 source: source
               };
 
-              folderEditable.source = source;
-
-              console.log("folder source");
-              console.log(source);
-
-              $tableRows.eq(i).find('a').eq(1).editable(folderEditable);
+              $tableRows.eq(i).find('a').eq(1).editable(newEditable);
               $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
 
             }
