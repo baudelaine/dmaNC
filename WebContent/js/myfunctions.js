@@ -13,6 +13,7 @@ var $traTab = $("a[href='#Translation']");
 var activeTab = "Final";
 var previousTab;
 var $activeSubDatasTable;
+var $activeDatasTable;
 var $newRowModal = $('#newRowModal');
 var $modelListModal = $('#modModelList');
 var $projectFileModal = $('#modProjectFile');
@@ -88,14 +89,19 @@ var newRelationCols = [];
 newRelationCols.push();
 
 var qsCols = [];
-qsCols.push({field:"checkbox", checkbox: "true"});
+// qsCols.push({field:"checkbox", checkbox: "true"});
 qsCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
 // qsCols.push({field:"_id", title: "_id", sortable: true});
 qsCols.push({field:"table_name", title: "table_name", sortable: true});
 qsCols.push({field:"table_alias", title: "table_alias", editable: false, sortable: true});
 qsCols.push({field:"type", title: "type", sortable: true});
 // qsCols.push({field:"visible", title: "visible", formatter: "boolFormatter", align: "center", sortable: false});
-qsCols.push({field:"folder", title: "Folder", editable: {type: "select", mode: "inline", value: "", source: [{value: "", text: ""}]}, sortable: true});
+
+var folderEditable = {type: "select", mode: "inline", value: "", source: [{value: "", text: ""}]};
+
+qsCols.push({field:"folder", title: "Folder", editable: folderEditable, sortable: true});
+// qsCols.push({field:"folder", title: "Folder", editable: {type: "select", mode: "inline"}, sortable: true});
+// qsCols.push({field:"folder", title: "Folder", editable: {type: "text", mode: "inline"}, sortable: true});
 qsCols.push({field:"filter", title: "filter", editable: {type: "textarea", mode: "inline"}, sortable: true});
 qsCols.push({field:"label", title: "label", editable: {type: "textarea", mode: "inline"}, sortable: true});
 qsCols.push({field:"description", title: "Description", sortable: false, editable: {type: "textarea", mode: "inline", rows: 4}});
@@ -133,7 +139,7 @@ qsCols.push({field:"linker", formatter: "boolFormatter", title: "linker", align:
 qsCols.push({field:"linker_ids", title: "linker_ids"});
 
 var fieldCols = [];
-fieldCols.push({field:"checkbox", checkbox: "true"});
+// fieldCols.push({field:"checkbox", checkbox: "true"});
 fieldCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
 fieldCols.push({field:"field_name", title: "Name", sortable: true });
 fieldCols.push({class:"field_type", field:"field_type", title: "Type", editable: {type: "text", mode: "inline"}, sortable: true});
@@ -281,7 +287,7 @@ $navTab.on('show.bs.tab', function(event){
 $qsTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, fieldCols, "fields");
   $datasTable.bootstrapTable("filterBy", {});
-  $datasTable.bootstrapTable('showColumn', 'checkbox');
+  // $datasTable.bootstrapTable('showColumn', 'checkbox');
   $datasTable.bootstrapTable('showColumn', 'visible');
   $datasTable.bootstrapTable('showColumn', 'filter');
   $datasTable.bootstrapTable('showColumn', 'label');
@@ -304,7 +310,7 @@ $finTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, relationCols, "relations");
   $datasTable.bootstrapTable("filterBy", {});
   $datasTable.bootstrapTable("filterBy", {type: ['Final']});
-  $datasTable.bootstrapTable('hideColumn', 'checkbox');
+  // $datasTable.bootstrapTable('hideColumn', 'checkbox');
   $datasTable.bootstrapTable('hideColumn', 'key_name');
   $datasTable.bootstrapTable('showColumn', 'operate');
   $datasTable.bootstrapTable('hideColumn', 'visible');
@@ -330,7 +336,7 @@ $refTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, relationCols, "relations");
   // $datasTable.bootstrapTable("filterBy", {type: ['Final', 'Ref']});
   $datasTable.bootstrapTable("filterBy", {});
-  $datasTable.bootstrapTable('hideColumn', 'checkbox');
+  // $datasTable.bootstrapTable('hideColumn', 'checkbox');
   $datasTable.bootstrapTable('hideColumn', 'key_name');
   $datasTable.bootstrapTable('showColumn', 'operate');
   $datasTable.bootstrapTable('hideColumn', 'visible');
@@ -356,7 +362,7 @@ $secTab.on('shown.bs.tab', function(e) {
   buildTable($datasTable, qsCols, datas, true, relationCols, "relations");
   // $datasTable.bootstrapTable("filterBy", {type: ['Final', 'Ref', 'Sec']});
   $datasTable.bootstrapTable("filterBy", {});
-  $datasTable.bootstrapTable('hideColumn', 'checkbox');
+  // $datasTable.bootstrapTable('hideColumn', 'checkbox');
   $datasTable.bootstrapTable('hideColumn', 'key_name');
   $datasTable.bootstrapTable('showColumn', 'operate');
   $datasTable.bootstrapTable('hideColumn', 'visible');
@@ -1655,28 +1661,28 @@ function buildFieldTable($el, cols, data, qs){
 
           onResetView: function(){
 
-            // var $tableRows = $el.find('tbody tr');
-            //
-            //
-            // $.each(data, function(i, row){
-            //
-            //   // Disable editable for field_type if field is !custom and remove trash
-            //   // $tableRows.eq(i).find('a').eq(0) = field_type
-            //   if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
-            //     if(!row.custom){
-            //       // $tableRows.eq(i).find('a').eq(1).editable('destroy');
-            //       $tableRows.eq(i).find('a').eq(1).editable('disable');
-            //       $tableRows.eq(i).find('a.remove').remove();
-            //     }
-            //     else{
-            //       $tableRows.eq(i).find('a').eq(1).editable('destroy');
-            //       customFieldType.source = dbDataType;
-            //       $tableRows.eq(i).find('a').eq(1).editable(customFieldType);
-            //       $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
-            //     }
-            //   }
-            //
-            // })
+            var $tableRows = $el.find('tbody tr');
+
+
+            $.each(data, function(i, row){
+
+              // Disable editable for field_type if field is !custom and remove trash
+              // $tableRows.eq(i).find('a').eq(0) = field_type
+              if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
+                if(!row.custom){
+                  // $tableRows.eq(i).find('a').eq(1).editable('destroy');
+                  $tableRows.eq(i).find('a').eq(1).editable('disable');
+                  $tableRows.eq(i).find('a.remove').remove();
+                }
+                else{
+                  $tableRows.eq(i).find('a').eq(1).editable('destroy');
+                  customFieldType.source = dbDataType;
+                  $tableRows.eq(i).find('a').eq(1).editable(customFieldType);
+                  $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
+                }
+              }
+
+            })
 
           },
 
@@ -1926,7 +1932,7 @@ function buildRelationTable($el, cols, data, qs){
 
           case "usedForDimensions":
             if(dimensionGlobal.length < 1){
-              showalert("buildTable()", 'No dimension created yet. Create one clicking <i class="glyphicon glyphicon-zoom-in"></i> in Query Subject tab.', "alert-warning", "bottom");
+              showalert("buildRelationTable()", 'No dimension created yet. Create one clicking <i class="glyphicon glyphicon-zoom-in"></i> in Query Subject tab.', "alert-warning", "bottom");
               return;
             }
 
@@ -1945,12 +1951,12 @@ function buildRelationTable($el, cols, data, qs){
 
             if(!row.ref && activeTab.match("Reference")){
               allowNommageRep = false;
-              showalert("buildSubTable()", "Ref for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
+              showalert("buildRelationTable()", "Ref for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
               return;
             }
             if(!row.sec && activeTab.match("Security")){
               allowNommageRep = false;
-              showalert("buildSubTable()", "Sec for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
+              showalert("buildRelationTable()", "Sec for " + row.pktable_alias + " has to be checked first.", "alert-warning", "bottom");
               return;
             }
 
@@ -1969,7 +1975,7 @@ function buildRelationTable($el, cols, data, qs){
 
             }
             if(!allowNommageRep){
-              showalert("buildSubTable()", "RepTableName for pktable_alias " + row.pktable_alias + " already checked.", "alert-warning", "bottom");
+              showalert("buildRelationTable()", "RepTableName for pktable_alias " + row.pktable_alias + " already checked.", "alert-warning", "bottom");
               return;
             }
             var newValue = value == false ? true : false;
@@ -2390,6 +2396,8 @@ function buildTable($el, cols, data) {
 
         onResetView: function(){
 
+          console.log("on pass dans onResetView de buildTable");
+
           var $tableRows = $el.find('tbody tr');
 
           $.each($el.bootstrapTable("getData"), function(i, row){
@@ -2409,6 +2417,10 @@ function buildTable($el, cols, data) {
               }
 
             if(activeTab.match("Query Subject") && $activeSubDatasTable == $el){
+              console.log(row);
+              console.log(cols);
+              console.log($tableRows.eq(i).find('a'));
+              console.log($tableRows.eq(i).find('a').eq(1).editable());
 
               $tableRows.eq(i).find('a').eq(1).editable('destroy');
 
@@ -2430,7 +2442,12 @@ function buildTable($el, cols, data) {
                 source: source
               };
 
-              $tableRows.eq(i).find('a').eq(1).editable(newEditable);
+              folderEditable.source = source;
+
+              console.log("folder source");
+              console.log(source);
+
+              $tableRows.eq(i).find('a').eq(1).editable(folderEditable);
               $tableRows.eq(i).find('a').eq(1).editable('option', 'defaultValue', '');
 
             }
@@ -2453,7 +2470,6 @@ function buildTable($el, cols, data) {
             showalert("buildTable()", 'No folder created yet. Create one clicking <i class="glyphicon glyphicon-folder-open"></i> on the right.', "alert-warning", "bottom");
             return;
           }
-
 
           if(activeTab.match("Final")){
             if(field.match("remove")){
@@ -2545,7 +2561,7 @@ function buildTable($el, cols, data) {
         }
     });
 
-    $el.bootstrapTable('hideColumn', 'checkbox');
+    // $el.bootstrapTable('hideColumn', 'checkbox');
     $el.bootstrapTable('hideColumn', 'visible');
     $el.bootstrapTable('hideColumn', 'filter');
     $el.bootstrapTable('showColumn', 'label');
@@ -3339,6 +3355,12 @@ function initGlobals(){
   dimensionGlobal = getArrayFromSet(dimensionSet);
   langGlobal = Object.keys(qss[0].labels);
 
+  console.log(folderGlobal);
+  console.log(dimensionGlobal);
+  console.log(langGlobal);
+
+  console.log(qss);
+
 }
 
 function OpenModel(id){
@@ -3359,14 +3381,10 @@ function OpenModel(id){
 
 		success: function(data) {
       $datasTable.bootstrapTable("load", data);
+      $refTab.tab('show');
       initGlobals();
+      $finTab.tab('show');
       $qsTab.tab('show');
-
-      // if(activeTab == "Final"){
-      //   $datasTable.bootstrapTable("filterBy", {type: ['Final']});
-      // }
-			// showalert("OpenModel()", "Model opened successfully.", "alert-success", "bottom");
-
 		},
 		error: function(data) {
 			showalert("OpenModel()", "Opening model failed.", "alert-danger", "bottom");
