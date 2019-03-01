@@ -87,6 +87,7 @@ public class GetDimensionsServlet extends HttpServlet {
 								}
 								
 							    Map<String, String> bk = new HashMap<String, String>();
+						    	bk.put("selectedQs", selectedQs);
 						    	bk.put("qsFinalName", qsFinalName);
 						    	bk.put("bk", field.getField_name());
 							    bks.add(bk);
@@ -174,6 +175,7 @@ public class GetDimensionsServlet extends HttpServlet {
 						}
 						
 					    Map<String, String> bk = new HashMap<String, String>();
+				    	bk.put("selectedQs", selectedQs);
 				    	bk.put("qsFinalName", qsFinalName);
 				    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
 				    	bks.add(bk);

@@ -27,7 +27,7 @@ var dimensionGlobal = [];
 var folderGlobal = [];
 var langGlobal = [];
 var labelsGlobal = {};
-var $selectedDimensionIndex;
+var $selectedDimension;
 var currentProject;
 var currentLanguage;
 
@@ -218,10 +218,10 @@ var dimensionCols = [];
 dimensionCols.push({field:"index", title: "index", formatter: "indexFormatter", sortable: false});
 dimensionCols.push({field:"dimension", title: "Dimension", editable: {type: 'text', mode: 'inline'}});
 dimensionCols.push({field:"order", title: "Order", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
-dimensionCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 2}, sortable: true});
+dimensionCols.push({field:"bk", title: "BK", editable: {type: "textarea", mode: "inline", rows: 4}, sortable: true});
 dimensionCols.push({field:"hierarchyName", title: "Hierarchy Name", editable: {type: "text", mode: "inline"}, sortable: true});
 dimensionCols.push({field:"buildDrillPath", title: '<i class="glyphicon glyphicon-zoom-in"></i>', formatter: "buildDrillPathFormatter", align: "center"});
-dimensionCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeFormatter", align: "center"});
+dimensionCols.push({field:"remove", title: '<i class="glyphicon glyphicon-trash"></i>', formatter: "removeDimensionFormatter", align: "center"});
 
 $(document)
 .ready(function() {
@@ -774,19 +774,10 @@ function SetLanguage(language){
 }
 
 $('#selectDimension').change(function () {
-  console.log("change");
-  var selectedText = $(this).find("option:selected").val();
-  if(selectedText){
-    updateDimension(selectedText);
-  }
 });
 
 $('#selectDimension').on('show.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("show");
-  var selectedText = $(this).find("option:selected").val();
-  if(selectedText){
-    updateDimension(selectedText);
-  }
 });
 
 $('#selectDimension').on('shown.bs.select', function (e, clickedIndex, isSelected, previousValue) {
@@ -815,6 +806,66 @@ $('#selectDimension').on('refreshed.bs.select', function (e, clickedIndex, isSel
 
 $('#selectDimension').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
   console.log("changed");
+  var selectedText = $(this).find("option:selected").val();
+  if(selectedText != ''){
+    $('#selectTimeDimension').selectpicker('deselectAll')
+    updateDimension(selectedText);
+    $("#bkExpression").prop('disabled', false);
+    $('#hierarchyName').prop('disabled', false);
+  }
+});
+
+$('#selectTimeDimension').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+  // do something...
+  console.log(e);
+  console.log(clickedIndex);
+  console.log(isSelected);
+  console.log(previousValue);
+  console.log($(this).val());
+  if($(this).val().length > 0){
+    $('#selectDimension').selectpicker('val','');
+    $('#selectOrder').empty();
+    $('#selectOrder').selectpicker('refresh');
+    $('#selectBK').empty();
+    $('#selectBK').selectpicker('refresh');
+    $("#bkExpression").val('');
+    $("#bkExpression").prop('disabled', true);
+    $('#hierarchyName').val('');
+    $('#hierarchyName').prop('disabled', true);
+
+  }
+});
+
+$("#DrillModal").on('shown.bs.modal', function(){
+  console.log(Gdimensions);
+  console.log($selectedDimension);
+  console.log(Gdimensions[$selectedDimension.dimension]);
+  if($selectedDimension.dimension != "" && Gdimensions[$selectedDimension.dimension] != undefined){
+    $('#selectTimeDimension').selectpicker('deselectAll');
+    $('#selectDimension').selectpicker('val', $selectedDimension.dimension);
+    $('#selectDimension').selectpicker('refresh');
+    updateDimension($selectedDimension.dimension);
+    if($selectedDimension.order != ""){
+      console.log($selectedDimension.order);
+      var orderQsFinalName = $selectedDimension.order.split('.').slice(1,2).toString().replace(/[\[\]]/g, '');
+      console.log(orderQsFinalName);
+      var orderOrder = $selectedDimension.order.split('.').slice(2,3).toString().replace(/[\[\]]/g, '');
+      console.log(orderOrder);
+
+      $('#selectOrder').selectpicker('val', orderQsFinalName + ' -- ' + orderOrder);
+      $('#selectOrder').selectpicker('refresh');
+    }
+    else{
+      $('#selectOrder').selectpicker('val', "");
+      $('#selectOrder').selectpicker('refresh');
+    }
+    $("#bkExpression").val($selectedDimension.bk);
+  }
+  if($selectedDimension.dimension != "" && Gdimensions[$selectedDimension.dimension] == undefined){
+    console.log($selectedDimension.dimension);
+    dimension = $selectedDimension.dimension.replace(/[\[\]]/g, '').split(',');
+    $('#selectTimeDimension').selectpicker('val',dimension);
+  }
 });
 
 function updateDimension(dimension){
@@ -823,12 +874,9 @@ function updateDimension(dimension){
   $('#selectOrder').selectpicker('refresh');
   $('#selectBK').empty();
   $('#selectBK').selectpicker('refresh');
+  $("#bkExpression").val('');
 
-  console.log(Gdimensions);
-
-  console.log(dimension);
-
-  console.log(Gdimensions[dimension]);
+  var emptyOption = '<option class="fontsize" value="" data-subtext=""></option>';
 
   var orders = Gdimensions[dimension].orders;
   var bks = Gdimensions[dimension].bks;
@@ -836,20 +884,18 @@ function updateDimension(dimension){
   $.each(orders, function(i, order){
     var option = '<option class="fontsize" value="' + order.qsFinalName + ' -- ' + order.order + '" data-subtext="' + order.qsFinalName + '">' + order.order + '</option>';
     $('#selectOrder').append(option);
-
   })
-  var blankOption = '<option class="fontsize" value="" data-subtext=""></option>';
-  $('#selectOrder').append(blankOption);
+  $('#selectOrder').append(emptyOption);
+  $('#selectOrder').selectpicker('val', "");
   $('#selectOrder').selectpicker('refresh');
 
   $.each(bks, function(i, bk){
     var option = '<option class="fontsize" value="' + bk.qsFinalName + ' -- ' + bk.bk + '" data-subtext="' + bk.qsFinalName + '">' + bk.bk + '</option>';
     $('#selectBK').append(option);
-
   })
-  var blankSelectedOption = '<option class="fontsize" value="" data-subtext="" selected="selected"></option>';
   // if($("#selectBK option[value='']").length > 0){
-    $('#selectBK').append(blankSelectedOption);
+  $('#selectBK').append(emptyOption);
+  $('#selectBK').selectpicker('val', '');
   // }
 
   $('#selectBK').selectpicker('refresh');
@@ -878,12 +924,39 @@ function getDimensions(dimensionSet, selectedQs){
     data: JSON.stringify(parms),
     success: function(data) {
       console.log(data);
+      console.log(selectedQs);
       Gdimensions = data.DATA;
+      var emptyOption = '<option class="fontsize" value="" data-subtext="' + '' + '"></option>';
+
       $.each(Object.values(data.DATA), function(i, dimension){
-        var option = '<option class="fontsize" value="' + dimension.name + '" data-subtext="' + '' + '">' + dimension.name + '</option>';
-        $('#selectDimension').append(option);
+        var dimensionOption = '<option class="fontsize" value="' + dimension.name + '" data-subtext="' + '' + '">' + dimension.name + '</option>';
+        $('#selectDimension').append(dimensionOption);
+        // $.each(dimension.bks, function(i, bk){
+        //   if(bk.selectedQs == selectedQs){
+        //     var bkOption = '<option class="fontsize" value="' + bk.qsFinalName + ' -- ' + bk.bk + '" data-subtext="' + bk.qsFinalName + '">' + bk.bk + '</option>';
+        //     $('#selectBK').append(bkOption);
+        //   }
+        // });
+        // $.each(dimension.orders, function(i, order){
+        //   var orderOption = '<option class="fontsize" value="' + order.qsFinalName + ' -- ' + order.order + '" data-subtext="' + order.qsFinalName + '">' + order.order + '</option>';
+        //   $('#selectOrder').append(orderOption);
+        //
+        // });
+
       })
+
+      $('#selectDimension').append(emptyOption);
+      $('#selectDimension').selectpicker('val', "");
       $('#selectDimension').selectpicker('refresh');
+
+      // $('#selectBK').append(emptyOption);
+      // $('#selectBK').selectpicker('val', "");
+      // $('#selectBK').selectpicker('refresh');
+      //
+      // $('#selectOrder').append(emptyOption);
+      // $('#selectOrder').selectpicker('val', "");
+      // $('#selectOrder').selectpicker('refresh');
+
     },
     error: function(data) {
       console.log(data);
@@ -893,17 +966,53 @@ function getDimensions(dimensionSet, selectedQs){
 
 }
 
+function AddBKExpression(){
+
+  var output = $("#bkExpression").val();
+  // var order = $('#selectOrder').find("option:selected").val();
+  var bk = $('#selectBK').find("option:selected").val();
+  if(bk){
+    // var orderQsFinalName = order.split(' -- ').slice(0,1).toString();
+    var bkQsFinalName = bk.split(' -- ').slice(0,1).toString();
+    // var orderOrder = order.split(' -- ').slice(1).toString();
+    var bkBk = bk.split(' -- ').slice(1).toString();
+  }
+
+  if(bkQsFinalName && bkBk){
+    if(output != ''){
+      output += " || '-' || " + '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']';
+    }
+    else{
+      output = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']';
+    }
+  }
+
+  $("#bkExpression").val(output);
+
+}
+
 function BuildDrillPath(){
 
   var dimension = $('#selectDimension').find("option:selected").val();
   var order = $('#selectOrder').find("option:selected").val();
   var bk = $('#selectBK').find("option:selected").val();
-  if(order && bk){
+  console.log(order);
+  if(order && order != '' && order != undefined){
     var orderQsFinalName = order.split(' -- ').slice(0,1).toString();
-    var bkQsFinalName = bk.split(' -- ').slice(0,1).toString();
     var orderOrder = order.split(' -- ').slice(1).toString();
+  }
+  if(bk && bk != '' && bk != undefined){
+    var bkQsFinalName = bk.split(' -- ').slice(0,1).toString();
     var bkBk = bk.split(' -- ').slice(1).toString();
   }
+
+  if($("#selectTimeDimension").val().length > 0){
+    dimension = $("#selectTimeDimension").val();
+    if(Array.isArray(dimension)){
+      dimension = '[' + dimension.toString() + ']';
+    };
+  }
+
   var hierarchyName = $('#hierarchyName').val();
 
   var alias = $('#drillFieldName').text().split('.')[0];
@@ -911,12 +1020,13 @@ function BuildDrillPath(){
 
   if($activeSubDatasTable != undefined){
 
-    var dim = $activeSubDatasTable.bootstrapTable("getData")[$selectedDimensionIndex];
+    var dim = $activeSubDatasTable.bootstrapTable("getData")[$selectedDimension.index];
     if(!dimension){dim.dimension = ""} else{dim.dimension = dimension};
-    if(!order){dim.order = ""} else{dim.order = '[DATA].[' + orderQsFinalName + '].[' + orderOrder + ']';}
-    if(!bk){dim.bk = ""} else{dim.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']'};
+    if(!orderQsFinalName && !orderOrder){dim.order = ""} else{dim.order = '[DATA].[' + orderQsFinalName + '].[' + orderOrder + ']';}
+    // if(!bkQsFinalName && !bkBk){dim.bk = ""} else{dim.bk = '[DATA].[' + bkQsFinalName + '].[' + bkBk + ']'};
+    dim.bk = $("#bkExpression").val();
     dim.hierarchyName = hierarchyName;
-    updateRow($activeSubDatasTable, $selectedDimensionIndex, dim);
+    updateRow($activeSubDatasTable, $selectedDimension.index, dim);
 
   }
 
@@ -1109,6 +1219,15 @@ function removeFieldFormatter(value, row, index) {
 
 }
 
+function removeDimensionFormatter(value, row, index) {
+
+  return [
+      '<a class="remove" href="javascript:void(0)" title="Remove">',
+      '<i class="glyphicon glyphicon-trash"></i>',
+      '</a>'
+  ].join('');
+}
+
 
 function buildDrillPathFormatter(value, row, index) {
   return [
@@ -1292,6 +1411,7 @@ function getArrayFromSet(set){
 }
 
 function clearDrillModal(){
+  $('#selectTimeDimension').selectpicker('deselectAll');
   $('#selectDimension').empty();
   $('#selectDimension').selectpicker('refresh');
   $('#selectOrder').empty();
@@ -1299,6 +1419,8 @@ function clearDrillModal(){
   $('#selectBK').empty();
   $('#selectBK').selectpicker('refresh');
   $('#drillFieldName').text('');
+  $('#hierarchyName').text('');
+  $('#bkExpression').val('');
 }
 
 function expandRelationTable($detail, cols, data, qs) {
@@ -1358,52 +1480,51 @@ function buildDimensionTable($el, cols, data, fld, qs){
 
       },
       onResetView: function(){
-        var $tableRows = $el.find('tbody tr');
-
-        $.each(data, function(i, row){
-          console.log(fld);
-          console.log(qs);
-          console.log($tableRows.eq(i).find('a'));
+        // var $tableRows = $el.find('tbody tr');
+        //
+        // $.each(data, function(i, row){
+        //   console.log(fld);
+        //   console.log(qs);
+        //   console.log($tableRows.eq(i).find('a'));
           // $tableRows.eq(i).find('a').eq(0).editable('enable');
 
           // Change dimension to checklist editable if field_type are time/date and remove zoom-in icon
           // $tableRows.eq(i).find('a').eq(0) = dimension
-          if(fld.timeDimension){
-            row.order = '';
-            row.bk = '';
-            row.hierarchyName = '';
-            $tableRows.eq(i).find('a').eq(1).editable('disable');
-            $tableRows.eq(i).find('a').eq(2).editable('disable');
-            $tableRows.eq(i).find('a').eq(3).editable('disable');
-            $tableRows.eq(i).find('a').eq(0).editable('destroy');
-            $tableRows.eq(i).find('a').eq(0).editable(dateDimensions);
-            $tableRows.eq(i).find('a.buildDrillPath').remove();
-          }
-          else{
-            $tableRows.eq(i).find('a').eq(0).editable('destroy');
-            var dimensionSet = getSetFromArray(dimensionGlobal);
-
-            var source = [];
-            source.push({"text": "", "value": ""});
-
-            dimensionSet.forEach(function(value){
-              var option = {};
-              option.text = value;
-              option.value = value;
-              source.push(option);
-            })
-
-            var newEditable = {
-              type: "select",
-              mode: "inline",
-              source: source
-            };
-
-            $tableRows.eq(i).find('a').eq(0).editable(newEditable);
-            $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
-          }
-
-        });
+          // if(fld.timeDimension){
+          //   row.order = '';
+          //   row.bk = '';
+          //   row.hierarchyName = '';
+          //   $tableRows.eq(i).find('a').eq(1).editable('disable');
+          //   $tableRows.eq(i).find('a').eq(2).editable('disable');
+          //   $tableRows.eq(i).find('a').eq(3).editable('disable');
+          //   $tableRows.eq(i).find('a').eq(0).editable('destroy');
+          //   $tableRows.eq(i).find('a').eq(0).editable(dateDimensions);
+          //   $tableRows.eq(i).find('a.buildDrillPath').remove();
+          // }
+          // else{
+            // $tableRows.eq(i).find('a').eq(0).editable('destroy');
+            // var dimensionSet = getSetFromArray(dimensionGlobal);
+            //
+            // var source = [];
+            // source.push({"text": "", "value": ""});
+            //
+            // dimensionSet.forEach(function(value){
+            //   var option = {};
+            //   option.text = value;
+            //   option.value = value;
+            //   source.push(option);
+            // })
+            //
+            // var newEditable = {
+            //   type: "select",
+            //   mode: "inline",
+            //   source: source
+            // };
+            //
+            // $tableRows.eq(i).find('a').eq(0).editable(newEditable);
+            // $tableRows.eq(i).find('a').eq(0).editable('option', 'defaultValue', '');
+          // }
+        // });
 
       },
 
@@ -1457,7 +1578,7 @@ function buildDimensionTable($el, cols, data, fld, qs){
 
             getDimensions(dimensionSet, qs._id);
 
-            $selectedDimensionIndex = row.index;
+            $selectedDimension = row;
 
             $('#DrillModal').modal('toggle');
 
