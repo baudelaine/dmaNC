@@ -185,6 +185,7 @@ public class GetMaxDatabaseMetaDatasServlet extends HttpServlet {
 			    	table.put("table_schema", table_schema);
 			    	table.put("table_type", table_type);
 			    	table.put("table_remarks", table_remarks);
+			    	if(table_remarks == null) {table.put("table_remarks", "");}
 			    	table.put("table_recCount", recCount);
 			    	table.put("table_description", "");
 		    		table.put("table_primaryKeyFieldsCount", pks.size());
@@ -204,8 +205,9 @@ public class GetMaxDatabaseMetaDatasServlet extends HttpServlet {
 				    	field.put("column_name", rst1.getString("COLUMN_NAME"));
 				    	field.put("column_type", rst1.getString("TYPE_NAME"));
 				    	field.put("column_remarks", rst1.getString("REMARKS"));
+				    	if(rst1.getString("REMARKS") == null) {field.put("column_remarks", "");}
 			        	field.put("column_size", rst1.getInt("COLUMN_SIZE"));
-				    	field.put("column_description", null);
+				    	field.put("column_description", "");
 			        	if(pks.contains(rst1.getString("COLUMN_NAME"))){
 			    			field.put("column_isPrimaryKey", true);
 			    		}
