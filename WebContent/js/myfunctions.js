@@ -1325,8 +1325,8 @@ function modAddRelation(){
           relation.key_type = key_type;
           relation.key_name = key_type + 'K_' + alias + '_' + pkTabMatches[0];
           relation._id = relation.key_name + '_' + type;
+          relation.above = relation.seqs[0].column_name;
 
-          console.log(relation);
 
           modWriteRelation(relation);
       },
@@ -1350,7 +1350,6 @@ function modWriteRelation(relation){
       if(obj.relations.length == 0){
         obj.relations.push(relation);
       }
-      console.log(obj);
     }
   });
 
@@ -2633,6 +2632,9 @@ function GetNewField($el) {
             console.log(data);
             data.field_name = fieldName.toUpperCase();
             data.custom = true;
+            console.log(currentLanguage);
+            data.labels[currentLanguage] = '';
+            data.descriptions[currentLanguage] = '';
             AddRow($el, data);
           },
           error: function(data) {
