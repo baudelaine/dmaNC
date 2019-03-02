@@ -766,6 +766,7 @@ function SetLanguage(language){
       });
 
     }
+    
     if(activeTab.match("Query Subject")){
       $refTab.tab('show');
       $qsTab.tab('show');

@@ -127,6 +127,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	    }
 		
 		if(rst != null){rst.close();}
+		
+		if(label == null) {label = "";}
     	
 		QuerySubject result = new QuerySubject();
 		
@@ -182,6 +184,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		if(!language.isEmpty()) {
 			result.getLabels().put(language, "");
 			result.getDescriptions().put(language, "");
+			result.setLabel("");
+			result.setDescription("");
 		}
 		
 		System.out.println("result" + result);
@@ -259,6 +263,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
     		if(!language.isEmpty()) {
     			field.getLabels().put(language, "");
     			field.getDescriptions().put(language, "");
+    			field.setLabel("");
+    			field.setDescription("");
     		}
     		
         	result.add(field);
@@ -337,6 +343,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	    	    	relation.setLabel(rst0.getString("REMARKS"));
 	    	    }
 	    		if(rst0 != null){rst0.close();}
+	    		
+	    		if(relation.getLabel() == null) {relation.setLabel("");}
 	        	
 	    		if(dbmd != null){
 	    			@SuppressWarnings("unchecked")
@@ -346,7 +354,6 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		    			relation.setDescription((String) o.get("table_description"));
 	    			}
 	    		}
-	        	
 	        	
 	        	Seq seq = new Seq();
 	        	seq.setTable_name(fktable_name);
