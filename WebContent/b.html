@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Data Modeling Accelarator</title>
+	<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<link href="css/bootstrap-table.min.css" type="text/css" rel="stylesheet" />
+	<link href="css/bootstrap-editable.css" type="text/css" rel="stylesheet" />
+	<link href="css/bootstrap-select.min.css" type="text/css" rel="stylesheet" />
+	<link href="css/bootstrap-theme.min.css" type="text/css" rel="stylesheet" />
+	<link href="css/bootstrap-tagsinput.css" type="text/css" rel="stylesheet">
+	<link href="css/mycss.css" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+
+	<div class="container-fluid" style="margin-top: 10px;">
+
+    <div class="well well-sm">
+
+			<div class="toolbar form-inline" id="Toolbar">
+				<div class="input-group">
+					<div class="input-group-btn">
+						<select class="selectpicker" data-style="btn-default" id="tables" data-live-search="true" title="Choose a table..."></select>
+						<button type="button" onclick="SortOnStats()" class="btn btn-default" data-toggle="tooltip" title="Sort within stats."><span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span></button>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">@</span>
+						<input type="text" id="alias" class="form-control" placeholder="Alias">
+					</div>
+					<button type="button" onclick="GetQuerySubjects()" class="btn btn-default dropdown-toggle" data-toggle="tooltip" data-placement="top" title="Get Query Subject."><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span></button>
+				</div>
+
+				<div class="input-group">
+					<div class="input-group-btn">
+						<select class="selectpicker" data-style="btn-default" id="languagesSelect" data-live-search="true" title="Current languages..."></select>
+						<button type="button" onclick="OpenQueryModal()" id="LoadLabelsAndDescription" class="btn btn-default" data-toggle="tooltip" title="Load labels and description."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+    
+
+  </div>
+
+</body>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-table.min.js"></script>
+<script src="js/bootstrap-editable.js"></script>
+<script src="js/bootstrap-table-editable.js"></script>
+<script src="js/bootstrap-select.min.js"></script>
+<script src="js/bootstrap-list-filter.min.js"></script>
+<script src="js/bootstrap-tagsinput.js"></script>
+<script src="js/bootbox.min.js"></script>
+
+</hml>
