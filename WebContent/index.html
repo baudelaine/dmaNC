@@ -26,55 +26,37 @@
 
 		    <div class="navbar-header">
 		      <a class="navbar-brand" href="#">
-		        <img alt="Brand" src="img/cognos.jpg">
-						<h5><strong>Data Modeling Accelarator</strong></h5>
+		        <img alt="Brand" class="img-responsive" src="img/cognos-analytics.jpg">
+						<!-- span class="label label-primary">Consult less, report more...</span -->
 		      </a>
 				</div>
 
 				<form class="navbar-form navbar-left">
+					<h2><strong>Data Modeling Accelarator</strong></h2>
+
+				</form>
+
+				<form class="navbar-form navbar-right">
 
 							<div id="alert_placeholder"></div>
 
 							<div id="divLoading"></div>
 							<div id="Alert"></div>
+				<!-- </form> -->
 
-				</form>
 
-
-				<form class="navbar-form navbar-right">
-
-					<div class="input-group">
-						<div class="input-group-btn">
-							<select class="selectpicker" data-style="btn-default" id="tables" data-live-search="true" title="Choose a table..."></select>
-							<button type="button" onclick="SortOnStats()" class="btn btn-default" data-toggle="tooltip" title="Sort within stats."><span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span></button>
-
-						</div>
-							<div class="input-group">
-  						<span class="input-group-addon">@</span>
-							<input type="text" id="alias" class="form-control" placeholder="Alias">
-							</div>
-					</div>
-
-						<div class="btn-group">
-							<button type="button" onclick="GetQuerySubjects()" class="btn btn-default dropdown-toggle" data-toggle="tooltip" data-placement="top" title="Get Query Subject."><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span></button>
-							<!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						    <span class="caret"></span>
-						    <span class="sr-only">Toggle Dropdown</span>
-						  </button>
-						  <ul class="dropdown-menu">
-								<li><a href="#" id="withPK" onClick="GetQuerySubjectsWithPK(); return false;">with PK</a></li>
-						  </ul> -->
-						</div>
+				<!-- <form class="navbar-form navbar-right"> -->
+					<div class="well well-sm">
 
 						<button type="button" onclick="Search()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Search."><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
 						<button type="button" onclick="Publish()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Publish model."><span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>
 						<button type="button" onclick="SaveModel()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Save model to server."><span class="glyphicon glyphicon-save-file" aria-hidden="true"></span></button>
 						<button type="button" onclick="GetModelList()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Open model from server."><span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></button>
-						<!-- <button type="button" onclick="ExpandAll()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Expand all rows."><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></button>						<button type="button" onclick="GetTableData()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Show object in console"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></button> -->
-						<button type="button" onclick="RemoveAll()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Remove all."><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
 
-					<button type="button" onclick="TestDBConnection()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Test connection to server database."><span class="glyphicon glyphicon-signal aria-hidden="true"></span></button>
-					<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Release server session" onClick="Logout()"><span class="glyphicon glyphicon-off aria-hidden="true"></span></button>
+						<button type="button" onclick="TestDBConnection()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Test connection to server database."><span class="glyphicon glyphicon-signal aria-hidden="true"></span></button>
+						<button type="button" onclick="RemoveAll()" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Remove all."><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+						<button type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Release server session" onClick="Logout()"><span class="glyphicon glyphicon-off aria-hidden="true"></span></button>
+					</div>
 				</form>
 
 		  </div>
@@ -84,7 +66,7 @@
 
 		<!-- modal -->
 
-		<div class="modal fade" tabindex="-1" role="dialog" id="newRowModal">
+		<div class="modal fade" tabindex="-1" role="dialog" id="newRowModal" data-keyboard="false" data-backdrop="static">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -92,6 +74,7 @@
 		        <h4 class="modal-title">Add new relationship to <label id="modQuerySubject">PK Table</label></h4>
 		      </div><!-- /.modal-header -->
 		      <div class="modal-body">
+						<div id="newRowModalAlert"></div>
 
 						<div class="container-fluid">
 							<div id="modDivLoading"></div>
@@ -106,9 +89,10 @@
 							<div class="row">
 								<div class="form-group">
 												<label for="modPKTable">PK Table</label>
-												<select class="selectpicker form-control" data-style="btn-default" data-width="90%" id="modPKTable" data-live-search="true" title="Choose a pktable...">
-												</select>
-												<button type="button" onclick="SortOnStats()" class="btn btn-default" data-toggle="tooltip" title="Sort within stats."><span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span></button>
+												<div class="input-group-btn">
+													<select class="selectpicker form-control" data-style="btn-default" data-width="93%" id="modPKTable" data-live-search="true" title="Choose a pktable..."></select>
+													<button type="button" onclick="SortOnStats()" class="btn btn-default" data-toggle="tooltip" title="Sort within stats."><span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span></button>
+												</div>
 								</div>
 							</div>
 
@@ -123,7 +107,7 @@
 
 							<div class="row">
 									<div class="form-group">
-										<div class="input-group">
+										<!-- <div class="input-group"> -->
 
 													<label for="modKeyType">Key Type</label>
 													<!-- <div class="input-group-btn"> -->
@@ -133,30 +117,30 @@
 														</select>
 													<!-- </div> -->
 
-										</div>
+										<!-- </div> -->
 									</div>
 							</div>
 
 							<div class="row">
 								<div class="form-group">
-									<div class="input-group">
+									<!-- <div class="input-group"> -->
 										<label for="modColumn">Column</label>
 										<!-- <div class="input-group-btn"> -->
 											<select class="selectpicker form-control" data-style="btn-default" id="modColumn" data-live-search="true" title="Choose a column..."></select>
 										<!-- </div> -->
-									</div>
+									<!-- </div> -->
 								</div>
 							</div>
 							<div class="row">
 								<div class="form-group">
-									<div class="input-group">
+									<!-- <div class="input-group"> -->
 										<label for="modColumn">PK Column</label>
 											<!-- <span class="input-group-addon"></span> -->
 											<!-- <input type="text" id="modPKTableAlias" class="form-control" placeholder="pktable_alias"> -->
 										<!-- <div class="input-group-btn"> -->
 											<select class="selectpicker form-control" data-style="btn-default" id="modPKColumn" data-live-search="true" title="Choose a pkcolumn..."></select>
 										<!-- </div> -->
-									</div>
+									<!-- </div> -->
 								</div>
 							</div>
 
@@ -183,7 +167,7 @@
 
 		<!-- modal -->
 
-		<div class="modal fade" tabindex="-1" role="dialog" id="DrillModal">
+		<div class="modal fade" tabindex="-1" role="dialog" id="DrillModal" data-keyboard="false" data-backdrop="static">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -195,6 +179,19 @@
 						<div class="container-fluid">
 							<div id="modDivLoading"></div>
 
+							<div class="row">
+					        <h4>Time Dimension</h4>
+					        <select class="selectpicker form-control" id="selectTimeDimension" multiple>
+										<option class="fontsize" value="Year" data-subtext="">Year</option>'
+										<option class="fontsize" value="Quarter" data-subtext="">Quarter</option>'
+										<option class="fontsize" value="Month" data-subtext="">Month</option>'
+										<option class="fontsize" value="Weeks" data-subtext="">Weeks</option>'
+										<option class="fontsize" value="Day" data-subtext="">Day</option>'
+										<option class="fontsize" value="AM/PM" data-subtext="">AM/PM</option>'
+										<option class="fontsize" value="Hour" data-subtext="">Hour</option>'
+										<option class="fontsize" value="Date" data-subtext="">Date</option>'
+					        </select>
+					    </div>
 							<div class="row">
 					        <h4>Dimension</h4>
 					        <select class="selectpicker form-control" id="selectDimension">
@@ -220,9 +217,6 @@
 										<textarea id="bkExpression" class="form-control" placeholder="Paste BK expressions here..." rows="8"></textarea>
 							</div>
 
-
-
-
 						</div>
 
 					</div> <!-- /.modal-body -->
@@ -239,7 +233,7 @@
 
 
 		<!-- modelList modal -->
-		<div class="modal fade" id="modModelList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal fade" id="modModelList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -259,7 +253,7 @@
 		<!-- modelList modal -->
 
 		<!-- projectFile modal -->
-		<div class="modal fade" id="modProjectFile" tabindex="-1" role="dialog" aria-labelledby="modProjectFileLabel">
+		<div class="modal fade" id="modProjectFile" tabindex="-1" role="dialog" aria-labelledby="modProjectFileLabel" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -281,7 +275,7 @@
 		<!-- projectFile modal -->
 
 		<!-- removeKeysModal modal -->
-		<div class="modal fade" id="removeKeysModal" tabindex="-1" role="dialog" aria-labelledby="removeKeysModalLabel">
+		<div class="modal fade" id="removeKeysModal" tabindex="-1" role="dialog" aria-labelledby="removeKeysModalLabel" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -303,7 +297,7 @@
 		<!-- projectFile modal -->
 
 		<!-- logout modal -->
-	  <div class="modal fade" id="modLogout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal fade" id="modLogout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static">
 	    <div class="modal-dialog" role="document">
 	      <div class="modal-content">
 	        <div class="modal-header">
@@ -316,7 +310,7 @@
 	        </div>
 	        <div class="modal-footer">
 						<form method="post" action='ibm_security_logout' name="logout_form">
-							<INPUT TYPE="HIDDEN" name="logoutExitPage" VALUE="/login.html">
+							<input type="hidden" name="logoutExitPage" VALUE="login.html">
 							<input type="submit" class="btn btn-danger" name="logout" value="Logout">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 	          </form>
@@ -328,6 +322,177 @@
 	  </div>
 	  <!-- logout modal -->
 
+		<!-- queriesList modal -->
+		<div class="modal fade" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="queryModalLabel" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="queryModalLabel">SQL queries for labels and descriptions</h4>
+					</div>
+					<div class="modal-body">
+						<div id="queryModalAlert"></div>
+						<form>
+		          <div class="form-group">
+		            <label for="tableLabel" class="col-form-label">Table Label</label>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
+								<div class="collapse" id="tableLabelSyntax">
+								  <div class="well well-sm">
+								    SELECT ... AS Table_Name, ... AS Table_Label FROM ... IN (?)
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
+								<div class="collapse" id="tableLabelAboutParameter">
+								  <div class="well well-sm">
+								    (?) stand for table(s) selected in 'Choose table(s)'.
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableLabelEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
+								<div class="collapse" id="tableLabelEG">
+								  <div class="well well-sm">
+								    <strong>SELECT</strong> systable.tableid <strong>AS Table_Name,</strong> singular <strong>AS Table_Label FROM</strong> systable join sdc on sdc.tableid = systable.tableid where systable.tableid <strong>IN (?)</strong>
+										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
+								  </div>
+								</div>
+								<button type="button" id="tableLabelQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+		            <textarea class="form-control" id="tableLabel" rows="4"></textarea>
+		          </div>
+							<div class="form-group">
+		            <label for="tableDescription" class="col-form-label">Table Description</label>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
+								<div class="collapse" id="tableDescriptionSyntax">
+								  <div class="well well-sm">
+								    SELECT ... AS Table_Name, ... AS Table_Description FROM ... IN (?)
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
+								<div class="collapse" id="tableDescriptionAboutParameter">
+								  <div class="well well-sm">
+								    (?) stand for table(s) selected in 'Choose table(s)'.
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#tableDescriptionEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
+								<div class="collapse" id="tableDescriptionEG">
+								  <div class="well well-sm">
+								    <strong>SELECT</strong> systable.tableid <strong>AS Table_Name,</strong> tabledoc <strong>AS Table_Description FROM</strong> systable join sdc on sdc.tableid = systable.tableid where systable.tableid <strong>IN (?)</strong>
+										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
+								  </div>
+								</div>
+								<button type="button" id="tableDescriptionQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+		            <textarea class="form-control" id="tableDescription" rows="4"></textarea>
+		          </div>
+							<div class="form-group">
+		            <label for="columnLabel" class="col-form-label">Column Label</label>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
+								<div class="collapse" id="columnLabelSyntax">
+								  <div class="well well-sm">
+								    SELECT ... AS Table_Name, ... AS Column_Name, ... AS Column_Label FROM ... = ? ... IN (?)
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
+								<div class="collapse" id="columnLabelAboutParameter">
+								  <div class="well well-sm">
+										? stand for each table selected in 'Choose table(s)'.<br>
+								    (?) stand for all columns from each table(s) selected in 'Choose table(s)'.
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnLabelEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
+								<div class="collapse" id="columnLabelEG">
+								  <div class="well well-sm">
+										<strong>SELECT</strong> tableid <strong>AS Table_Name,</strong> columnid <strong>AS Column_Name,</strong> columnlabel <strong>AS Column_Label FROM</strong> syscolumn where tableid <strong>= ?</strong> and columnid <strong>IN (?)</strong>
+										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
+								  </div>
+								</div>
+								<button type="button" id="columnLabelQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+		            <textarea class="form-control" id="columnLabel" rows="4"></textarea>
+		          </div>
+							<div class="form-group">
+		            <label for="columnDescription" class="col-form-label">Column Description</label>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionSyntax" aria-expanded="false" aria-controls="collapseExample">SQL syntax</a>
+								<div class="collapse" id="columnDescriptionSyntax">
+								  <div class="well well-sm">
+								    SELECT ... AS Table_Name, ... AS Column_Name, ... AS Column_Description FROM ... = ? ... IN (?)
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionAboutParameter" aria-expanded="false" aria-controls="collapseExample">About parameter(s)</a>
+								<div class="collapse" id="columnDescriptionAboutParameter">
+								  <div class="well well-sm">
+										? stand for each table selected in 'Choose table(s)'.<br>
+								    (?) stand for all columns from each table(s) selected in 'Choose table(s)'.
+								  </div>
+								</div>
+								<a class="btn btn-primary btn-xs" role="button" data-toggle="collapse" href="#columnDescriptionEG" aria-expanded="false" aria-controls="collapseExample">e.g.</a>
+								<div class="collapse" id="columnDescriptionEG">
+								  <div class="well well-sm">
+										<strong>SELECT</strong> tableid <strong>AS Table_Name,</strong> columnid <strong>AS Column_Name,</strong> columndoc <strong>AS Column_Description FROM</strong> syscolumn where tableid <strong>= ?</strong> and columnid <strong>IN (?)</strong>
+										<br><br><span class="glyphicon glyphicon-alert" aria-hidden="true"> Everything in <strong>bold</strong> is <strong>mandatory</strong>.</span>
+								  </div>
+								</div>
+								<button type="button" id="columnDescriptionQuery" class="btn btn-default btn-xs" data-toggle="tooltip" title="Run query."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+		            <textarea class="form-control" id="columnDescription" rows="4"></textarea>
+		          </div>
+        		</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" onclick="SaveQueries()" class="btn btn-default" data-toggle="tooltip" title="Save queries to server."><span class="glyphicon glyphicon-save-file" aria-hidden="true"></span></button>
+						<button type="button" onclick="GetQueriesList()" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Open queries from server."><span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></button>
+						<button type="button" class="btn btn-primary" onclick="GetLabels()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></button>
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- queriesList modal -->
+
+		<!-- modelList modal -->
+		<div class="modal fade" id="modQueriesList" tabindex="-1" role="dialog" aria-labelledby="mymodQueriesList" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Queries(s) available(s) on server</h4>
+					</div>
+					<div class="modal-body">
+
+					</div>
+					<div class="modal-footer">
+						<!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- modelList modal -->
+
+
+
+		<!-- <div class="clearfix"></div> -->
+
+		<div class="well well-sm">
+
+			<div class="toolbar form-inline" id="Toolbar">
+				<div class="input-group">
+					<div class="input-group-btn">
+						<select class="selectpicker" data-style="btn-default" id="tables" data-live-search="true" title="Choose a table..."></select>
+						<button type="button" onclick="SortOnStats()" class="btn btn-default" data-toggle="tooltip" title="Sort within stats."><span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span></button>
+					</div>
+					<div class="input-group">
+						<span class="input-group-addon">@</span>
+						<input type="text" id="alias" class="form-control" placeholder="Alias">
+					</div>
+					<button type="button" onclick="GetQuerySubjects()" class="btn btn-default dropdown-toggle" data-toggle="tooltip" data-placement="top" title="Get Query Subject."><span class="glyphicon glyphicon-magnet" aria-hidden="true"></span></button>
+				</div>
+
+				<div class="input-group">
+					<div class="input-group-btn">
+						<select class="selectpicker" data-style="btn-default" id="languagesSelect" data-live-search="true" title="Current languages..."></select>
+						<button type="button" onclick="OpenQueryModal()" id="LoadLabelsAndDescription" class="btn btn-default" data-toggle="tooltip" title="Load labels and description."><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
 
 		<div>
 
@@ -340,6 +505,7 @@
 				<li role="presentation" class="disabled"><a href="#Translation" aria-controls="translation" role="tab" data-toggle="tab">Translation</a></li>
 		    <!-- <li role="presentation"><a href="#Fields" aria-controls="fields" role="tab" data-toggle="tab">Fields</a></li> -->
 		  </ul>
+
 
 		  <!-- Tab panes -->
 		  <div class="tab-content">

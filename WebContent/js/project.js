@@ -16,12 +16,13 @@ $('.modal').on('shown.bs.modal', function() {
 });
 
 $('#newProjectModal').on('shown.bs.modal', function(){
-  GetResources()
+  GetResources();
+  GetLocales();
 });
 
 $('button#create').click(function(){
-  if($("#prjResource").val() == "" | $("#prjName").val() == ""){
-    ShowAlert("Neither Name nor Resource should be left empty.", "alert-warning");
+  if($("#prjResource").val() == "" | $("#prjName").val() == "" | $("#prjLanguage").find("option:selected").val() == ""){
+    ShowAlert("Neither Name, Resource nor Language should be left empty.", "alert-warning");
     return;
   }
   NewProject();
@@ -109,12 +110,33 @@ function GetResources() {
       datas.RESOURCES = data;
       // console.log("datas" + JSON.stringify(datas));
       console.log(datas);
-      loadList($("#prjResource"), datas.RESOURCES);
+      loadResources($("#prjResource"), datas.RESOURCES);
     },
     error: function(data) {
       console.log(data);
     }
   });
+}
+
+function GetLocales(){
+  $.ajax({
+    type: 'POST',
+    url: "GetCognosLocales",
+    dataType: 'json',
+    success: function(data) {
+      console.log(data);
+      // var resource = {};
+      // resource = data;
+      datas.LOCALES = data.cognosLocales;
+      // console.log("datas" + JSON.stringify(datas));
+      console.log(datas);
+      loadLocales($("#prjLanguage"), datas.LOCALES);
+    },
+    error: function(data) {
+      console.log(data);
+    }
+  });
+
 }
 
 function NewProject() {
@@ -124,6 +146,8 @@ function NewProject() {
   prj.dbSchema = $("#prjDbSchema").val();
   prj.description = $("#prjDescription").val();
   prj.resource = datas.RESOURCES[$("#prjResource").val()];
+  prj.languages = [];
+  prj.languages.push($("#prjLanguage").find("option:selected").val());
 
   $.ajax({
     type: 'POST',
@@ -169,7 +193,18 @@ function OpenProject(id) {
   });
 }
 
-function loadList(obj, list){
+function loadLocales(obj, list){
+  obj.empty();
+  $.each(list, function(i, item){
+    var option = '<option class="fontsize" value="' + item + '" data-subtext="">' + item + '</option>';
+    obj.append(option);
+  });
+  obj.selectpicker('refresh');
+
+}
+
+
+function loadResources(obj, list){
   obj.empty();
   $.each(list, function(i, item){
     var option = '<option class="fontsize" value="' + i + '" data-subtext="' + item.dbName + ' - ' + item.dbEngine

@@ -128,6 +128,7 @@ public class GetPKRelationsServlet extends HttpServlet {
 		        	relation.setKey_type("P");
 		        	relation.setType(type.toUpperCase());
 		        	relation.set_id("PK_" + relation.getPktable_alias() + "_" + alias + "_" + type.toUpperCase());
+		        	relation.setAbove(pkcolumn_name);
 		        	
 		        	String[] types = {"TABLE"};
 		    		ResultSet rst0 = metaData.getTables(con.getCatalog(), schema, fktable_name, types);

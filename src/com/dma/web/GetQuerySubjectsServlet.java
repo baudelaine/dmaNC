@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Servlet implementation class GetImportedKeysServlet
  */
@@ -38,6 +40,7 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	String qs_id = "";
 	String r_id = "";
 	String linker_id = "";
+	String language = "";
 	boolean withRecCount = false;
 	long qs_recCount = 0L;
 	Map<String, Object> dbmd = null;
@@ -63,10 +66,12 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		alias = request.getParameter("alias");
 		type = request.getParameter("type");
 		linker_id = request.getParameter("linker_id");
+		language = request.getParameter("language");
 		
 		System.out.println("table=" + table);
 		System.out.println("alias=" + alias);
 		System.out.println("type=" + type);
+		System.out.println("language=" + language);
 		List<Object> result = new ArrayList<Object>();
 
 		try{
@@ -122,6 +127,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	    }
 		
 		if(rst != null){rst.close();}
+		
+		if(label == null) {label = "";}
     	
 		QuerySubject result = new QuerySubject();
 		
@@ -172,6 +179,13 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 				result.setLabel((String) o.get("table_remarks"));
 				result.setDescription((String) o.get("table_description"));
 			}
+		}
+		
+		if(!language.isEmpty()) {
+			result.getLabels().put(language, "");
+			result.getDescriptions().put(language, "");
+			result.setLabel("");
+			result.setDescription("");
 		}
 		
 		System.out.println("result" + result);
@@ -242,6 +256,17 @@ public class GetQuerySubjectsServlet extends HttpServlet {
     			}
     		}
         	
+    		if(StringUtils.containsAny(field.getField_type().toUpperCase(), "DATE", "DATETIME", "TIMESTAMP")) {
+    			field.setTimeDimension(true);
+    		}
+    		
+    		if(!language.isEmpty()) {
+    			field.getLabels().put(language, "");
+    			field.getDescriptions().put(language, "");
+    			field.setLabel("");
+    			field.setDescription("");
+    		}
+    		
         	result.add(field);
         }
 
@@ -318,6 +343,8 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 	    	    	relation.setLabel(rst0.getString("REMARKS"));
 	    	    }
 	    		if(rst0 != null){rst0.close();}
+	    		
+	    		if(relation.getLabel() == null) {relation.setLabel("");}
 	        	
 	    		if(dbmd != null){
 	    			@SuppressWarnings("unchecked")
@@ -327,7 +354,6 @@ public class GetQuerySubjectsServlet extends HttpServlet {
 		    			relation.setDescription((String) o.get("table_description"));
 	    			}
 	    		}
-	        	
 	        	
 	        	Seq seq = new Seq();
 	        	seq.setTable_name(fktable_name);

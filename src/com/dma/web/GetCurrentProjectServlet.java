@@ -1,9 +1,7 @@
 package com.dma.web;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -17,14 +15,14 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Servlet implementation class GetImportedKeysServlet
  */
-@WebServlet("/GetCognosLocales")
-public class GetCognosLocalesServlet extends HttpServlet {
+@WebServlet("/GetCurrentProject")
+public class GetCurrentProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCognosLocalesServlet() {
+    public GetCurrentProjectServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,16 +36,14 @@ public class GetCognosLocalesServlet extends HttpServlet {
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		try{
-			List<String> cognosLocales = 
-					Arrays.asList(((String) request.getServletContext().getAttribute("cognosLocales")).replaceAll("\\s", "").split(","));
+			
+			Project project = (Project) request.getSession().getAttribute("currentProject");
 			result.put("status", "OK");
-			result.put("content", (String) request.getServletContext().getAttribute("cognosLocales"));
-			result.put("cognosLocales", cognosLocales);
+			result.put("data", project);
 		}
 		catch(Exception e){
 			result.put("status", "KO");
 			result.put("message", e.getMessage());
-			result.put("troubleshooting", "Check CognosLocales is initialized in server.xml");		
 			e.printStackTrace(System.err);
 		}
 		

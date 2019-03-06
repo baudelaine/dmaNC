@@ -76,8 +76,6 @@ public class GetLabelsServlet extends HttpServlet {
 				con.createStatement().execute("ALTER SESSION SET NLS_COMP=LINGUISTIC");
 			}
 
-			
-			
 			List<String> tables = (List<String>) parms.get("tables");
 			
 			if(tables.size() > 0){
@@ -193,6 +191,7 @@ public class GetLabelsServlet extends HttpServlet {
 					else{
 						result = (Map<String, Object>) dbmd.get(table);
 					}
+					if(result == null) {result = new HashMap<String, Object>();}
 					result.put("table_name", table);
 					result.put("table_remarks", tlMap.get(table));
 					result.put("table_description", tdMap.get(table));

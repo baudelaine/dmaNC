@@ -1,0 +1,7 @@
+SELECT TABLE as Table_Name,LABEL as Table_Label FROM TABLELABELS where TABLE IN (?) and LANG = 'fr'
+
+SELECT TABLE as Table_Name,DESCRIPTION as Table_Description FROM TABLELABELS where TABLE IN (?) and LANG = 'fr'
+
+SELECT TABLE AS Table_Name, COLUMN AS Column_Name, LABEL AS Column_Label FROM COLUMNLABELS WHERE TABLE = ? AND COLUMN IN (?) and LANG = 'fr'
+
+SELECT TABLE AS Table_Name, COLUMN AS Column_Name, DESCRIPTION AS Column_Description FROM COLUMNLABELS WHERE TABLE = ? AND COLUMN IN (?) and LANG = 'fr'
