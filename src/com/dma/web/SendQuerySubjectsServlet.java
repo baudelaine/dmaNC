@@ -444,7 +444,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				System.out.println("Map Dimension : " + dimensions.toString());
 				createHierarchiesNb(dimensions);				
 				renameHierarchies(dimensions, dimensionsHN);
-				buildDimensions(dimensions, dimensionsBK, measures);
+				buildDimensions(dimensions, dimensionsBK, measures, dBEngine);
 
 		// end multidimensional
 
@@ -1141,7 +1141,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 		}
 	}
 	
-	protected void buildDimensions(Map<String, Map<String, String>> dimensions, Map<String, Map<String, String>> dimensionsBK, Map<String, Map<String, String>> measures){
+	protected void buildDimensions(Map<String, Map<String, String>> dimensions, Map<String, Map<String, String>> dimensionsBK, Map<String, Map<String, String>> measures, String dBEngine){
 		
 		Map<String, String> dimensionScreenTip = new HashMap<String, String> ();
 		Map<String, String> hierarchyScreenTip = new HashMap<String, String> ();
@@ -1159,7 +1159,7 @@ public class SendQuerySubjectsServlet extends HttpServlet {
 				String qiName = split[1];
 				path = StringUtils.replace(path, ".", "].[");
 				path = "[DATA].[" + path + "]";
-				fsvc.createTimeDimension(path, dimension.getKey(), qiName);
+				fsvc.createTimeDimension(path, dimension.getKey(), qiName, dBEngine);
 			} else 
 			{
 				fsvc.createDimension("[DIMENSIONAL]", dimension.getKey());			
