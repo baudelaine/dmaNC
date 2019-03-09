@@ -87,10 +87,11 @@ public class GetDimensionsServlet extends HttpServlet {
 								}
 								
 							    Map<String, String> bk = new HashMap<String, String>();
-						    	bk.put("selectedQs", selectedQs);
-						    	bk.put("qsFinalName", qsFinalName);
-						    	bk.put("bk", field.getField_name());
-							    bks.add(bk);
+							    if (query_subject.getValue().get_id().equals(selectedQs)) {
+							    	bk.put("qsFinalName", qsFinalName);
+							    	bk.put("bk", field.getField_name());
+							    	bks.add(bk);
+							    }
 							}
 							
 							
@@ -175,10 +176,11 @@ public class GetDimensionsServlet extends HttpServlet {
 						}
 						
 					    Map<String, String> bk = new HashMap<String, String>();
-				    	bk.put("selectedQs", selectedQs);
-				    	bk.put("qsFinalName", qsFinalName);
-				    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
-				    	bks.add(bk);
+					    if (query_subjects.get(pkAlias + "Ref").get_id().equals(selectedQs)) {
+					    	bk.put("qsFinalName", qsFinalName);
+					    	bk.put("bk", gDirNameCurrent.substring(1) + "." + field.getField_name());
+					    	bks.add(bk);
+					    }
 					}
 					
 					recurse0(pkAlias, gDirNameCurrent, qsFinalName, "Ref" ,dimension, query_subjects, selectedQs);	

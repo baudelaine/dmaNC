@@ -3,29 +3,14 @@ package com.dma.svc;
 import java.io.File;
 import java.io.StringReader;
 import java.util.Map;
-import java.util.logging.Level;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-import org.apache.commons.lang3.StringUtils;
 
-import com.cognos.developer.schemas.bibus._3.AddOptions;
-import com.cognos.developer.schemas.bibus._3.BaseClass;
-import com.cognos.developer.schemas.bibus._3.Folder;
-import com.cognos.developer.schemas.bibus._3.PropEnum;
-import com.cognos.developer.schemas.bibus._3.QueryOptions;
-import com.cognos.developer.schemas.bibus._3.SearchPathMultipleObject;
-import com.cognos.developer.schemas.bibus._3.SearchPathSingleObject;
-import com.cognos.developer.schemas.bibus._3.Sort;
-import com.cognos.developer.schemas.bibus._3.TokenProp;
-import com.cognos.developer.schemas.bibus._3.UpdateActionEnum;
-import com.cognos.org.apache.axis.wsdl.symbolTable.Utils;
-import com.dma.cognos.CRNConnect;
-import com.dma.web.Field;
-import com.dma.web.QuerySubject;
 import com.dma.web.RelationShip;
 
 import sapphire.util.Logger;
