@@ -766,7 +766,7 @@ function SetLanguage(language){
       });
 
     }
-    
+
     if(activeTab.match("Query Subject")){
       $refTab.tab('show');
       $qsTab.tab('show');
@@ -3351,6 +3351,11 @@ function OpenModel(id){
 
 		success: function(data) {
       $datasTable.bootstrapTable("load", data);
+      if(currentProject){
+        $("#languagesSelect").selectpicker('val', currentProject.languages[0]);
+        $("#languagesSelect").selectpicker('refresh');
+        SetLanguage(currentProject.languages[0]);
+      }
       $refTab.tab('show');
       initGlobals();
       $finTab.tab('show');
