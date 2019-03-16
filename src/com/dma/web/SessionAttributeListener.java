@@ -1,5 +1,7 @@
 package com.dma.web;
 
+import java.sql.DriverManager;
+import java.sql.DatabaseMetaData;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -98,6 +100,10 @@ public class SessionAttributeListener implements HttpSessionAttributeListener {
 	    			case "IFX":
 	    				query = (String) ic.lookup("TestIFXConnection");
 	    				break;
+
+	    			case "TD":
+	    				query = (String) ic.lookup("TestTDConnection");
+	    				break;
 	    				
 	    		}
 	    		s.setAttribute("query", query);
@@ -109,16 +115,27 @@ public class SessionAttributeListener implements HttpSessionAttributeListener {
     		String jndiName = project.getResource().getJndiName();
     		Connection con = null;
     		try{
-				DataSource ds = (DataSource) ic.lookup(jndiName);
+			DataSource ds = (DataSource) ic.lookup(jndiName);
+			
+			System.out.println("dbEngine=" + dbEngine.toUpperCase());
+			if(dbEngine.equalsIgnoreCase("TD")){
+				System.out.println("Loading TERADATA driver with DriverManager.");
+				con = DriverManager.getConnection("jdbc:teradata://172.16.186.245", "dbc", "dbc");
+        			con.createStatement().execute("DATABASE " + schema);
+			}
+			else{
 				con = ds.getConnection();
-				s.setAttribute("con", con);
+        		//	con.createStatement().execute("SET SCHEMA " + schema);
+			}
+			s.setAttribute("con", con);
         		s.setAttribute("jndiName", jndiName);
-        		con.createStatement().execute("SET SCHEMA " + schema);
     			System.out.println("SessionId " + s.getId() + " is now connected to " + jndiName + " using shema " + schema);
         		
     		}
-    		catch(NamingException | SQLException e){
+    		catch(NamingException |  SQLException e){
+			System.out.println("****** con = " + con + " !!!!!!!!!!!");
     			System.out.println("!!! ERROR: Connection to jndiName " + jndiName + " failed.");
+			e.printStackTrace(System.err);
     		}
 			
 			
